@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CKA Kubernetes Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f8fafc; --surface: #ffffff; --surface2: #f1f5f9;
+    --border: #e2e8f0; --border2: #cbd5e1;
+    --text: #0f172a; --text2: #475569; --text3: #94a3b8;
+    --blue: #2563eb; --blue-light: #eff6ff; --blue-border: #bfdbfe;
+    --purple: #7c3aed; --purple-light: #f5f3ff; --purple-border: #ddd6fe;
+    --green: #16a34a; --green-light: #f0fdf4; --green-border: #bbf7d0;
+    --orange: #ea580c; --orange-light: #fff7ed; --orange-border: #fed7aa;
+    --red: #dc2626; --red-light: #fef2f2; --red-border: #fecaca;
+    --teal: #0d9488; --teal-light: #f0fdfa; --teal-border: #99f6e4;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+  /* Header */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 14px; }
+  .header-logo { width: 36px; height: 36px; background: linear-gradient(135deg,#2563eb,#7c3aed); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .header-text h1 { font-size: 17px; font-weight: 800; }
+  .header-text p { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .header-badge { margin-left: auto; background: var(--blue-light); border: 1px solid var(--blue-border); color: var(--blue); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+
+  /* Search */
+  .search-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 24px; }
+  .search-input-wrap { max-width: 480px; position: relative; }
+  .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 13px; }
+  .search-input { width: 100%; padding: 8px 12px 8px 34px; border: 1px solid var(--border2); border-radius: 8px; font-size: 13px; font-family: 'Inter',sans-serif; color: var(--text); background: var(--surface2); outline: none; transition: all .2s; }
+  .search-input:focus { border-color: var(--blue); background: var(--surface); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+  .search-input::placeholder { color: var(--text3); }
+
+  /* Nav */
+  .nav-tabs { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 2px; overflow-x: auto; }
+  .tab { padding: 10px 15px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; user-select: none; }
+  .tab:hover { color: var(--blue); }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+  /* Main */
+  .main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .section-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+  /* Architecture */
+  .arch-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 28px; }
+  .arch-wrapper-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .arch-wrapper-title span { font-size: 16px; }
+
+  /* Cluster border */
+  .cluster-box { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 16px; position: relative; background: #fafbff; }
+  .cluster-label { position: absolute; top: -11px; left: 16px; background: var(--surface); padding: 0 8px; font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; }
+
+  .planes-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  @media(max-width:780px){ .planes-row { grid-template-columns: 1fr; } }
+
+  .plane-box { border-radius: 10px; padding: 14px; }
+  .plane-control { background: #faf5ff; border: 1.5px solid #ddd6fe; }
+  .plane-data { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+
+  .plane-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .plane-title .pdot { width: 7px; height: 7px; border-radius: 50%; }
+  .pdot-purple { background: var(--purple); }
+  .pdot-blue { background: var(--blue); }
+  .plane-control .plane-title { color: var(--purple); }
+  .plane-data .plane-title { color: var(--blue); }
+
+  .arch-comps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media(max-width:500px){ .arch-comps { grid-template-columns: 1fr; } }
+
+  .arch-comp { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; cursor: pointer; transition: all .15s; display: flex; gap: 9px; align-items: flex-start; }
+  .arch-comp:hover { border-color: var(--blue); box-shadow: 0 2px 10px rgba(37,99,235,.1); transform: translateY(-1px); }
+  .arch-comp.active-comp { border-color: var(--blue); background: var(--blue-light); }
+  .arch-comp-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+  .arch-comp-name { font-size: 12px; font-weight: 700; color: var(--text); }
+  .arch-comp-desc { font-size: 10px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+
+  /* Worker nodes row */
+  .workers-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  @media(max-width:600px){ .workers-row { grid-template-columns: 1fr 1fr; } }
+
+  .worker-node { background: var(--surface); border: 1.5px solid #bbf7d0; border-radius: 10px; padding: 12px; transition: all .15s; cursor: pointer; }
+  .worker-node:hover { border-color: var(--green); box-shadow: 0 2px 10px rgba(22,163,74,.12); transform: translateY(-1px); }
+  .worker-title { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .pods-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .pod-chip { background: #dcfce7; border: 1px solid #86efac; border-radius: 4px; padding: 2px 7px; font-size: 9px; color: var(--green); font-family: 'JetBrains Mono',monospace; }
+  .node-agents { display: flex; flex-direction: column; gap: 3px; }
+  .node-agent { font-size: 9px; color: var(--text3); display: flex; align-items: center; gap: 5px; }
+  .node-agent::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+
+  /* Detail panel */
+  .detail-panel { margin-top: 14px; border: 1px solid var(--blue-border); border-radius: 10px; background: var(--blue-light); padding: 16px 18px; animation: fadeUp .2s ease both; }
+  .dp-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .dp-icon { font-size: 24px; }
+  .dp-name { font-size: 16px; font-weight: 800; color: var(--text); }
+  .dp-badge { font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 20px; letter-spacing: .06em; }
+  .dp-badge-ctrl { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple-border); }
+  .dp-badge-data { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-border); }
+  .dp-badge-net { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-border); }
+  .dp-desc { font-size: 12px; color: var(--text2); line-height: 1.7; margin-bottom: 12px; }
+  .dp-facts { display: grid; grid-template-columns: repeat(auto-fill,minmax(190px,1fr)); gap: 8px; }
+  .dp-fact { background: var(--surface); border-radius: 7px; padding: 10px 12px; border-left: 3px solid var(--blue); }
+  .dp-fact-label { font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--text3); margin-bottom: 3px; font-weight: 600; }
+  .dp-fact-val { font-size: 11px; color: var(--text); line-height: 1.5; }
+  .dp-close { margin-left: auto; background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text3); padding: 2px 6px; border-radius: 4px; }
+  .dp-close:hover { background: var(--border); }
+
+  /* Request flow */
+  .flow-section { margin-bottom: 28px; }
+  .flow-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .flow-steps::before { content: ''; position: absolute; left: 17px; top: 18px; bottom: 18px; width: 2px; background: linear-gradient(to bottom, var(--purple), var(--blue), var(--green)); opacity: .3; }
+  .flow-step { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; }
+  .step-num { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; position: relative; z-index: 1; }
+  .sn1 { background: #f5f3ff; border: 1.5px solid var(--purple); color: var(--purple); }
+  .sn2 { background: #eff6ff; border: 1.5px solid var(--blue); color: var(--blue); }
+  .sn3 { background: #eff6ff; border: 1.5px solid var(--blue); color: var(--blue); }
+  .sn4 { background: #f0fdf4; border: 1.5px solid var(--green); color: var(--green); }
+  .sn5 { background: #f0fdf4; border: 1.5px solid var(--green); color: var(--green); }
+  .sn6 { background: #fff7ed; border: 1.5px solid var(--orange); color: var(--orange); }
+  .step-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .step-desc { font-size: 11px; color: var(--text2); line-height: 1.6; }
+  .step-code { display: inline-block; background: #0f172a; color: #7dd3fc; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-family: 'JetBrains Mono',monospace; margin-top: 5px; }
+
+  /* Category */
+  .category { margin-bottom: 28px; }
+  .category-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  .category-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .category-name { font-size: 14px; font-weight: 700; }
+  .category-count { margin-left: auto; font-size: 11px; color: var(--text3); }
+
+  /* Cmd grid & cards */
+  .cmds-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(500px,1fr)); gap: 10px; }
+  @media(max-width:680px){ .cmds-grid { grid-template-columns: 1fr; } }
+
+  .cmd-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; cursor: pointer; transition: all .15s; }
+  .cmd-card:hover { border-color: var(--blue); box-shadow: 0 2px 12px rgba(37,99,235,.08); transform: translateY(-1px); }
+  .cmd-card.expanded { border-color: var(--blue); box-shadow: 0 4px 16px rgba(37,99,235,.1); }
+  .cmd-top { display: flex; align-items: flex-start; gap: 10px; }
+  .cmd-label { flex: 1; font-size: 13px; font-weight: 600; line-height: 1.4; }
+  .cmd-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; flex-shrink: 0; letter-spacing: .05em; text-transform: uppercase; }
+  .tag-get { background: var(--blue-light); color: var(--blue); }
+  .tag-create { background: var(--green-light); color: var(--green); }
+  .tag-delete { background: var(--red-light); color: var(--red); }
+  .tag-edit { background: var(--orange-light); color: var(--orange); }
+  .tag-debug { background: var(--purple-light); color: var(--purple); }
+  .tag-apply { background: var(--teal-light); color: var(--teal); }
+  .tag-config { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
+  .expand-icon { font-size: 11px; color: var(--text3); flex-shrink: 0; margin-top: 2px; transition: transform .2s; }
+  .cmd-card.expanded .expand-icon { transform: rotate(90deg); }
+
+  .cmd-code { margin-top: 8px; background: #0f172a; border-radius: 6px; padding: 10px 12px; font-family: 'JetBrains Mono',monospace; font-size: 11.5px; color: #e2e8f0; line-height: 1.6; position: relative; overflow-x: auto; white-space: pre; }
+  .copy-btn { position: absolute; top: 7px; right: 8px; background: rgba(255,255,255,.1); border: none; border-radius: 4px; padding: 3px 8px; font-size: 10px; color: #94a3b8; cursor: pointer; font-family: 'Inter',sans-serif; transition: all .15s; }
+  .copy-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
+  .copy-btn.copied { color: #4ade80; }
+
+  .cmd-detail { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .cmd-card.expanded .cmd-detail { display: block; }
+  .cmd-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+  .cmd-flags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .flag { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; font-size: 10px; font-family: 'JetBrains Mono',monospace; color: var(--text2); }
+  .flag strong { color: var(--blue); font-weight: 600; }
+
+  /* Tip */
+  .tip-box { background: var(--blue-light); border: 1px solid var(--blue-border); border-radius: 10px; padding: 12px 16px; display: flex; gap: 10px; margin-bottom: 20px; }
+  .tip-icon { font-size: 15px; flex-shrink: 0; }
+  .tip-text { font-size: 12px; color: #1e40af; line-height: 1.6; }
+  .tip-text strong { font-weight: 700; }
+
+  /* Tables */
+  .cheat-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--surface); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
+  .cheat-table th { background: var(--surface2); padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: .05em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .cheat-table td { padding: 8px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .cheat-table tr:last-child td { border-bottom: none; }
+  .cheat-table tr:hover td { background: var(--surface2); }
+  .cheat-table td:first-child { font-family: 'JetBrains Mono',monospace; font-size: 11px; color: var(--blue); white-space: nowrap; }
+
+  /* Highlights */
+  .hl-flag { color: #f59e0b; }
+  .hl-val { color: #10b981; }
+  .hl-comment { color: #64748b; font-style: italic; }
+  .hl-cmd { color: #60a5fa; }
+
+  /* Search empty */
+  .search-empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; display: none; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.5; } }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">⎈</div>
+  <div class="header-text">
+    <h1>Kubernetes CKA Reference</h1>
+    <p>Architecture, Commands & Troubleshooting</p>
+  </div>
+  <span class="header-badge">CKA 2024</span>
+</div>
+
+<div class="search-bar">
+  <div class="search-input-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" placeholder="Search commands, flags, topics…" oninput="filterCommands(this.value)">
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <div class="tab active" onclick="showTab('overview',this)">🏗️ Overview & Architecture</div>
+  <div class="tab" onclick="showTab('pods',this)">🟢 Pods</div>
+  <div class="tab" onclick="showTab('deployments',this)">🚀 Deployments</div>
+  <div class="tab" onclick="showTab('services',this)">🔀 Services & Networking</div>
+  <div class="tab" onclick="showTab('storage',this)">💾 Storage</div>
+  <div class="tab" onclick="showTab('config',this)">⚙️ Config & Secrets</div>
+  <div class="tab" onclick="showTab('rbac',this)">🔐 RBAC</div>
+  <div class="tab" onclick="showTab('nodes',this)">🖥️ Nodes & Cluster</div>
+  <div class="tab" onclick="showTab('troubleshoot',this)">🔧 Troubleshoot</div>
+  <div class="tab" onclick="showTab('shortcuts',this)">⚡ Quick Ref</div>
+</div>
+
+<div class="main" id="mainContent">
+
+<!-- ═══════════════════ OVERVIEW & ARCHITECTURE ═══════════════════ -->
+<div class="section active" id="sec-overview">
+  <div class="section-title">Overview & Architecture</div>
+  <div class="section-desc">How Kubernetes works — every component, its role, and how they connect.</div>
+
+  <div class="arch-wrapper">
+    <div class="arch-wrapper-title"><span>⎈</span> Kubernetes Cluster — Click any component to explore</div>
+
+    <div class="cluster-box">
+      <span class="cluster-label">K8s Cluster</span>
+
+      <div class="planes-row">
+        <!-- Control Plane -->
+        <div class="plane-box plane-control">
+          <div class="plane-title"><span class="pdot pdot-purple"></span>Control Plane</div>
+          <div class="arch-comps">
+            <div class="arch-comp" onclick="showDetail('apiserver',this)">
+              <span class="arch-comp-icon">🔌</span>
+              <div><div class="arch-comp-name">API Server</div><div class="arch-comp-desc">Front door — every operation goes through here</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('etcd',this)">
+              <span class="arch-comp-icon">🗄️</span>
+              <div><div class="arch-comp-name">etcd</div><div class="arch-comp-desc">Distributed KV store — the single source of truth</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('scheduler',this)">
+              <span class="arch-comp-icon">📅</span>
+              <div><div class="arch-comp-name">Scheduler</div><div class="arch-comp-desc">Assigns unscheduled pods to the best node</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('controller',this)">
+              <span class="arch-comp-icon">🔄</span>
+              <div><div class="arch-comp-name">Controller Manager</div><div class="arch-comp-desc">Runs reconciliation loops to enforce desired state</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('ccm',this)">
+              <span class="arch-comp-icon">☁️</span>
+              <div><div class="arch-comp-name">Cloud Controller</div><div class="arch-comp-desc">Bridges cluster to cloud-provider APIs</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Plane -->
+        <div class="plane-box plane-data">
+          <div class="plane-title"><span class="pdot pdot-blue"></span>Data Plane — Per Worker Node</div>
+          <div class="arch-comps">
+            <div class="arch-comp" onclick="showDetail('kubelet',this)">
+              <span class="arch-comp-icon">🤖</span>
+              <div><div class="arch-comp-name">kubelet</div><div class="arch-comp-desc">Node agent — runs and health-checks containers</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('kubeproxy',this)">
+              <span class="arch-comp-icon">🌐</span>
+              <div><div class="arch-comp-name">kube-proxy</div><div class="arch-comp-desc">Maintains iptables/IPVS rules for Services</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('cri',this)">
+              <span class="arch-comp-icon">📦</span>
+              <div><div class="arch-comp-name">Container Runtime</div><div class="arch-comp-desc">containerd / CRI-O — actually runs containers</div></div>
+            </div>
+            <div class="arch-comp" onclick="showDetail('cni',this)">
+              <span class="arch-comp-icon">🕸️</span>
+              <div><div class="arch-comp-name">CNI Plugin</div><div class="arch-comp-desc">Calico / Cilium — wires pod networking</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Worker nodes -->
+      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">
+        ● Worker Nodes
+      </div>
+      <div class="workers-row">
+        <div class="worker-node" onclick="showDetail('pod',this)">
+          <div class="worker-title">Node 1</div>
+          <div class="pods-row">
+            <div class="pod-chip">nginx-7x4</div>
+            <div class="pod-chip">api-2x1</div>
+            <div class="pod-chip">redis-1</div>
+          </div>
+          <div class="node-agents">
+            <div class="node-agent">kubelet</div>
+            <div class="node-agent">kube-proxy</div>
+            <div class="node-agent">containerd</div>
+          </div>
+        </div>
+        <div class="worker-node" onclick="showDetail('pod',this)">
+          <div class="worker-title">Node 2</div>
+          <div class="pods-row">
+            <div class="pod-chip">worker-3x2</div>
+            <div class="pod-chip">cache-9</div>
+          </div>
+          <div class="node-agents">
+            <div class="node-agent">kubelet</div>
+            <div class="node-agent">kube-proxy</div>
+            <div class="node-agent">containerd</div>
+          </div>
+        </div>
+        <div class="worker-node" onclick="showDetail('pod',this)">
+          <div class="worker-title">Node 3</div>
+          <div class="pods-row">
+            <div class="pod-chip">db-0</div>
+            <div class="pod-chip">monitor-4x2</div>
+          </div>
+          <div class="node-agents">
+            <div class="node-agent">kubelet</div>
+            <div class="node-agent">kube-proxy</div>
+            <div class="node-agent">containerd</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail panel -->
+      <div id="archDetail" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Request flow -->
+  <div class="arch-wrapper flow-section">
+    <div class="flow-title"><span>📬</span> How a Pod Gets Scheduled — Request Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num sn1">1</div>
+        <div>
+          <div class="step-title">You apply a manifest</div>
+          <div class="step-desc">kubectl sends YAML to the API Server over HTTPS. It authenticates, authorizes (RBAC), and passes admission controllers before storing anything.</div>
+          <div class="step-code">kubectl apply -f deployment.yaml</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num sn2">2</div>
+        <div>
+          <div class="step-title">State persisted to etcd</div>
+          <div class="step-desc">Desired state (e.g. "3 replicas of nginx") is written to etcd — the single source of truth. All other components watch for changes via the API Server.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num sn3">3</div>
+        <div>
+          <div class="step-title">Scheduler picks a node</div>
+          <div class="step-desc">Filters nodes (resources, taints, affinity), scores the rest, and binds the pod to the winner. The binding is written back to etcd via API Server.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num sn4">4</div>
+        <div>
+          <div class="step-title">kubelet starts the container</div>
+          <div class="step-desc">The kubelet on the assigned node watches its pod bindings, calls containerd via CRI to pull the image and start the container(s).</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num sn5">5</div>
+        <div>
+          <div class="step-title">Networking is wired up</div>
+          <div class="step-desc">The CNI plugin assigns the pod an IP. kube-proxy updates iptables/IPVS rules so Service traffic reaches the new pod.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num sn6">6</div>
+        <div>
+          <div class="step-title">Reconciliation loop — forever</div>
+          <div class="step-desc">Controllers continuously compare actual ↔ desired state. Pod crashes? ReplicaSet controller creates a new one. This self-healing loop never stops.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key objects quick ref -->
+  <div class="arch-wrapper">
+    <div class="flow-title"><span>🧩</span> Core Kubernetes Objects</div>
+    <table class="cheat-table" style="margin-bottom:0">
+      <tr><th>Object</th><th>Purpose</th><th>Scope</th></tr>
+      <tr><td>Pod</td><td>Smallest deployable unit — one or more containers sharing network & storage</td><td>Namespaced</td></tr>
+      <tr><td>ReplicaSet</td><td>Ensures N identical pods are always running</td><td>Namespaced</td></tr>
+      <tr><td>Deployment</td><td>Manages ReplicaSets for rolling updates & rollbacks</td><td>Namespaced</td></tr>
+      <tr><td>StatefulSet</td><td>Like Deployment but with stable pod identity, ordered ops, persistent storage</td><td>Namespaced</td></tr>
+      <tr><td>DaemonSet</td><td>One pod per node — used for node-level agents (log, monitor, CNI)</td><td>Namespaced</td></tr>
+      <tr><td>Job / CronJob</td><td>Run-to-completion tasks / scheduled tasks</td><td>Namespaced</td></tr>
+      <tr><td>Service</td><td>Stable IP + DNS name that load-balances to a set of pods</td><td>Namespaced</td></tr>
+      <tr><td>Ingress</td><td>HTTP/S routing rules (needs an Ingress Controller to take effect)</td><td>Namespaced</td></tr>
+      <tr><td>ConfigMap</td><td>Non-sensitive config as key-value pairs</td><td>Namespaced</td></tr>
+      <tr><td>Secret</td><td>Sensitive config — base64 encoded (use Vault for real encryption)</td><td>Namespaced</td></tr>
+      <tr><td>PersistentVolume</td><td>Cluster-wide storage resource</td><td>Cluster</td></tr>
+      <tr><td>PersistentVolumeClaim</td><td>A pod's request for storage that binds to a PV</td><td>Namespaced</td></tr>
+      <tr><td>Namespace</td><td>Virtual cluster — isolates resources within one physical cluster</td><td>Cluster</td></tr>
+      <tr><td>Node</td><td>A worker machine (VM or bare-metal) that runs pods</td><td>Cluster</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════ PODS ═══════════════════ -->
+<div class="section" id="sec-pods">
+  <div class="section-title">Pods</div>
+  <div class="section-desc">Create, inspect, debug, and delete pods — the atomic unit of Kubernetes.</div>
+  <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>CKA tip:</strong> Use <code>--dry-run=client -o yaml</code> to generate manifests fast. Edit then <code>kubectl apply -f</code>.</div></div>
+
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#eff6ff">📋</div><span class="category-name">Get & Inspect</span><span class="category-count">6 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">List all pods in a namespace</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pods <span class="hl-flag">-n</span> <span class="hl-val">&lt;namespace&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Lists all pods in the namespace. Use <code>-A</code> for all namespaces. Add <code>-o wide</code> to see node assignment and IP.</div><div class="cmd-flags"><span class="flag"><strong>-A</strong> — all namespaces</span><span class="flag"><strong>-o wide</strong> — show node & IP</span><span class="flag"><strong>-w</strong> — watch live</span><span class="flag"><strong>-l app=nginx</strong> — filter by label</span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Describe a pod (events, status, config)</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> describe pod <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">-n</span> <span class="hl-val">&lt;ns&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Shows container states, resource limits, volumes, and events. The Events section is crucial for debugging CrashLoopBackOff and scheduling failures.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Get pod YAML manifest</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pod <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">-o</span> yaml<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Outputs the full pod spec as YAML. Useful for copying a manifest to edit and re-apply.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Stream pod logs</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> logs <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">-f --tail=</span><span class="hl-val">100</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Streams live logs. Use <code>-c &lt;container&gt;</code> for multi-container pods. <code>--previous</code> gets logs from a crashed container.</div><div class="cmd-flags"><span class="flag"><strong>-f</strong> — follow/stream</span><span class="flag"><strong>--previous</strong> — crashed container</span><span class="flag"><strong>-c name</strong> — specific container</span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Exec into a running pod</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> exec <span class="hl-flag">-it</span> <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">--</span> /bin/sh<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Opens an interactive shell inside the container. Add <code>-c &lt;name&gt;</code> for multi-container pods. Use <code>/bin/bash</code> if available.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Get pod IP and node placement</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pod <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">-o</span> wide<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Shows NODE, IP, NOMINATED NODE columns. Essential for checking which node a pod landed on after scheduling.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f0fdf4">➕</div><span class="category-name">Create & Run</span><span class="category-count">5 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Run a quick pod imperatively</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> run <span class="hl-val">nginx</span> <span class="hl-flag">--image=</span><span class="hl-val">nginx:1.25</span> <span class="hl-flag">--port=</span><span class="hl-val">80</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Creates a pod directly. Good for quick tests. Not for production — use Deployments.</div><div class="cmd-flags"><span class="flag"><strong>--restart=Never</strong> — won't recreate if dies</span><span class="flag"><strong>--env="K=V"</strong> — set env vars</span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Generate pod YAML without applying ⭐</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> run <span class="hl-val">nginx</span> <span class="hl-flag">--image=</span><span class="hl-val">nginx</span> <span class="hl-flag">--dry-run=client -o</span> yaml <span class="hl-flag">></span> pod.yaml<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">⭐ Key exam technique. Generates valid YAML you can edit before applying. Much faster than writing from scratch.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Apply a manifest file</span><span class="cmd-tag tag-apply">APPLY</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> apply <span class="hl-flag">-f</span> <span class="hl-val">pod.yaml</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Creates or updates a resource. Idempotent — safe to re-run. Use <code>-f .</code> to apply all files in a directory.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Launch a temporary debug pod</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> run tmp <span class="hl-flag">--image=</span><span class="hl-val">busybox</span> <span class="hl-flag">--rm -it --restart=Never --</span> sh<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Creates pod, opens shell, auto-deletes on exit. Great for curl-testing services or DNS lookups from inside the cluster.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Force delete a pod</span><span class="cmd-tag tag-delete">DELETE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> delete pod <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">--grace-period=0 --force</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Bypasses the 30s termination grace period. Use in exam to save time.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ DEPLOYMENTS ═══════════════════ -->
+<div class="section" id="sec-deployments">
+  <div class="section-title">Deployments</div>
+  <div class="section-desc">Manage application deployments, rollouts, and scaling.</div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#eff6ff">🚀</div><span class="category-name">Create, Scale & Rollout</span><span class="category-count">6 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create a deployment</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create deployment <span class="hl-val">myapp</span> <span class="hl-flag">--image=</span><span class="hl-val">nginx:1.25</span> <span class="hl-flag">--replicas=</span><span class="hl-val">3</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Creates a Deployment → ReplicaSet → Pods hierarchy. The controller ensures N replicas always run.</div><div class="cmd-flags"><span class="flag"><strong>--replicas=3</strong></span><span class="flag"><strong>--port=80</strong></span><span class="flag"><strong>--dry-run=client -o yaml</strong></span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Scale a deployment</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> scale deployment <span class="hl-val">myapp</span> <span class="hl-flag">--replicas=</span><span class="hl-val">5</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Changes desired replica count instantly. Controller reconciles and creates/terminates pods to match.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Update deployment image (rolling update)</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> set image deployment/<span class="hl-val">myapp</span> <span class="hl-val">nginx</span>=<span class="hl-val">nginx:1.26</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Triggers a rolling update — new ReplicaSet spins up, old one scales down. Controlled by maxSurge and maxUnavailable.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Check rollout status</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> rollout status deployment/<span class="hl-val">myapp</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Watches the rollout and reports success/failure. Exits non-zero on failure — useful in CI pipelines.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Rollback to previous version</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> rollout undo deployment/<span class="hl-val">myapp</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Rolls back to the previous ReplicaSet. Use <code>--to-revision=N</code> for a specific version.</div><div class="cmd-flags"><span class="flag"><strong>--to-revision=2</strong> — specific revision</span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Edit deployment live</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> edit deployment <span class="hl-val">myapp</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Opens resource in $EDITOR (vim by default). Save and quit to apply. Set <code>KUBE_EDITOR=nano</code> to change editor.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SERVICES ═══════════════════ -->
+<div class="section" id="sec-services">
+  <div class="section-title">Services & Networking</div>
+  <div class="section-desc">Expose apps, test DNS, configure network policies.</div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f0fdfa">🔀</div><span class="category-name">Services</span><span class="category-count">6 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Expose a deployment as a Service</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> expose deployment <span class="hl-val">myapp</span> <span class="hl-flag">--port=</span><span class="hl-val">80</span> <span class="hl-flag">--target-port=</span><span class="hl-val">8080</span> <span class="hl-flag">--type=</span><span class="hl-val">ClusterIP</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Creates a Service selecting pods matching the deployment's labels. <code>--port</code> = service port, <code>--target-port</code> = container port.</div><div class="cmd-flags"><span class="flag"><strong>ClusterIP</strong> — internal only</span><span class="flag"><strong>NodePort</strong> — all node IPs</span><span class="flag"><strong>LoadBalancer</strong> — cloud LB</span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">List services and endpoints</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get svc,endpoints <span class="hl-flag">-n</span> <span class="hl-val">&lt;ns&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">If endpoints shows &lt;none&gt;, your label selector doesn't match any pods — common exam mistake. Check pod labels vs service selector.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Port-forward to a service</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> port-forward svc/<span class="hl-val">mysvc</span> <span class="hl-val">8080</span>:<span class="hl-val">80</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Forwards localhost:8080 → service:80. Runs in foreground. Works for pods too: <code>kubectl port-forward pod/mypod 8080:80</code>.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Test DNS from inside cluster</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> run tmp <span class="hl-flag">--image=</span><span class="hl-val">busybox</span> <span class="hl-flag">--rm -it --restart=Never --</span> nslookup <span class="hl-val">mysvc.default.svc.cluster.local</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">DNS format: <code>&lt;svc&gt;.&lt;namespace&gt;.svc.cluster.local</code>. Short form <code>&lt;svc&gt;</code> works within the same namespace.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create NetworkPolicy — deny all ingress</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Denies all ingress to all pods in the namespace. Requires a CNI that supports NetworkPolicy (Calico, Cilium) — Flannel does NOT.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create ClusterIP service (dry-run)</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create service clusterip <span class="hl-val">mysvc</span> <span class="hl-flag">--tcp=</span><span class="hl-val">80:8080</span> <span class="hl-flag">--dry-run=client -o</span> yaml<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Format: <code>--tcp=&lt;svcPort&gt;:&lt;targetPort&gt;</code>. Note: selector won't be set — edit the YAML to match your pod labels.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ STORAGE ═══════════════════ -->
+<div class="section" id="sec-storage">
+  <div class="section-title">Storage</div>
+  <div class="section-desc">PersistentVolumes, PVCs, StorageClasses.</div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#fff7ed">💾</div><span class="category-name">PV, PVC & StorageClass</span><span class="category-count">5 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">List PVs sorted by size</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pv <span class="hl-flag">--sort-by=</span><span class="hl-val">.spec.capacity.storage</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">STATUS: Available (unclaimed), Bound, Released, Failed. PVs are cluster-scoped — no namespace needed.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">List PVCs in a namespace</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pvc <span class="hl-flag">-n</span> <span class="hl-val">&lt;namespace&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">If STATUS is Pending: no matching PV for the access mode/size, or dynamic provisioning failed. Check StorageClass.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create a PVC manifest</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">If a matching PV exists, it binds. Otherwise the StorageClass dynamically provisions one. accessModes: RWO, ROX, RWX.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">List StorageClasses</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get storageclass<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">The one marked (default) is used when no storageClassName is set in a PVC.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Mount PVC in a pod</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code">volumes:
+- name: data
+  persistentVolumeClaim:
+    claimName: my-pvc
+containers:
+- volumeMounts:
+  - mountPath: /data
+    name: data<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Volume name must match between volumes and volumeMounts. Data at /data persists beyond pod restarts.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CONFIG ═══════════════════ -->
+<div class="section" id="sec-config">
+  <div class="section-title">Config & Secrets</div>
+  <div class="section-desc">ConfigMaps, Secrets, and injection patterns.</div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f0f9ff">⚙️</div><span class="category-name">ConfigMaps & Secrets</span><span class="category-count">6 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create ConfigMap from literals</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create configmap <span class="hl-val">app-config</span> <span class="hl-flag">--from-literal=</span><span class="hl-val">DB_HOST=postgres</span> <span class="hl-flag">--from-literal=</span><span class="hl-val">PORT=5432</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Also: <code>--from-file=config.properties</code> or <code>--from-env-file=.env</code>.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Inject ConfigMap as env vars</span><span class="cmd-tag tag-apply">APPLY</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code">envFrom:
+- configMapRef:
+    name: app-config<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Loads ALL keys from a ConfigMap as env vars. Use <code>env[].valueFrom.configMapKeyRef</code> for individual keys.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create a Secret from literals</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create secret generic <span class="hl-val">db-creds</span> <span class="hl-flag">--from-literal=</span><span class="hl-val">password=s3cret</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Secrets are base64 encoded — NOT encrypted by default. Enable etcd encryption at rest or use Vault for real security.</div><div class="cmd-flags"><span class="flag"><strong>generic</strong></span><span class="flag"><strong>tls</strong></span><span class="flag"><strong>docker-registry</strong></span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Decode a secret value</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get secret <span class="hl-val">db-creds</span> <span class="hl-flag">-o</span> jsonpath='{.data.password}' | base64 <span class="hl-flag">-d</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Extracts and decodes a specific key. jsonpath output format is useful for scripting.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Mount Secret as env var</span><span class="cmd-tag tag-apply">APPLY</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code">env:
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: db-creds
+      key: password<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Env var secrets are NOT updated when the secret changes (unlike volume mounts). Use volumes for live updates.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create TLS secret from cert files</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create secret tls <span class="hl-val">my-tls</span> <span class="hl-flag">--cert=</span><span class="hl-val">tls.crt</span> <span class="hl-flag">--key=</span><span class="hl-val">tls.key</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Creates a TLS Secret with keys tls.crt and tls.key. Referenced in Ingress resources for HTTPS termination.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ RBAC ═══════════════════ -->
+<div class="section" id="sec-rbac">
+  <div class="section-title">RBAC</div>
+  <div class="section-desc">Roles, ClusterRoles, and bindings.</div>
+  <div class="tip-box"><span class="tip-icon">⭐</span><div class="tip-text"><strong>CKA exam:</strong> RBAC is very common. Know Role (namespace) vs ClusterRole (cluster-wide). Memorize <code>kubectl auth can-i</code>.</div></div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f5f3ff">🔐</div><span class="category-name">Roles & Bindings</span><span class="category-count">6 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create a Role (namespace-scoped)</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create role <span class="hl-val">pod-reader</span> <span class="hl-flag">--verb=</span><span class="hl-val">get,list,watch</span> <span class="hl-flag">--resource=</span><span class="hl-val">pods</span> <span class="hl-flag">-n</span> <span class="hl-val">dev</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Verbs: get, list, watch, create, update, patch, delete, deletecollection. Applies only within the namespace.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Bind a Role to a user</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create rolebinding <span class="hl-val">alice-pod-reader</span> <span class="hl-flag">--role=</span><span class="hl-val">pod-reader</span> <span class="hl-flag">--user=</span><span class="hl-val">alice</span> <span class="hl-flag">-n</span> <span class="hl-val">dev</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Use <code>--serviceaccount=ns:name</code> for SAs, or <code>--group=devs</code> for groups.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create a ClusterRole</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create clusterrole <span class="hl-val">node-reader</span> <span class="hl-flag">--verb=</span><span class="hl-val">get,list</span> <span class="hl-flag">--resource=</span><span class="hl-val">nodes</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">ClusterRoles are cluster-scoped — needed for nodes, PVs, namespaces. Can also be bound in a specific namespace via RoleBinding.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Bind ClusterRole cluster-wide</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create clusterrolebinding <span class="hl-val">bob-node-reader</span> <span class="hl-flag">--clusterrole=</span><span class="hl-val">node-reader</span> <span class="hl-flag">--user=</span><span class="hl-val">bob</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Cluster-scoped — no namespace flag needed.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Check permissions (can-i) ⭐</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> auth can-i <span class="hl-val">create pods</span> <span class="hl-flag">--as=</span><span class="hl-val">alice</span> <span class="hl-flag">-n</span> <span class="hl-val">dev</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Returns yes or no. <code>--as</code> impersonates a user. Essential for RBAC debugging in the exam.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Create a ServiceAccount</span><span class="cmd-tag tag-create">CREATE</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> create serviceaccount <span class="hl-val">my-sa</span> <span class="hl-flag">-n</span> <span class="hl-val">default</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Pod identity. Bind a Role to SA with <code>--serviceaccount=namespace:name</code>. Reference in pod: <code>spec.serviceAccountName</code>.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ NODES ═══════════════════ -->
+<div class="section" id="sec-nodes">
+  <div class="section-title">Nodes & Cluster</div>
+  <div class="section-desc">Node management, taints, kubeconfig, cluster info.</div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f0fdf4">🖥️</div><span class="category-name">Node Operations</span><span class="category-count">7 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Get nodes + resource usage</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get nodes <span class="hl-flag">-o</span> wide && <span class="hl-cmd">kubectl</span> top nodes<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">get nodes shows K8s version and status. top nodes shows live CPU/memory (requires metrics-server).</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Cordon a node (stop new pods)</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> cordon <span class="hl-val">node01</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Marks node SchedulingDisabled. Existing pods keep running. Undo with <code>kubectl uncordon node01</code>.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Drain a node (evict all pods)</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> drain <span class="hl-val">node01</span> <span class="hl-flag">--ignore-daemonsets --delete-emptydir-data</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Evicts all pods then cordons the node. Required before node upgrades.</div><div class="cmd-flags"><span class="flag"><strong>--ignore-daemonsets</strong></span><span class="flag"><strong>--delete-emptydir-data</strong></span><span class="flag"><strong>--force</strong> — evict uncontrolled pods</span></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Taint a node</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> taint nodes <span class="hl-val">node01</span> <span class="hl-val">key=value</span>:<span class="hl-val">NoSchedule</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Prevents pods without matching Tolerations from scheduling here. Effects: NoSchedule, PreferNoSchedule, NoExecute. Remove with trailing <code>-</code>.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Label a node</span><span class="cmd-tag tag-edit">EDIT</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> label node <span class="hl-val">node01</span> <span class="hl-val">disktype=ssd</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Used with nodeSelector or nodeAffinity in pod specs. Remove with <code>disktype-</code> (trailing dash).</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Switch kubectl context ⭐</span><span class="cmd-tag tag-config">CONFIG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> config use-context <span class="hl-val">&lt;context-name&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Exam tip: questions often require switching contexts first. Use <code>kubectl config get-contexts</code> to list all.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Cluster info</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> cluster-info && <span class="hl-cmd">kubectl</span> get componentstatuses<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Shows API server and CoreDNS URLs. componentstatuses (cs) shows health of etcd, scheduler, controller-manager.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TROUBLESHOOT ═══════════════════ -->
+<div class="section" id="sec-troubleshoot">
+  <div class="section-title">Troubleshooting</div>
+  <div class="section-desc">Debug crashes, networking issues, and resource problems.</div>
+  <div class="tip-box"><span class="tip-icon">🔧</span><div class="tip-text"><strong>Flow:</strong> pod status → describe (events) → logs → exec into pod → svc/endpoints → node resources → RBAC.</div></div>
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f5f3ff">🐛</div><span class="category-name">Debug Commands</span><span class="category-count">8 commands</span></div>
+    <div class="cmds-grid">
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Get events sorted by time</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get events <span class="hl-flag">-n</span> <span class="hl-val">&lt;ns&gt;</span> <span class="hl-flag">--sort-by=</span><span class="hl-val">.metadata.creationTimestamp</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Events show scheduling decisions, image pulls, OOM kills, probe failures. First thing to check on a broken cluster.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Debug with ephemeral container</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> debug <span class="hl-val">&lt;pod-name&gt;</span> <span class="hl-flag">-it --image=</span><span class="hl-val">busybox</span> <span class="hl-flag">--target=</span><span class="hl-val">&lt;container&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Attaches debug container without restarting the pod (K8s 1.23+). Great for distroless containers with no shell.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Resource usage per pod</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> top pods <span class="hl-flag">-n</span> <span class="hl-val">&lt;ns&gt;</span> <span class="hl-flag">--sort-by=</span><span class="hl-val">cpu</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Live CPU/memory usage. Requires metrics-server. If OOMKilled → increase memory limits.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Copy files from/to a pod</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> cp <span class="hl-val">&lt;pod-name&gt;</span>:/etc/config <span class="hl-val">./local-config</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Copies between local and pod. Requires tar in the container. Reverse: <code>kubectl cp ./file pod:/path</code>.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Check control plane + kubelet logs</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pods <span class="hl-flag">-n</span> kube-system && journalctl <span class="hl-flag">-u</span> kubelet <span class="hl-flag">-f</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Static pod manifests live in /etc/kubernetes/manifests/. Edit them to fix misconfigured control plane components.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">jsonpath — extract specific field</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> get pod <span class="hl-val">mypod</span> <span class="hl-flag">-o</span> jsonpath='{.status.podIP}'<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Extract specific fields. Loop: <code>{range .items[*]}{.metadata.name}{"\n"}{end}</code></div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">Check cert expiry (kubeadm)</span><span class="cmd-tag tag-debug">DEBUG</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code">kubeadm certs check-expiration<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">Shows expiry for all cluster certs. Renew with <code>kubeadm certs renew all</code>. Default expiry: 1 year.</div></div>
+      </div>
+      <div class="cmd-card" onclick="toggle(this)">
+        <div class="cmd-top"><span class="cmd-label">View ResourceQuota and LimitRange</span><span class="cmd-tag tag-get">GET</span><span class="expand-icon">▶</span></div>
+        <div class="cmd-code"><span class="hl-cmd">kubectl</span> describe quota <span class="hl-flag">-n</span> <span class="hl-val">&lt;ns&gt;</span> && <span class="hl-cmd">kubectl</span> describe limitrange <span class="hl-flag">-n</span> <span class="hl-val">&lt;ns&gt;</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+        <div class="cmd-detail"><div class="cmd-desc">If pods fail to schedule, quota exhaustion may be the cause. LimitRange sets default requests/limits for containers.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SHORTCUTS ═══════════════════ -->
+<div class="section" id="sec-shortcuts">
+  <div class="section-title">⚡ Quick Reference</div>
+  <div class="section-desc">Aliases, exam tips, and etcd backup commands.</div>
+  <div class="tip-box"><span class="tip-icon">🎯</span><div class="tip-text"><strong>Exam setup:</strong> Run these aliases at the start of every CKA session — saves several minutes.</div></div>
+
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#eff6ff">⚡</div><span class="category-name">Exam Aliases & Setup</span></div>
+    <div class="cmd-code" style="border-radius:10px;padding:18px;font-size:12px;line-height:2;margin-bottom:20px;">
+<span class="hl-comment"># Paste at start of every exam session</span>
+alias k=kubectl
+alias kgp='kubectl get pods'
+alias kgs='kubectl get svc'
+alias kgd='kubectl get deploy'
+alias kgn='kubectl get nodes'
+
+source &lt;(kubectl completion bash)
+complete -F __start_kubectl k
+
+<span class="hl-comment"># Dry-run shortcut</span>
+export do="--dry-run=client -o yaml"
+<span class="hl-comment"># kubectl run nginx --image=nginx $do > pod.yaml</span>
+
+export now="--grace-period=0 --force"<button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#fef2f2">🔑</div><span class="category-name">etcd Backup & Restore (high value — 25% weight)</span></div>
+    <div class="cmd-code" style="border-radius:10px;padding:18px;font-size:12px;line-height:2;margin-bottom:20px;">
+<span class="hl-comment"># Backup</span>
+ETCDCTL_API=3 etcdctl snapshot save /opt/etcd-backup.db \
+  <span class="hl-flag">--endpoints=</span>https://127.0.0.1:2379 \
+  <span class="hl-flag">--cacert=</span>/etc/kubernetes/pki/etcd/ca.crt \
+  <span class="hl-flag">--cert=</span>/etc/kubernetes/pki/etcd/server.crt \
+  <span class="hl-flag">--key=</span>/etc/kubernetes/pki/etcd/server.key
+
+<span class="hl-comment"># Verify</span>
+ETCDCTL_API=3 etcdctl snapshot status /opt/etcd-backup.db <span class="hl-flag">--write-out=table</span>
+
+<span class="hl-comment"># Restore</span>
+ETCDCTL_API=3 etcdctl snapshot restore /opt/etcd-backup.db \
+  <span class="hl-flag">--data-dir=</span>/var/lib/etcd-restore
+<span class="hl-comment"># Then edit /etc/kubernetes/manifests/etcd.yaml</span>
+<span class="hl-comment"># Set --data-dir=/var/lib/etcd-restore</span><button class="copy-btn" onclick="copyCode(event)">Copy</button></div>
+
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#f0fdf4">📋</div><span class="category-name">Resource Abbreviations</span></div>
+    <table class="cheat-table">
+      <tr><th>Short</th><th>Resource</th><th>Short</th><th>Resource</th></tr>
+      <tr><td>po</td><td>pods</td><td>svc</td><td>services</td></tr>
+      <tr><td>deploy</td><td>deployments</td><td>ns</td><td>namespaces</td></tr>
+      <tr><td>rs</td><td>replicasets</td><td>pv</td><td>persistentvolumes</td></tr>
+      <tr><td>sts</td><td>statefulsets</td><td>pvc</td><td>persistentvolumeclaims</td></tr>
+      <tr><td>ds</td><td>daemonsets</td><td>cm</td><td>configmaps</td></tr>
+      <tr><td>ing</td><td>ingresses</td><td>sa</td><td>serviceaccounts</td></tr>
+      <tr><td>netpol</td><td>networkpolicies</td><td>sc</td><td>storageclasses</td></tr>
+    </table>
+  </div>
+
+  <div class="category">
+    <div class="category-header"><div class="category-icon" style="background:#fff7ed">🎯</div><span class="category-name">CKA Exam Domains & Weights</span></div>
+    <table class="cheat-table" style="margin-bottom:0">
+      <tr><th>Domain</th><th>Weight</th><th>Key Topics</th></tr>
+      <tr><td>Troubleshooting</td><td>30%</td><td>Logs, events, node issues, app failures</td></tr>
+      <tr><td>Cluster Architecture & Installation</td><td>25%</td><td>kubeadm, RBAC, etcd backup, upgrades</td></tr>
+      <tr><td>Services & Networking</td><td>20%</td><td>Services, DNS, NetworkPolicy, Ingress</td></tr>
+      <tr><td>Workloads & Scheduling</td><td>15%</td><td>Deployments, taints, affinity, resource limits</td></tr>
+      <tr><td>Storage</td><td>10%</td><td>PV, PVC, StorageClass, volume mounts</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- Search empty -->
+<div class="search-empty" id="searchEmpty">
+  <div style="font-size:36px;margin-bottom:12px">🔍</div>
+  <div>No results for "<span id="searchTerm"></span>"</div>
+  <div style="font-size:12px;margin-top:6px">Try different keywords</div>
+</div>
+
+</div>
+
+<script>
+const archDetails = {
+  apiserver: { icon:'🔌', name:'API Server (kube-apiserver)', badge:'dp-badge-ctrl', badgeText:'Control Plane',
+    desc:'The central nervous system of Kubernetes. Every operation — kubectl, operators, controllers — goes through the API Server. It authenticates (who are you?), authorizes via RBAC (are you allowed?), then passes admission controllers before writing to etcd. It is the ONLY component that reads/writes etcd.',
+    facts:[{l:'Port',v:'6443 (HTTPS)'},{l:'Auth methods',v:'X.509 certs, Bearer tokens, OIDC, SA tokens'},{l:'Key admission',v:'LimitRanger, PodSecurity, MutatingWebhook'},{l:'HA',v:'Multiple replicas behind a load balancer'}]},
+  etcd: { icon:'🗄️', name:'etcd', badge:'dp-badge-ctrl', badgeText:'Control Plane',
+    desc:'The cluster\'s brain — a strongly consistent distributed key-value store built on the Raft consensus algorithm. Every K8s object exists here. If etcd is lost without a backup, the cluster\'s desired state is gone. Only the API Server talks to etcd directly.',
+    facts:[{l:'Ports',v:'2379 (client), 2380 (peer)'},{l:'Consistency',v:'Linearizable — strongly consistent reads'},{l:'HA',v:'Odd number of nodes (3 or 5) for quorum'},{l:'Backup',v:'etcdctl snapshot save — automate this!'}]},
+  scheduler: { icon:'📅', name:'Scheduler (kube-scheduler)', badge:'dp-badge-ctrl', badgeText:'Control Plane',
+    desc:'Watches for unbound pods and runs a two-phase algorithm: Filter (remove nodes that can\'t run the pod — insufficient CPU/mem, taints, affinity) then Score (rank remaining nodes 0–100). The highest-scored node wins and the binding is written to etcd.',
+    facts:[{l:'Phase 1',v:'Filter — removes unviable nodes'},{l:'Phase 2',v:'Score — ranks nodes 0–100'},{l:'Plugins',v:'Scheduling Framework for custom filter/score logic'},{l:'Custom',v:'Run multiple scheduler instances for different workloads'}]},
+  controller: { icon:'🔄', name:'Controller Manager', badge:'dp-badge-ctrl', badgeText:'Control Plane',
+    desc:'Runs a bundle of control loops — each watches a resource type and reconciles actual state toward desired state. This is the declarative model: you describe what you want, controllers make it happen. Key controllers: ReplicaSet, Node, Endpoints, Job, CronJob.',
+    facts:[{l:'Pattern',v:'Watch → Diff → Act (reconcile loop)'},{l:'ReplicaSet ctrl',v:'Ensures N copies of a pod always run'},{l:'Node ctrl',v:'Evicts pods from unresponsive nodes after grace period'},{l:'Extensibility',v:'Operators extend this pattern via CRDs'}]},
+  ccm: { icon:'☁️', name:'Cloud Controller Manager', badge:'dp-badge-ctrl', badgeText:'Control Plane',
+    desc:'Bridges Kubernetes to your cloud provider\'s API. Handles Node lifecycle (provider labels, stale instance cleanup), Route controller (VPC routes for pod CIDR), and Service controller (creates cloud LBs for type=LoadBalancer Services).',
+    facts:[{l:'Node ctrl',v:'Syncs cloud instance metadata to K8s Node objects'},{l:'Service ctrl',v:'Provisions AWS ELB/GCP LB on LoadBalancer Services'},{l:'Route ctrl',v:'Configures VPC routes for pod networking'},{l:'Only on',v:'Managed clusters: EKS, GKE, AKS'}]},
+  kubelet: { icon:'🤖', name:'kubelet', badge:'dp-badge-data', badgeText:'Data Plane',
+    desc:'The primary node agent running on every worker. It receives PodSpecs from the API Server, calls the container runtime via CRI to start containers, runs liveness/readiness probes, manages volume mounts, and reports node/pod status back. Static pods in /etc/kubernetes/manifests/ are also managed by kubelet — this is how control plane components themselves often run.',
+    facts:[{l:'Port',v:'10250 (HTTPS) — scraped by Prometheus'},{l:'Probes',v:'liveness, readiness, startup'},{l:'CRI',v:'Calls containerd or CRI-O via gRPC'},{l:'Static pods',v:'/etc/kubernetes/manifests/'}]},
+  kubeproxy: { icon:'🌐', name:'kube-proxy', badge:'dp-badge-data', badgeText:'Data Plane',
+    desc:'Runs on every node and maintains network rules that implement the Service abstraction. When you create a Service, kube-proxy programs iptables/IPVS rules so traffic hitting the ClusterIP gets distributed to healthy pods. Increasingly replaced by eBPF CNIs like Cilium.',
+    facts:[{l:'Mode',v:'iptables (default) or IPVS (faster at scale)'},{l:'Watches',v:'Service and EndpointSlice objects'},{l:'Note',v:'Traffic doesn\'t pass through kube-proxy — it just sets rules'},{l:'Alternative',v:'Cilium with kube-proxy replacement (eBPF)'}]},
+  cri: { icon:'📦', name:'Container Runtime (CRI)', badge:'dp-badge-data', badgeText:'Data Plane',
+    desc:'What actually starts and stops containers. Kubernetes defines the CRI gRPC API — any runtime implementing it can be used. containerd is the most common. It calls runc (OCI runtime) to create Linux namespaces and cgroups for the container.',
+    facts:[{l:'Default',v:'containerd (Docker removed in K8s v1.24)'},{l:'OCI runtime',v:'runc — creates Linux namespaces/cgroups'},{l:'Alternatives',v:'CRI-O, gVisor (sandbox), Kata Containers (VM)'},{l:'Interface',v:'CRI gRPC: RuntimeService + ImageService'}]},
+  cni: { icon:'🕸️', name:'CNI Plugin', badge:'dp-badge-data', badgeText:'Data Plane',
+    desc:'Responsible for pod networking. When a pod is created, kubelet calls the CNI plugin to assign an IP and set up the network interface in the pod\'s network namespace. Every pod must get a unique, routable IP — the flat network model K8s requires.',
+    facts:[{l:'Flannel',v:'VXLAN overlay — simple, no NetworkPolicy'},{l:'Calico',v:'BGP routing + full NetworkPolicy support'},{l:'Cilium',v:'eBPF — best perf, L7 policy, Hubble observability'},{l:'Rule',v:'Every pod must reach every pod without NAT'}]},
+  pod: { icon:'🟢', name:'Pod — The Atomic Unit', badge:'dp-badge-data', badgeText:'Worker Node',
+    desc:'The smallest deployable unit in Kubernetes. Wraps one or more containers sharing the same network namespace (same IP, same localhost) and storage volumes. Pods are ephemeral — they are born, run, and die. Deployments manage pod lifecycle via ReplicaSets.',
+    facts:[{l:'Networking',v:'Shared network namespace — containers share IP & localhost'},{l:'Lifecycle',v:'Pending → Running → Succeeded / Failed'},{l:'Sidecar',v:'Init containers + sidecar containers (e.g. Envoy proxy)'},{l:'Note',v:'IPs released on termination — use Services for stable addressing'}]},
+};
+
+function showDetail(key, el) {
+  const d = archDetails[key];
+  if (!d) return;
+  document.querySelectorAll('.arch-comp, .worker-node').forEach(c => c.classList.remove('active-comp'));
+  if (el) el.classList.add('active-comp');
+  const panel = document.getElementById('archDetail');
+  panel.style.display = 'block';
+  panel.innerHTML = `
+    <div class="detail-panel">
+      <div class="dp-header">
+        <span class="dp-icon">${d.icon}</span>
+        <div>
+          <div class="dp-name">${d.name}</div>
+          <span class="dp-badge ${d.badge}">${d.badgeText}</span>
+        </div>
+        <button class="dp-close" onclick="closeDetail()">✕</button>
+      </div>
+      <div class="dp-desc">${d.desc}</div>
+      <div class="dp-facts">${d.facts.map(f=>`<div class="dp-fact"><div class="dp-fact-label">${f.l}</div><div class="dp-fact-val">${f.v}</div></div>`).join('')}</div>
+    </div>`;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function closeDetail() {
+  document.getElementById('archDetail').style.display = 'none';
+  document.querySelectorAll('.arch-comp, .worker-node').forEach(c => c.classList.remove('active-comp'));
+}
+
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchEmpty').style.display = 'none';
+  document.querySelectorAll('.category').forEach(c => c.style.display = '');
+  document.querySelectorAll('.cmd-card').forEach(c => c.style.display = '');
+  document.querySelector('.nav-tabs').style.opacity = '1';
+}
+
+function toggle(card) {
+  if (event.target.classList.contains('copy-btn')) return;
+  card.classList.toggle('expanded');
+}
+
+function copyCode(e) {
+  e.stopPropagation();
+  const btn = e.target;
+  const codeEl = btn.closest('.cmd-code');
+  const text = codeEl.innerText.replace(/Copy$/, '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+function filterCommands(q) {
+  const lq = q.toLowerCase().trim();
+  if (!lq) {
+    document.querySelectorAll('.cmd-card').forEach(c => c.style.display = '');
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-overview').classList.add('active');
+    document.querySelectorAll('.tab').forEach((t,i) => i===0 ? t.classList.add('active') : t.classList.remove('active'));
+    document.querySelectorAll('.category').forEach(c => c.style.display = '');
+    document.getElementById('searchEmpty').style.display = 'none';
+    document.querySelector('.nav-tabs').style.opacity = '1';
+    return;
+  }
+  document.querySelector('.nav-tabs').style.opacity = '0.5';
+  document.querySelectorAll('.section').forEach(s => s.classList.add('active'));
+  let any = false;
+  document.querySelectorAll('.cmd-card').forEach(card => {
+    const match = card.innerText.toLowerCase().includes(lq);
+    card.style.display = match ? '' : 'none';
+    if (match) any = true;
+  });
+  document.querySelectorAll('.category').forEach(cat => {
+    const vis = [...cat.querySelectorAll('.cmd-card')].some(c => c.style.display !== 'none');
+    cat.style.display = vis ? '' : 'none';
+  });
+  document.getElementById('searchEmpty').style.display = any ? 'none' : 'block';
+  document.getElementById('searchTerm').textContent = q;
+}
+</script>
+</body>
+</html>
