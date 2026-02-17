@@ -1,0 +1,1058 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kubernetes Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070b14;
+    --panel: #0d1525;
+    --panel2: #111a2e;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --accent5: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: 0 0 20px rgba(0,212,255,0.25);
+    --glow2: 0 0 20px rgba(124,58,237,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .label-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 800;
+    background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 50%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Architecture diagram */
+  .arch {
+    display: grid;
+    gap: 20px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  /* Cluster boundary */
+  .cluster {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(13,21,37,0.9), rgba(17,26,46,0.9));
+    overflow: hidden;
+  }
+  .cluster::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.04), transparent 60%);
+    pointer-events: none;
+  }
+
+  .cluster-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: absolute;
+    top: -1px;
+    left: 24px;
+    background: var(--bg);
+    padding: 0 10px;
+    color: var(--accent);
+    line-height: 0;
+    top: 0;
+    transform: translateY(-50%);
+  }
+
+  /* Planes */
+  .planes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .planes { grid-template-columns: 1fr; }
+  }
+
+  /* Plane box */
+  .plane {
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .control-plane {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(124,58,237,0.04));
+    border: 1px solid rgba(124,58,237,0.4);
+  }
+  .control-plane::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent2), transparent);
+  }
+
+  .data-plane {
+    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,212,255,0.02));
+    border: 1px solid rgba(0,212,255,0.3);
+  }
+  .data-plane::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .plane-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .control-plane .plane-title { color: var(--accent2); }
+  .data-plane .plane-title { color: var(--accent); }
+
+  .plane-title .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .control-plane .dot { background: var(--accent2); box-shadow: 0 0 6px var(--accent2); }
+  .data-plane .dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+  /* Components grid */
+  .components {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .components { grid-template-columns: 1fr; }
+  }
+
+  /* Component card */
+  .comp {
+    background: rgba(7,11,20,0.7);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    border: 1px solid transparent;
+  }
+
+  .comp:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.06);
+    box-shadow: var(--glow);
+  }
+
+  .comp.active {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    box-shadow: var(--glow);
+  }
+
+  .control-plane .comp:hover,
+  .control-plane .comp.active {
+    border-color: var(--accent2);
+    background: rgba(124,58,237,0.1);
+    box-shadow: var(--glow2);
+  }
+
+  .comp-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .comp-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+
+  .comp-short {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* Worker node */
+  .worker-section {
+    margin-top: 20px;
+  }
+
+  .workers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 700px) {
+    .workers-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .worker-node {
+    background: rgba(7,11,20,0.8);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    padding: 14px;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+
+  .worker-node:hover {
+    border-color: var(--accent3);
+    box-shadow: 0 0 16px rgba(16,185,129,0.2);
+    transform: translateY(-2px);
+  }
+
+  .worker-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent3);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .pods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .pod {
+    background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.08));
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 9px;
+    color: var(--accent3);
+    letter-spacing: 0.05em;
+  }
+
+  .node-comps {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .node-comp {
+    font-size: 9px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .node-comp span {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* Detail panel */
+  .detail-panel {
+    margin-top: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: all 0.4s ease;
+    min-height: 0;
+    background: var(--panel);
+  }
+
+  .detail-inner {
+    padding: 24px 28px;
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .detail-icon { font-size: 28px; }
+
+  .detail-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .detail-badge {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .badge-control { background: rgba(124,58,237,0.2); color: var(--accent2); border: 1px solid rgba(124,58,237,0.3); }
+  .badge-data { background: rgba(0,212,255,0.15); color: var(--accent); border: 1px solid rgba(0,212,255,0.3); }
+  .badge-addon { background: rgba(245,158,11,0.15); color: var(--accent4); border: 1px solid rgba(245,158,11,0.3); }
+
+  .detail-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #94a3b8;
+    margin-bottom: 16px;
+  }
+
+  .detail-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .fact {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 12px 14px;
+    border-left: 2px solid var(--accent);
+  }
+
+  .fact-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .fact-value {
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Flow section */
+  .flow-section {
+    margin-top: 28px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .section-head {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-head::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .flow-steps::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 20px;
+    bottom: 20px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent2), var(--accent), var(--accent3));
+    opacity: 0.4;
+  }
+
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    cursor: default;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s;
+  }
+
+  .flow-step:hover .step-num { transform: scale(1.15); }
+
+  .step-1 .step-num { background: rgba(124,58,237,0.2); border: 1px solid var(--accent2); color: var(--accent2); }
+  .step-2 .step-num { background: rgba(0,212,255,0.1); border: 1px solid var(--accent); color: var(--accent); }
+  .step-3 .step-num { background: rgba(0,212,255,0.1); border: 1px solid var(--accent); color: var(--accent); }
+  .step-4 .step-num { background: rgba(16,185,129,0.1); border: 1px solid var(--accent3); color: var(--accent3); }
+  .step-5 .step-num { background: rgba(16,185,129,0.1); border: 1px solid var(--accent3); color: var(--accent3); }
+  .step-6 .step-num { background: rgba(245,158,11,0.1); border: 1px solid var(--accent4); color: var(--accent4); }
+
+  .step-content {}
+  .step-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .step-code {
+    display: inline-block;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--accent);
+    margin-top: 6px;
+  }
+
+  /* Networking section */
+  .net-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .net-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.25s;
+  }
+  .net-card:hover {
+    border-color: var(--accent4);
+    box-shadow: 0 0 16px rgba(245,158,11,0.15);
+    transform: translateY(-2px);
+  }
+
+  .net-icon { font-size: 22px; margin-bottom: 8px; }
+  .net-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .net-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Footer note */
+  .footer-note {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+  }
+
+  /* Hint bar */
+  .hint {
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="label-tag">// SYSTEM ARCHITECTURE</div>
+    <h1>Kubernetes Architecture</h1>
+    <p class="subtitle">Container orchestration at scale — click any component to explore</p>
+  </header>
+
+  <div class="arch">
+    <p class="hint">▸ Click any component to see a detailed explanation</p>
+
+    <!-- Main Cluster -->
+    <div class="cluster">
+      <span class="cluster-label">K8s Cluster</span>
+
+      <div class="planes">
+
+        <!-- Control Plane -->
+        <div class="plane control-plane">
+          <div class="plane-title"><span class="dot"></span> Control Plane</div>
+          <div class="components">
+
+            <div class="comp" onclick="showDetail('apiserver')">
+              <span class="comp-icon">🔌</span>
+              <div class="comp-name">API Server</div>
+              <div class="comp-short">kube-apiserver — the front door for all cluster operations</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('etcd')">
+              <span class="comp-icon">🗄️</span>
+              <div class="comp-name">etcd</div>
+              <div class="comp-short">Distributed key-value store holding all cluster state</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('scheduler')">
+              <span class="comp-icon">📅</span>
+              <div class="comp-name">Scheduler</div>
+              <div class="comp-short">Assigns unscheduled pods to the best available node</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('controller')">
+              <span class="comp-icon">🔄</span>
+              <div class="comp-name">Controller Manager</div>
+              <div class="comp-short">Runs reconciliation loops to enforce desired state</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('ccm')">
+              <span class="comp-icon">☁️</span>
+              <div class="comp-name">Cloud Controller</div>
+              <div class="comp-short">Bridges cluster to cloud-provider APIs (AWS, GCP, Azure)</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Data Plane overview -->
+        <div class="plane data-plane">
+          <div class="plane-title"><span class="dot"></span> Data Plane — Worker Node</div>
+          <div class="components">
+
+            <div class="comp" onclick="showDetail('kubelet')">
+              <span class="comp-icon">🤖</span>
+              <div class="comp-name">kubelet</div>
+              <div class="comp-short">Node agent — ensures containers are running in their pods</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('kubeproxy')">
+              <span class="comp-icon">🌐</span>
+              <div class="comp-name">kube-proxy</div>
+              <div class="comp-short">Manages iptables/IPVS rules for Service networking</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('cri')">
+              <span class="comp-icon">📦</span>
+              <div class="comp-name">Container Runtime</div>
+              <div class="comp-short">containerd / CRI-O — actually runs your containers</div>
+            </div>
+
+            <div class="comp" onclick="showDetail('cni')">
+              <span class="comp-icon">🕸️</span>
+              <div class="comp-name">CNI Plugin</div>
+              <div class="comp-short">Calico, Flannel, Cilium — wires pod networking together</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Worker Nodes -->
+      <div class="worker-section">
+        <div class="plane-title" style="color: var(--accent3); font-size:12px; margin-bottom:8px;">
+          <span class="dot" style="background:var(--accent3); box-shadow:0 0 6px var(--accent3);"></span>
+          Worker Nodes (Data Plane)
+        </div>
+        <div class="workers-grid">
+
+          <div class="worker-node" onclick="showDetail('pod')">
+            <div class="worker-title">Node 1</div>
+            <div class="pods">
+              <div class="pod">nginx-7x4</div>
+              <div class="pod">api-2x1</div>
+              <div class="pod">redis-1x0</div>
+            </div>
+            <div class="node-comps">
+              <div class="node-comp"><span></span>kubelet</div>
+              <div class="node-comp"><span></span>kube-proxy</div>
+              <div class="node-comp"><span></span>containerd</div>
+            </div>
+          </div>
+
+          <div class="worker-node" onclick="showDetail('pod')">
+            <div class="worker-title">Node 2</div>
+            <div class="pods">
+              <div class="pod">worker-3x2</div>
+              <div class="pod">cache-9x1</div>
+            </div>
+            <div class="node-comps">
+              <div class="node-comp"><span></span>kubelet</div>
+              <div class="node-comp"><span></span>kube-proxy</div>
+              <div class="node-comp"><span></span>containerd</div>
+            </div>
+          </div>
+
+          <div class="worker-node" onclick="showDetail('pod')">
+            <div class="worker-title">Node 3</div>
+            <div class="pods">
+              <div class="pod">db-0x0</div>
+              <div class="pod">monitor-4x2</div>
+              <div class="pod">log-6x1</div>
+            </div>
+            <div class="node-comps">
+              <div class="node-comp"><span></span>kubelet</div>
+              <div class="node-comp"><span></span>kube-proxy</div>
+              <div class="node-comp"><span></span>containerd</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail Panel -->
+      <div class="detail-panel" id="detailPanel" style="display:none;">
+        <div class="detail-inner" id="detailContent"></div>
+      </div>
+
+    </div>
+
+    <!-- Request flow -->
+    <div class="flow-section">
+      <div class="section-head">📬 How a Pod Gets Scheduled — Request Flow</div>
+      <div class="flow-steps">
+
+        <div class="flow-step step-1">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">You apply a manifest</div>
+            <div class="step-desc">kubectl sends a YAML/JSON manifest to the API Server over HTTPS. The API Server authenticates, authorizes (RBAC), and admits the request via admission controllers.</div>
+            <div class="step-code">kubectl apply -f deployment.yaml</div>
+          </div>
+        </div>
+
+        <div class="flow-step step-2">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">State written to etcd</div>
+            <div class="step-desc">The desired state (e.g., "run 3 replicas of nginx") is persisted to etcd. This is the single source of truth — every other component watches etcd via the API Server.</div>
+          </div>
+        </div>
+
+        <div class="flow-step step-3">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Scheduler picks a node</div>
+            <div class="step-desc">The Scheduler watches for unbound pods. It filters nodes by resource requests, affinity rules, taints/tolerations — then ranks them and binds the pod to the best node.</div>
+          </div>
+        </div>
+
+        <div class="flow-step step-4">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">kubelet takes action</div>
+            <div class="step-desc">The kubelet on the selected node sees the pod binding and calls the container runtime (containerd) to pull the image and start the container(s).</div>
+          </div>
+        </div>
+
+        <div class="flow-step step-5">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">Networking wired up</div>
+            <div class="step-desc">The CNI plugin assigns an IP to the pod and configures routes. kube-proxy updates iptables/IPVS so the Service can route traffic to the new pod.</div>
+          </div>
+        </div>
+
+        <div class="flow-step step-6">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <div class="step-title">Reconciliation loop — forever</div>
+            <div class="step-desc">Controllers continuously compare actual state vs desired state. If a pod crashes, the ReplicaSet controller creates a new one. This self-healing loop never stops.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Networking objects -->
+    <div class="flow-section">
+      <div class="section-head">🌐 Core Networking Objects</div>
+      <div class="net-grid">
+        <div class="net-card" onclick="showDetail('service')">
+          <div class="net-icon">🔀</div>
+          <div class="net-title">Service</div>
+          <div class="net-desc">Stable virtual IP (ClusterIP) that load-balances to a set of pods. Types: ClusterIP, NodePort, LoadBalancer, ExternalName.</div>
+        </div>
+        <div class="net-card" onclick="showDetail('ingress')">
+          <div class="net-icon">🚪</div>
+          <div class="net-title">Ingress</div>
+          <div class="net-desc">HTTP/HTTPS routing rules. An Ingress Controller (nginx, Traefik) translates these rules into actual reverse-proxy config.</div>
+        </div>
+        <div class="net-card" onclick="showDetail('configmap')">
+          <div class="net-icon">⚙️</div>
+          <div class="net-title">ConfigMap & Secret</div>
+          <div class="net-desc">Decouple config from images. Secrets are base64-encoded (integrate with Vault for real encryption at rest).</div>
+        </div>
+        <div class="net-card" onclick="showDetail('pv')">
+          <div class="net-icon">💾</div>
+          <div class="net-title">PersistentVolume</div>
+          <div class="net-desc">Storage abstraction. PVCs claim storage; StorageClass provisions it dynamically from cloud or on-prem backends.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">KUBERNETES ARCHITECTURE — Click any component for deep detail // Built with ❤️</div>
+
+</div>
+
+<script>
+const details = {
+  apiserver: {
+    icon: '🔌',
+    name: 'API Server (kube-apiserver)',
+    badge: 'badge-control',
+    badgeText: 'Control Plane',
+    desc: 'The API Server is the central nervous system of Kubernetes — every single operation flows through it. It exposes the Kubernetes API (a RESTful HTTP API) and is the only component that reads from and writes to etcd. When you run kubectl, helm, or any operator — they all talk to kube-apiserver.\n\nIt processes requests in a strict pipeline: authentication (who are you?), authorization (are you allowed?), and admission control (does this request pass policy?). Admission controllers like LimitRanger, PodSecurity, and MutatingWebhook run here before anything is persisted.',
+    facts: [
+      { label: 'Port', value: '6443 (HTTPS)' },
+      { label: 'Auth methods', value: 'X.509 certs, Bearer tokens, OIDC, ServiceAccount tokens' },
+      { label: 'Key flag', value: '--enable-admission-plugins' },
+      { label: 'HA setup', value: 'Run multiple replicas behind a load balancer' }
+    ]
+  },
+  etcd: {
+    icon: '🗄️',
+    name: 'etcd',
+    badge: 'badge-control',
+    badgeText: 'Control Plane',
+    desc: 'etcd is the cluster\'s brain — a strongly consistent, distributed key-value store built on the Raft consensus algorithm. Every Kubernetes object (pods, deployments, services, secrets) exists as a key-value entry in etcd. If etcd is lost and you have no backup, the cluster\'s desired state is gone.\n\nThe API Server is the only component allowed to talk to etcd directly. All others (scheduler, controllers, kubelet) talk to the API Server, which proxies reads and writes. etcd uses a watch mechanism so components get real-time notifications when data changes.',
+    facts: [
+      { label: 'Port', value: '2379 (client), 2380 (peer)' },
+      { label: 'Consistency', value: 'Strong (linearizable reads)' },
+      { label: 'HA setup', value: 'Odd number of nodes (3 or 5) for quorum' },
+      { label: 'Backup', value: 'etcdctl snapshot save — critical to automate!' }
+    ]
+  },
+  scheduler: {
+    icon: '📅',
+    name: 'Scheduler (kube-scheduler)',
+    badge: 'badge-control',
+    badgeText: 'Control Plane',
+    desc: 'The Scheduler watches for newly created pods that have no node assigned yet. For each such pod, it runs a two-phase algorithm: Filtering (eliminate nodes that can\'t run the pod — insufficient CPU, memory, no matching label, tainted) and Scoring (rank remaining nodes by a set of priority functions).\n\nScoring considers things like image locality, resource balancing, pod affinity/anti-affinity, topology spread constraints, and custom plugins via the Scheduling Framework. The highest-scored node wins, and the binding is written back to the API Server.',
+    facts: [
+      { label: 'Phase 1', value: 'Filter — removes unviable nodes' },
+      { label: 'Phase 2', value: 'Score — ranks remaining nodes 0–100' },
+      { label: 'Extensibility', value: 'Scheduling Framework plugins (Filter, Score, Bind, etc.)' },
+      { label: 'Custom', value: 'Can run multiple scheduler instances for different workloads' }
+    ]
+  },
+  controller: {
+    icon: '🔄',
+    name: 'Controller Manager (kube-controller-manager)',
+    badge: 'badge-control',
+    badgeText: 'Control Plane',
+    desc: 'The Controller Manager runs a bundle of independent control loops — each one watches a specific resource type and reconciles actual state toward desired state. This is the core of Kubernetes\' declarative model: you describe what you want, and controllers make it happen.\n\nKey built-in controllers: Node Controller (marks nodes NotReady when heartbeat stops), ReplicaSet Controller (creates/deletes pods to match .spec.replicas), Endpoints Controller (populates the Endpoints object for Services), Service Account Controller, Job Controller, Cronjob Controller, and many more.',
+    facts: [
+      { label: 'Pattern', value: 'Watch → Diff → Act (reconcile loop)' },
+      { label: 'ReplicaSet ctrl', value: 'Ensures N copies of a pod always run' },
+      { label: 'Node ctrl', value: 'Evicts pods from unresponsive nodes after grace period' },
+      { label: 'Custom CRDs', value: 'Operators extend this pattern for your own resources' }
+    ]
+  },
+  ccm: {
+    icon: '☁️',
+    name: 'Cloud Controller Manager',
+    badge: 'badge-control',
+    badgeText: 'Control Plane',
+    desc: 'The Cloud Controller Manager (CCM) bridges Kubernetes to your cloud provider\'s API. It was split out of the main controller manager to allow cloud vendors to evolve their integrations independently. It only runs on managed Kubernetes clusters (EKS, GKE, AKS, etc.).\n\nIt handles: Node lifecycle (sets provider-specific labels, deletes stale cloud instances), Route controller (configures VPC routes for pod network CIDR), and Service controller (creates cloud Load Balancers when you create a Service of type LoadBalancer).',
+    facts: [
+      { label: 'Node controller', value: 'Syncs cloud instance metadata to K8s Node objects' },
+      { label: 'Service ctrl', value: 'Provisions AWS ELB/GCP LB when Service type=LoadBalancer' },
+      { label: 'Route ctrl', value: 'Configures VPC routes for pod networking' },
+      { label: 'Interface', value: 'cloud-provider interface — vendored by AWS, GCP, Azure' }
+    ]
+  },
+  kubelet: {
+    icon: '🤖',
+    name: 'kubelet',
+    badge: 'badge-data',
+    badgeText: 'Data Plane',
+    desc: 'The kubelet is the primary node agent — it runs on every worker node and is responsible for making sure containers described in PodSpecs are running and healthy. It receives PodSpecs from the API Server and drives the container runtime to start/stop containers.\n\nThe kubelet also runs liveness and readiness probes, reports node and pod status back to the API Server, manages volumes (mount/unmount), and interfaces with the CRI (Container Runtime Interface) so it works with any OCI-compliant runtime. It also handles static pods — pods defined as YAML files on disk (how control plane components themselves often run).',
+    facts: [
+      { label: 'Port', value: '10250 (HTTPS) — scraped by Prometheus' },
+      { label: 'Probes', value: 'liveness, readiness, startup — all managed by kubelet' },
+      { label: 'CRI', value: 'Calls containerd or CRI-O via gRPC' },
+      { label: 'Static pods', value: '/etc/kubernetes/manifests — how control plane bootstraps' }
+    ]
+  },
+  kubeproxy: {
+    icon: '🌐',
+    name: 'kube-proxy',
+    badge: 'badge-data',
+    badgeText: 'Data Plane',
+    desc: 'kube-proxy runs on every node and maintains network rules that implement the Kubernetes Service abstraction. When you create a Service, kube-proxy programs iptables (or IPVS) rules so that traffic hitting the Service\'s ClusterIP gets distributed to the healthy pods behind it.\n\nIn modern clusters, kube-proxy is increasingly being replaced or supplemented by eBPF-based solutions like Cilium, which bypass iptables entirely for better performance and observability. But kube-proxy remains the default in most distributions.',
+    facts: [
+      { label: 'Mode', value: 'iptables (default) or IPVS (faster at scale)' },
+      { label: 'Watches', value: 'Service and EndpointSlice objects for changes' },
+      { label: 'No proxy', value: 'Traffic doesn\'t pass through kube-proxy — it just sets rules' },
+      { label: 'Alternative', value: 'Cilium with kube-proxy replacement (eBPF)' }
+    ]
+  },
+  cri: {
+    icon: '📦',
+    name: 'Container Runtime (CRI)',
+    badge: 'badge-data',
+    badgeText: 'Data Plane',
+    desc: 'The Container Runtime is what actually starts and stops containers. Kubernetes defines the Container Runtime Interface (CRI) — a gRPC API — and any runtime implementing it can be used. The most common is containerd (used by EKS, GKE, and most clusters). CRI-O is another lightweight option.\n\ncontainerd calls runc (or another OCI runtime like gVisor, Kata Containers) to actually create Linux namespaces and cgroups for the container. This is the final layer in the stack — from YAML manifest all the way down to a kernel namespace.',
+    facts: [
+      { label: 'Default runtime', value: 'containerd (since Docker was removed in K8s v1.24)' },
+      { label: 'OCI runtime', value: 'runc — creates actual Linux namespaces/cgroups' },
+      { label: 'Alternatives', value: 'CRI-O, gVisor (sandbox), Kata Containers (VM-based)' },
+      { label: 'Interface', value: 'CRI gRPC API — RuntimeService + ImageService' }
+    ]
+  },
+  cni: {
+    icon: '🕸️',
+    name: 'CNI Plugin (Container Network Interface)',
+    badge: 'badge-data',
+    badgeText: 'Data Plane',
+    desc: 'The CNI plugin is responsible for pod networking. When a pod is created, kubelet calls the CNI plugin to assign an IP address and set up the network interface inside the pod\'s network namespace. Every pod gets a unique, routable IP — this is the "flat network" model K8s requires.\n\nPopular options: Flannel (simple VXLAN overlay, good for small clusters), Calico (BGP-based, great for network policy enforcement), Cilium (eBPF-powered, best observability and performance, supports mTLS). Network Policies are only enforced if your CNI supports them — Flannel does not.',
+    facts: [
+      { label: 'Flannel', value: 'VXLAN overlay — simple, no network policy' },
+      { label: 'Calico', value: 'BGP routing + full NetworkPolicy support' },
+      { label: 'Cilium', value: 'eBPF — best performance, L7 policy, Hubble observability' },
+      { label: 'Rule', value: 'Every pod must reach every other pod without NAT' }
+    ]
+  },
+  pod: {
+    icon: '🟢',
+    name: 'Pod — The Atomic Unit',
+    badge: 'badge-data',
+    badgeText: 'Data Plane',
+    desc: 'A Pod is the smallest deployable unit in Kubernetes. It wraps one or more containers that share the same network namespace (same IP, same localhost) and the same storage volumes. Most pods have one container; multi-container pods use sidecars (logging agent, service mesh proxy like Envoy) or init containers.\n\nPods are ephemeral — they are born, run, and die. You never update a pod in-place (except resource limits). Instead, Deployments and StatefulSets create new pods with rolling updates. Each pod gets its own IP, which is only valid for its lifetime.',
+    facts: [
+      { label: 'Networking', value: 'Shared network namespace — containers share IP & localhost' },
+      { label: 'Lifecycle', value: 'Pending → Running → Succeeded/Failed/Unknown' },
+      { label: 'Sidecar', value: 'Init containers, sidecar containers (e.g. Istio Envoy proxy)' },
+      { label: 'Ephemeral', value: 'IPs are released on termination — use Services for stable addressing' }
+    ]
+  },
+  service: {
+    icon: '🔀',
+    name: 'Service',
+    badge: 'badge-addon',
+    badgeText: 'Networking',
+    desc: 'A Service gives a stable IP and DNS name to a dynamic set of pods. Pods come and go — their IPs change — but a Service always points to the current healthy pods via label selectors. ClusterIP is internal only. NodePort exposes it on every node\'s port. LoadBalancer provisions a cloud LB. ExternalName maps to an external DNS name.',
+    facts: [
+      { label: 'ClusterIP', value: 'Internal virtual IP — only reachable inside the cluster' },
+      { label: 'NodePort', value: 'Exposes on <NodeIP>:<NodePort> (30000–32767)' },
+      { label: 'LoadBalancer', value: 'Triggers cloud LB provisioning via CCM' },
+      { label: 'DNS', value: 'my-svc.my-namespace.svc.cluster.local' }
+    ]
+  },
+  ingress: {
+    icon: '🚪',
+    name: 'Ingress',
+    badge: 'badge-addon',
+    badgeText: 'Networking',
+    desc: 'Ingress defines HTTP/HTTPS routing rules: host-based and path-based routing to different Services. An Ingress Controller (a pod running nginx, Traefik, or Envoy) watches Ingress resources and configures itself accordingly. Without a controller, Ingress objects do nothing.',
+    facts: [
+      { label: 'Routing', value: 'Host: api.example.com → service/api, path /v2 → service/api-v2' },
+      { label: 'TLS', value: 'cert-manager automates Let\'s Encrypt certificates' },
+      { label: 'Controllers', value: 'nginx-ingress, Traefik, HAProxy, AWS ALB Ingress' },
+      { label: 'Modern alt', value: 'Gateway API (more expressive, multi-team friendly)' }
+    ]
+  },
+  configmap: {
+    icon: '⚙️',
+    name: 'ConfigMap & Secret',
+    badge: 'badge-addon',
+    badgeText: 'Config',
+    desc: 'ConfigMaps store non-sensitive config as key-value pairs, injected into pods as environment variables or mounted as files. Secrets are identical in structure but base64-encoded and intended for sensitive data (passwords, API keys). Warning: base64 is NOT encryption — use Sealed Secrets or HashiCorp Vault for real secret management.',
+    facts: [
+      { label: 'ConfigMap', value: 'envFrom, env.valueFrom, or volume mount' },
+      { label: 'Secret types', value: 'Opaque, TLS, dockerconfigjson, ServiceAccount token' },
+      { label: 'Encryption', value: 'Enable EncryptionConfiguration on API Server for etcd encryption at rest' },
+      { label: 'Better option', value: 'External Secrets Operator + Vault / AWS Secrets Manager' }
+    ]
+  },
+  pv: {
+    icon: '💾',
+    name: 'PersistentVolume & PVC',
+    badge: 'badge-addon',
+    badgeText: 'Storage',
+    desc: 'PersistentVolumes (PV) are storage resources provisioned by an admin or dynamically by a StorageClass. PersistentVolumeClaims (PVC) are requests for storage by a pod — a pod claims a PVC, K8s binds it to a matching PV. StorageClasses enable dynamic provisioning: the moment a PVC is created, a cloud disk (EBS, GCE PD, Azure Disk) is created automatically.',
+    facts: [
+      { label: 'Access modes', value: 'ReadWriteOnce (RWO), ReadOnlyMany (ROX), ReadWriteMany (RWX)' },
+      { label: 'Reclaim policy', value: 'Retain, Delete, Recycle' },
+      { label: 'Dynamic provision', value: 'StorageClass + CSI driver → auto-creates cloud disks' },
+      { label: 'StatefulSets', value: 'Use volumeClaimTemplates for per-pod persistent storage' }
+    ]
+  }
+};
+
+function showDetail(key) {
+  const d = details[key];
+  if (!d) return;
+
+  // Clear active states
+  document.querySelectorAll('.comp').forEach(c => c.classList.remove('active'));
+
+  const panel = document.getElementById('detailPanel');
+  const content = document.getElementById('detailContent');
+
+  const factsHTML = d.facts.map(f => `
+    <div class="fact">
+      <div class="fact-label">${f.label}</div>
+      <div class="fact-value">${f.value}</div>
+    </div>
+  `).join('');
+
+  content.innerHTML = `
+    <div class="detail-header">
+      <span class="detail-icon">${d.icon}</span>
+      <div>
+        <div class="detail-title">${d.name}</div>
+        <span class="detail-badge ${d.badge}">${d.badgeText}</span>
+      </div>
+    </div>
+    <div class="detail-desc">${d.desc.replace(/\n\n/g, '</p><p style="margin-top:12px;color:#94a3b8;font-size:13px;line-height:1.8;">').replace(/^/, '<p>').replace(/$/, '</p>')}</div>
+    <div class="detail-facts">${factsHTML}</div>
+  `;
+
+  panel.style.display = 'block';
+  panel.style.animation = 'fadeUp 0.3s ease both';
+
+  // Scroll into view smoothly
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+</script>
+</body>
+</html>
