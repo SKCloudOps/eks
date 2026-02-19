@@ -44,7 +44,7 @@
       --code-bg: #f6f8fa;
       --nav-width: 260px;
       --content-max: 720px;
-      --header-h: 56px;
+      --header-h: 40px;
     }
 
     *,
@@ -55,6 +55,8 @@
 
     html {
       font-size: 16px;
+      overflow: hidden;
+      /* Prevent default scrollbars, main content scrolls independently */
     }
 
     /* Content blocks: only one open at a time */
@@ -87,6 +89,8 @@
       color: var(--text);
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      /* Double ensure no body scroll */
     }
 
     .site-header {
@@ -118,16 +122,50 @@
       font-weight: 600;
     }
 
-    .nav-toggle {
-      display: none;
+    .header-controls {
       margin-left: auto;
-      padding: 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .icon-btn {
+      padding: 0.4rem;
       background: transparent;
       border: 1px solid var(--border);
       border-radius: 6px;
-      color: var(--text);
+      color: var(--text-muted);
       cursor: pointer;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .nav-toggle {
+      display: none;
+      /* Handled by header-controls on desktop, this is for mobile override logic if needed */
+    }
+
+    /* Layout toggles */
+    .layout.nav-hidden nav {
+      display: none;
+    }
+
+    .layout.sidebar-hidden .right-sidebar {
+      display: none;
+    }
+
+    /* Make main content expand when sidebars are hidden */
+    .layout.nav-hidden main {
+      padding-left: clamp(1.5rem, 5vw, 4rem);
+      /* Center it a bit more when wide */
     }
 
     .layout {
@@ -144,66 +182,141 @@
       overflow-y: auto;
       background: var(--surface);
       border-right: 1px solid var(--border);
-      padding: 0.75rem 0;
+      padding: 1.5rem 1rem;
+      /* More padding for breathing room */
       flex-shrink: 0;
+      /* Scrollbar styling */
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    nav::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    nav::-webkit-scrollbar-thumb {
+      background-color: var(--border);
+      border-radius: 3px;
     }
 
     nav a {
       display: block;
-      padding: 0.5rem 1rem 0.5rem 1.25rem;
+      padding: 0.6rem 1rem;
+      margin-bottom: 0.1rem;
       color: var(--text-muted);
       text-decoration: none;
-      font-size: clamp(0.8rem, 1.5vw, 0.9rem);
-      border-left: 3px solid transparent;
-      transition: color 0.15s, background 0.15s;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 6px;
+      border-left: none;
+      transition: all 0.2s ease-in-out;
+      position: relative;
     }
 
-    nav a:hover {
+    nav a:hover,
+    nav a.active {
       color: var(--accent2);
       background: var(--surface2);
+      transform: translateX(3px);
+      font-weight: 600;
+    }
+
+    /* Submenu styling */
+    .nav-submenu {
+      display: none;
+      margin-bottom: 0.5rem;
+      padding-left: 0.5rem;
+    }
+
+    .nav-item.active .nav-submenu {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .nav-sub-link {
+      font-size: 0.8rem !important;
+      padding: 0.35rem 1rem 0.35rem 1.5rem !important;
+      color: var(--text-muted) !important;
+      opacity: 0.85;
+      font-weight: 400 !important;
+      background: transparent !important;
+    }
+
+    .nav-sub-link:hover {
+      color: var(--accent) !important;
+      background: var(--surface2) !important;
+      opacity: 1;
+      transform: translateX(2px) !important;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     nav .nav-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1rem 0.5rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 0.25rem;
+      padding: 0 0.5rem 0.5rem;
+      /* Aligned with new padding */
+      border-bottom: 2px solid var(--surface2);
+      /* Subtle divider */
+      margin-bottom: 1rem;
     }
 
     nav .nav-section {
-      font-size: 0.7rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--accent);
-      padding: 0;
-      margin: 0;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      opacity: 0.8;
     }
 
     .nav-close {
       display: none;
-      padding: 0.35rem 0.6rem;
-      font-size: 1.4rem;
+      padding: 0.4rem;
+      font-size: 1.25rem;
       line-height: 1;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-muted);
+      background: var(--surface2);
+      border: none;
+      border-radius: 50%;
+      /* Circle button */
+      color: var(--text);
       cursor: pointer;
-      font-family: inherit;
+      transition: background 0.2s;
     }
 
     .nav-close:hover {
-      color: var(--text);
-      background: var(--surface2);
+      background: var(--border);
     }
 
     main {
       flex: 1;
       min-width: 0;
       padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1.5rem, 5vw, 3rem) 4rem;
+      /* Allow main content to scroll independently */
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    main::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    main::-webkit-scrollbar-thumb {
+      background-color: var(--border);
+      border-radius: 4px;
     }
 
     .page-title {
@@ -263,28 +376,49 @@
     pre,
     code {
       font-family: 'JetBrains Mono', 'Consolas', monospace;
-      background: var(--code-bg);
-      border-radius: 6px;
-      border: 1px solid var(--border);
     }
 
     code {
+      background: rgba(175, 184, 193, 0.2);
+      border-radius: 6px;
       padding: 0.2em 0.4em;
       font-size: 0.875em;
+      color: var(--text);
     }
 
     pre {
-      padding: 1rem;
+      padding: 1.25rem;
       overflow-x: auto;
-      margin: 1rem 0;
-      font-size: clamp(0.8rem, 1.2vw, 0.85rem);
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
       max-width: 100%;
+      background: #0d1117;
+      /* High contrast dark bg */
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    /* Adding a subtle 'window controls' look to all code blocks */
+    pre::before {
+      content: "•••";
+      display: block;
+      font-size: 1.2rem;
+      letter-spacing: -2px;
+      color: #30363d;
+      margin-bottom: 0.75rem;
+      line-height: 0.5;
     }
 
     pre code {
       padding: 0;
       background: none;
       border: none;
+      border-radius: 0;
+      color: inherit;
+      font-size: inherit;
     }
 
     .card {
@@ -627,119 +761,136 @@
     }
 
 
-    /* ── Cheat Sheet ─────────────────────────────────────────────── */
+    /* ── Cheat Sheet & Syntax Highlighting ────────────────────────── */
     .cheat-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      /* single full-width column for readability */
-      gap: 1.75rem;
-      margin: 1.5rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 2rem;
+      margin: 2.5rem 0;
     }
 
     .cheat-card {
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-left: 4px solid var(--accent2);
-      border-radius: 8px;
+      border-radius: 16px;
       overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cheat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      border-color: var(--accent2);
     }
 
     .cheat-card-header {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 0.6rem;
-      background: var(--surface2);
+      background: linear-gradient(to right, var(--surface), var(--surface2));
       border-bottom: 1px solid var(--border);
-      padding: 0.65rem 1.1rem;
+      padding: 0.85rem 1.25rem;
     }
 
     .cheat-card-header h4 {
       margin: 0;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 1rem;
+      font-weight: 700;
       color: var(--text);
-      letter-spacing: 0.01em;
+      letter-spacing: -0.01em;
+    }
+
+    .cheat-card-header::after {
+      content: "";
+      width: 40px;
+      height: 4px;
+      background: var(--accent2);
+      border-radius: 2px;
+      opacity: 0.5;
     }
 
     .cheat-card-body {
       padding: 0;
+      background: #0d1117;
+      flex: 1;
     }
 
-    /* Override global pre inside cheat cards */
+    /* Override global pre inside cheat cards to remove extra padding/margin */
     .cheat-card pre {
       margin: 0;
-      padding: 1.1rem 1.25rem;
-      background: #1e2530;
-      color: #cdd6f4;
-      font-size: 0.88rem;
-      line-height: 1.7;
-      border-radius: 0;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      tab-size: 2;
-    }
-
-    .cheat-card code {
+      padding: 1.25rem;
       background: transparent;
-      padding: 0;
-      font-size: inherit;
-      color: inherit;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      overflow-x: auto;
     }
 
-    /* Syntax colouring via CSS — applied with JS below */
-    .cheat-card .cs-comment {
-      color: #6a9955;
+    .cheat-card pre::before {
+      display: none;
+      /* Hide the window dots in cards as header serves that purpose */
+    }
+
+    /* Syntax colouring (Global) */
+    .cs-str {
+      color: #a5d6ff;
+    }
+
+    /* Light Blue */
+    .cs-comment {
+      color: #8b949e;
       font-style: italic;
     }
 
-    /* # comments */
-    .cheat-card .cs-key {
-      color: #9cdcfe;
+    /* Muted Grey */
+    .cs-key {
+      color: #7ee787;
     }
 
-    /* YAML keys  */
-    .cheat-card .cs-str {
-      color: #ce9178;
+    /* Green */
+    .cs-kw {
+      color: #ff7b72;
+      font-weight: bold;
     }
 
-    /* strings    */
-    .cheat-card .cs-kw {
-      color: #569cd6;
-      font-weight: 500;
+    /* Red/Pink */
+    .cs-flag {
+      color: #79c0ff;
     }
 
-    /* kubectl, apiVersion etc */
-    .cheat-card .cs-flag {
-      color: #4fc1ff;
+    /* Blue */
+    .cs-val {
+      color: #d2a8ff;
     }
 
-    /* --flags    */
-    .cheat-card .cs-section {
-      color: #c586c0;
-      font-weight: 600;
+    /* Purple */
+    .cs-section {
+      color: #bc8cff;
+      font-weight: bold;
+      border-bottom: 1px dashed #bc8cff;
     }
 
-    /* === section === */
-
-    /* Two-column on very wide screens */
-    @media (min-width: 1600px) {
+    /* Two-column on wide screens */
+    @media (min-width: 1400px) {
       .cheat-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media (max-width: 768px) {
       .cheat-card pre {
-        font-size: 0.82rem;
-        padding: 0.85rem 0.9rem;
+        font-size: 0.8rem;
+        padding: 1rem;
       }
-    }
 
-    @media (max-width: 480px) {
-      .cheat-card pre {
-        font-size: 0.77rem;
-        padding: 0.7rem 0.75rem;
-        line-height: 1.6;
+      .cheat-grid {
+        gap: 1.5rem;
       }
     }
 
@@ -747,23 +898,28 @@
     .right-sidebar {
       position: sticky;
       top: var(--header-h);
-      width: 220px;
-      min-width: 220px;
+      width: 240px;
+      /* Slightly wider */
+      min-width: 240px;
       height: calc(100vh - var(--header-h));
       overflow-y: auto;
       background: var(--surface);
       border-left: 1px solid var(--border);
-      padding: 1rem 0.75rem;
+      padding: 2rem 1.5rem;
+      /* More generous padding */
       flex-shrink: 0;
     }
 
     .right-sidebar .sidebar-title {
-      font-size: 0.7rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--accent);
-      margin: 0 0 0.75rem 0.25rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      opacity: 0.6;
+      margin: 0 0 1rem 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--surface2);
     }
 
     .right-sidebar ul {
@@ -778,26 +934,32 @@
 
     .right-sidebar a {
       display: block;
-      padding: 0.4rem 0.6rem;
-      font-size: 0.82rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
       text-decoration: none;
-      border-radius: 5px;
-      transition: color 0.15s, background 0.15s;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .right-sidebar a:hover {
-      color: var(--accent2);
+      color: var(--accent);
       background: var(--surface2);
+      padding-left: 1.4rem;
+      /* Slide effect */
     }
 
     .right-sidebar .link-note {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin-top: 1rem;
-      padding: 0.5rem;
-      border-top: 1px solid var(--border);
-      line-height: 1.4;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background: var(--surface2);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      line-height: 1.5;
+      font-style: italic;
     }
   </style>
   <script type="application/ld+json">
@@ -819,9 +981,28 @@
 
 <body>
   <header class="site-header">
-    <h1>CKA Study Guide</h1>
-    <span class="badge">Certified Kubernetes Administrator</span>
-    <button type="button" class="nav-toggle" aria-label="Open menu" id="nav-toggle">☰</button>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <button type="button" class="icon-btn" id="toggle-left" title="Toggle Navigation">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+        </svg>
+      </button>
+      <h1>CKA Study Guide</h1>
+      <span class="badge">Certified Kubernetes Administrator</span>
+    </div>
+
+    <div class="header-controls">
+      <button type="button" class="icon-btn" id="toggle-right" title="Toggle Sidebar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="15" y1="3" x2="15" y2="21"></line>
+        </svg>
+      </button>
+      <button type="button" class="nav-toggle" aria-label="Open menu" id="nav-toggle">☰</button>
+    </div>
   </header>
   <div class="layout">
     <nav id="nav" aria-label="Section navigation">
@@ -842,20 +1023,53 @@
       <a href="#section-10">10 Design & Install</a>
       <a href="#section-11">11 kubeadm</a>
       <a href="#section-12">12 Troubleshooting</a>
-      <a href="#section-13">13 Other Topics</a>
-      <a href="#section-14">14 Lightning Labs</a>
-      <a href="#section-15">15 Mock Exams</a>
-      <a href="#section-16">16 Ultimate Mocks</a>
-      <a href="#section-17">17 Tips & Tricks</a>
-      <a href="#section-18">18 Cheat Sheet</a>
+
     </nav>
     <main>
-
       <header id="intro">
         <h1 class="page-title">Certified Kubernetes Administrator (CKA)</h1>
-        <p class="subtitle">Detailed standalone reference for CKA exam preparation—enough to prepare without other
-          materials. Use the sidebar to jump to any section. All key concepts, commands, YAML snippets, and diagrams are
-          included.</p>
+        <p class="subtitle">Detailed reference for CKA exam preparation—enough to prepare without other materials. Use
+          the sidebar to jump to any section. All key concepts, commands, YAML snippets, and diagrams are included.</p>
+
+        <!-- Expanded Overview Content -->
+        <h2 id="section-overview">Why take the CKA?</h2>
+        <p>The <strong>Certified Kubernetes Administrator (CKA)</strong> program provides assurance that CKAs have the
+          skills, knowledge, and competency to perform the responsibilities of Kubernetes administrators.</p>
+
+        <h3>What you will learn</h3>
+        <ul
+          style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
+            <strong>Cluster Architecture</strong><br>
+            <span style="font-size: 0.9em; color: var(--text-muted);">Installation, upgrades, etcd
+              backup/restore.</span>
+          </li>
+          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
+            <strong>Workloads & Scheduling</strong><br>
+            <span style="font-size: 0.9em; color: var(--text-muted);">Deployments, DaemonSets, resource limits,
+              affinity.</span>
+          </li>
+          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
+            <strong>Services & Networking</strong><br>
+            <span style="font-size: 0.9em; color: var(--text-muted);">ClusterIP, NodePort, Ingress, CNI, CoreDNS.</span>
+          </li>
+          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
+            <strong>Troubleshooting</strong><br>
+            <span style="font-size: 0.9em; color: var(--text-muted);">Fixing broken clusters, nodes, pods, and
+              networks.</span>
+          </li>
+        </ul>
+
+        <h3>Exam Format</h3>
+        <p>The exam is an online, proctored, performance-based test. You will have <strong>2 hours</strong> to complete
+          approximately <strong>15-20 tasks</strong> in a terminal environment. You are allowed to access the official
+          Kubernetes documentation during the exam.</p>
+
+        <div
+          style="margin-top: 1.5rem; padding: 1rem; border-left: 4px solid var(--accent); background: var(--surface);">
+          <strong>Pro Tip:</strong> Speed and accuracy are key. Familiarize yourself with imperative
+          <code>kubectl</code> commands to save time generating YAML manifests.
+        </div>
       </header>
 
       <!-- 01 Introduction -->
@@ -2960,8 +3174,11 @@ grep staticPodPath /var/lib/kubelet/config.yaml</code></pre>
       <div class="cheat-grid">
 
         <div class="cheat-card">
-          <h4>kubectl Quick Reference</h4>
-          <pre><code># Create resources fast
+          <div class="cheat-card-header">
+            <h4>kubectl Quick Reference</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># Create resources fast
 k run pod1 --image=nginx
 k create deploy d1 --image=nginx --replicas=3
 k expose deploy d1 --port=80 --name=d1-svc
@@ -2992,11 +3209,16 @@ k delete pod x --force --grace-period=0
 # Context & Namespace
 k config use-context &lt;ctx&gt;
 k config set-context --current --namespace=dev</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>Pod Skeleton</h4>
-          <pre><code>apiVersion: v1
+          <div class="cheat-card-header">
+            <h4>Pod Skeleton</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code>apiVersion: v1
 kind: Pod
 metadata:
   name: mypod
@@ -3059,11 +3281,16 @@ spec:
   # OR emptyDir:
   # - name: tmp
   #   emptyDir: {}</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>Deployment + Service</h4>
-          <pre><code>apiVersion: apps/v1
+          <div class="cheat-card-header">
+            <h4>Deployment + Service</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code>apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webapp
@@ -3104,11 +3331,16 @@ spec:
   - port: 80
     targetPort: 80
     nodePort: 30080     # only for NodePort</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>RBAC Pattern</h4>
-          <pre><code># Imperative (fastest in exam)
+          <div class="cheat-card-header">
+            <h4>RBAC Pattern</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># Imperative (fastest in exam)
 k create role dev-role \
   --verb=get,list,create,delete \
   --resource=pods -n dev
@@ -3129,11 +3361,16 @@ k auth can-i '*' '*' --as=system:serviceaccount:default:my-sa
 # ServiceAccount in pod
 spec:
   serviceAccountName: my-sa</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>ETCD Backup & Restore</h4>
-          <pre><code># BACKUP
+          <div class="cheat-card-header">
+            <h4>ETCD Backup & Restore</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># BACKUP
 ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd.db \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -3154,11 +3391,16 @@ vi /etc/kubernetes/manifests/etcd.yaml
 
 # Find etcd certs (from pod spec)
 k describe pod etcd-master -n kube-system | grep -A5 cert</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>Cluster Upgrade Sequence</h4>
-          <pre><code># === CONTROL PLANE ===
+          <div class="cheat-card-header">
+            <h4>Cluster Upgrade Sequence</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># === CONTROL PLANE ===
 apt-mark unhold kubeadm
 apt-get update && apt-get install -y kubeadm=1.XX.0-*
 apt-mark hold kubeadm
@@ -3181,11 +3423,16 @@ systemctl daemon-reload && systemctl restart kubelet
 apt-mark hold kubeadm kubelet
 # Back on control plane:
 kubectl uncordon &lt;worker&gt;</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>Storage: PV + PVC + SC</h4>
-          <pre><code># PersistentVolume
+          <div class="cheat-card-header">
+            <h4>Storage: PV + PVC + SC</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># PersistentVolume
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -3230,11 +3477,16 @@ allowVolumeExpansion: true
   - volumeMounts:
     - mountPath: /data
       name: data</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>Networking Cheat Sheet</h4>
-          <pre><code># NetworkPolicy (allow specific ingress)
+          <div class="cheat-card-header">
+            <h4>Networking Cheat Sheet</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># NetworkPolicy (allow specific ingress)
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -3282,11 +3534,16 @@ spec:
             name: api-svc
             port:
               number: 80</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>Troubleshooting Checklist</h4>
-          <pre><code># 1. Check nodes
+          <div class="cheat-card-header">
+            <h4>Troubleshooting Checklist</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># 1. Check nodes
 k get nodes
 k describe node &lt;node&gt;  # conditions, taints
 
@@ -3321,11 +3578,16 @@ k run net-test --image=nicolaka/netshoot \
 # 8. Certificate check
 openssl x509 -in /etc/kubernetes/pki/apiserver.crt \
   -text -noout | grep -A2 Validity</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>DaemonSet / Job / CronJob</h4>
-          <pre><code># DaemonSet
+          <div class="cheat-card-header">
+            <h4>DaemonSet / Job / CronJob</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># DaemonSet
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -3379,11 +3641,16 @@ spec:
             image: busybox
             command: ["/bin/sh","-c","date"]
           restartPolicy: OnFailure</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>JSONPath & Output</h4>
-          <pre><code># Single value
+          <div class="cheat-card-header">
+            <h4>JSONPath & Output</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># Single value
 k get pod x -o jsonpath='{.spec.nodeName}'
 
 # All pod names
@@ -3417,11 +3684,16 @@ k get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/os.txt
 
 # Count
 k get pods -A --no-headers | wc -l</code></pre>
+          </div>
         </div>
 
+
         <div class="cheat-card">
-          <h4>CSR / Certificates</h4>
-          <pre><code># Generate key + CSR
+          <div class="cheat-card-header">
+            <h4>CSR / Certificates</h4>
+          </div>
+          <div class="cheat-card-body">
+            <pre><code># Generate key + CSR
 openssl genrsa -out user.key 2048
 openssl req -new -key user.key \
   -subj "/CN=user/O=group" -out user.csr
@@ -3450,67 +3722,52 @@ k config set-credentials user \
 k config set-context user-ctx \
   --cluster=kubernetes --user=user
 k config use-context user-ctx</code></pre>
-        </div>
+          </div>
 
-      </div><!-- end cheat-grid -->
+        </div><!-- end cheat-grid -->
 
     </main>
     <aside class="right-sidebar" id="right-sidebar">
       <div class="sidebar-title">Quick Links</div>
       <ul>
         <!-- Add your own links below -->
-        <li><a href="#section-18">Cheat Sheet</a></li>
+        <li><a href="#section-13">Other Topics</a></li>
+        <li><a href="#section-14">Lightning Labs</a></li>
         <li><a href="#section-15">Mock Exams</a></li>
-        <li><a href="#section-12">Troubleshooting</a></li>
-        <li><a href="#section-07">Security</a></li>
-        <li><a href="#section-09">Networking</a></li>
-        <li><a href="#section-06">Cluster Maintenance</a></li>
+        <li><a href="#section-16">Ultimate Mocks</a></li>
+        <li><a href="#section-17">Tips & Tricks</a></li>
+        <li><a href="#section-18">Cheat Sheet</a></li>
+
       </ul>
-      <div class="link-note">
-        Edit this sidebar in the HTML source to add your own links.
-      </div>
+
     </aside>
   </div>
   <footer class="site-footer">
-    CKA Study Guide — Standalone reference for Certified Kubernetes Administrator exam preparation.
+    CKA Study Guide — Reference for Certified Kubernetes Administrator exam preparation.
   </footer>
   <script>
     (function () {
-      var t = document.getElementById('nav-toggle');
-      var c = document.getElementById('nav-close');
-      var n = document.getElementById('nav');
-      function closeNav() {
-        n.classList.remove('is-open');
-        if (t) t.setAttribute('aria-label', 'Open menu');
-      }
+      // ── Core Variables ────────────────────────────────────────────────
       var main = document.querySelector('main');
       var headerH = 56;
 
-      function easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
-      }
-
+      // ── Helper Functions ──────────────────────────────────────────────
       function smoothScrollTo(el) {
         if (!el) return;
-        var targetY = el.getBoundingClientRect().top + window.pageYOffset - headerH;
-        var startY = window.pageYOffset;
-        var dist = targetY - startY;
-        var duration = Math.min(600, 300 + Math.abs(dist) * 0.15);
-        var start = performance.now();
-        function step(now) {
-          var elapsed = now - start;
-          var p = Math.min(1, elapsed / duration);
-          var eased = easeOutCubic(p);
-          window.scrollTo(0, startY + dist * eased);
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
+        // Immediate snap to top with offset for header (40px) + buffer (10px)
+        var offset = 50;
+        var targetY = el.getBoundingClientRect().top + main.scrollTop - offset;
+
+        main.scrollTo({
+          top: targetY,
+          behavior: 'auto'
+        });
       }
 
       function wrapContentBlocks() {
         if (!main) return;
         var intro = document.getElementById('intro');
-        if (intro) {
+        if (intro && !document.getElementById('block-intro')) {
           var blockIntro = document.createElement('div');
           blockIntro.id = 'block-intro';
           blockIntro.className = 'content-block is-open';
@@ -3519,6 +3776,8 @@ k config use-context user-ctx</code></pre>
         }
         main.querySelectorAll('h2[id^="section-"]').forEach(function (h2) {
           var id = h2.getAttribute('id');
+          if (document.getElementById('block-' + id)) return; // already wrapped
+
           var block = document.createElement('div');
           block.id = 'block-' + id;
           block.className = 'content-block';
@@ -3533,58 +3792,203 @@ k config use-context user-ctx</code></pre>
         });
       }
 
-      function openBlock(block) {
+      function openBlock(block, skipScroll) {
         if (!block) return;
-        main.querySelectorAll('.content-block').forEach(function (b) { b.classList.remove('is-open'); });
-        block.classList.remove('is-open');
-        block.offsetHeight;
-        block.classList.add('is-open');
-        smoothScrollTo(block);
+
+        // 1. Instantly hide ALL other blocks
+        main.querySelectorAll('.content-block').forEach(function (b) {
+          if (b !== block) {
+            b.classList.remove('is-open');
+            b.style.display = 'none'; // Force hide immediately
+          }
+        });
+
+        // 2. Open current block
+        if (!block.classList.contains('is-open')) {
+          block.style.display = 'block';
+          block.classList.add('is-open');
+        }
+
+        // 3. Scroll to top (only if not skipping)
+        if (!skipScroll) {
+          main.scrollTop = 0; // Reset scroll for cleaner jump
+        }
       }
 
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', wrapContentBlocks);
-      } else {
+      // ── Initialization & Event Listeners ──────────────────────────────
+      document.addEventListener('DOMContentLoaded', function () {
+
+        // 1. Wrap Content
         wrapContentBlocks();
-      }
 
-      if (c) c.addEventListener('click', closeNav);
-      if (t && n) {
-        t.addEventListener('click', function () {
-          n.classList.toggle('is-open');
-          t.setAttribute('aria-label', n.classList.contains('is-open') ? 'Close menu' : 'Open menu');
-        });
-        n.querySelectorAll('a[href^="#"]').forEach(function (a) {
-          a.addEventListener('click', function (ev) {
-            var id = a.getAttribute('href');
-            if (id === '#') return;
-            ev.preventDefault();
-            closeNav();
-            var hash = id.slice(1);
-            var blockId = hash === 'intro' ? 'block-intro' : 'block-' + hash;
-            var block = document.getElementById(blockId);
-            openBlock(block);
-          });
-        });
-        document.addEventListener('click', function (e) {
-          if (n.classList.contains('is-open') && !n.contains(e.target) && e.target !== t)
-            closeNav();
-        });
-      }
+        // 2. Mobile Nav Controls
+        var navToggle = document.getElementById('nav-toggle');
+        var navClose = document.getElementById('nav-close');
+        var nav = document.getElementById('nav');
 
-      // Right sidebar link handling
-      var rs = document.getElementById('right-sidebar');
-      if (rs) {
-        rs.querySelectorAll('a[href^="#"]').forEach(function (a) {
-          a.addEventListener('click', function (ev) {
-            var id = a.getAttribute('href');
-            if (id === '#') return;
-            ev.preventDefault();
-            var hash = id.slice(1);
-            var blockId = hash === 'intro' ? 'block-intro' : 'block-' + hash;
-            var block = document.getElementById(blockId);
-            openBlock(block);
+        function closeMobileNav() {
+          nav.classList.remove('is-open');
+          if (navToggle) navToggle.setAttribute('aria-label', 'Open menu');
+        }
+
+        if (navClose) navClose.addEventListener('click', closeMobileNav);
+        if (navToggle && nav) {
+          navToggle.addEventListener('click', function () {
+            nav.classList.toggle('is-open');
+            navToggle.setAttribute('aria-label', nav.classList.contains('is-open') ? 'Close menu' : 'Open menu');
           });
+          // Close mob nav when clicking outside
+          document.addEventListener('click', function (e) {
+            if (nav.classList.contains('is-open') && !nav.contains(e.target) && e.target !== navToggle && !navToggle.contains(e.target))
+              closeMobileNav();
+          });
+        }
+
+        // 3. Desktop Focus Mode Toggles
+        const layout = document.querySelector('.layout');
+        const toggleLeftBtn = document.getElementById('toggle-left');
+        const toggleRightBtn = document.getElementById('toggle-right');
+
+        if (toggleLeftBtn) {
+          toggleLeftBtn.addEventListener('click', () => {
+            layout.classList.toggle('nav-hidden');
+            toggleLeftBtn.classList.toggle('active-toggle');
+            // Recalc scroll position if needed
+          });
+        }
+
+        if (toggleRightBtn) {
+          toggleRightBtn.addEventListener('click', () => {
+            layout.classList.toggle('sidebar-hidden');
+            toggleRightBtn.classList.toggle('active-toggle');
+          });
+        }
+
+        // 4. Generate Submenus & Attach Listeners
+        const navMap = {};
+        document.querySelectorAll('h2[id^="section-"]').forEach(h2 => {
+          const sectionId = h2.getAttribute('id');
+          navMap[sectionId] = [];
+
+          let nextNode = h2.nextElementSibling;
+          while (nextNode && nextNode.tagName !== 'H2') {
+            if (nextNode.tagName === 'H3') {
+              if (!nextNode.id) {
+                const text = nextNode.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                nextNode.id = sectionId + '-' + text;
+              }
+              navMap[sectionId].push({ id: nextNode.id, text: nextNode.textContent });
+            }
+            nextNode = nextNode.nextElementSibling;
+          }
+        });
+
+        // Loop through MAIN nav links to wrap + add listeners
+        nav.querySelectorAll('a[href^="#"]').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href === '#') return;
+          const id = href.substring(1);
+
+          // Main Link Click Handler (Accordion Behavior)
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            closeMobileNav();
+
+            // handle active state styling
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if (this.parentNode.classList.contains('nav-item')) {
+              this.parentNode.classList.add('active');
+            }
+
+            // Open Block
+            var blockId = id === 'intro' ? 'block-intro' : 'block-' + id;
+            var block = document.getElementById(blockId);
+            if (block) openBlock(block);
+          });
+
+          // Submenu Generation (only for #section- links)
+          if (id.startsWith('section-')) {
+            if (link.parentNode.classList.contains('nav-item')) return; // already processed
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'nav-item';
+            link.parentNode.insertBefore(wrapper, link);
+            wrapper.appendChild(link);
+
+            if (navMap[id] && navMap[id].length > 0) {
+              const subMenu = document.createElement('div');
+              subMenu.className = 'nav-submenu';
+              navMap[id].forEach(item => {
+                const subLink = document.createElement('a');
+                subLink.href = '#' + item.id;
+                subLink.className = 'nav-sub-link';
+                subLink.textContent = item.text;
+                subLink.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  closeMobileNav();
+                  e.stopPropagation(); // prevent bubbling to parent
+
+                  // Ensure parent block is open, but DON'T scroll to top yet
+                  const blockId = 'block-' + id;
+                  const block = document.getElementById(blockId);
+
+                  if (block) {
+                    openBlock(block, true); // true = skip scroll to top
+
+                    // Now scroll to the specific subsection
+                    // Slight delay ensuring layout is stable
+                    setTimeout(() => {
+                      const target = document.getElementById(item.id);
+                      smoothScrollTo(target);
+                    }, 10);
+                  }
+                });
+                subMenu.appendChild(subLink);
+              });
+              wrapper.appendChild(subMenu);
+            }
+          }
+        });
+
+        // Right Sidebar Links
+        var rs = document.getElementById('right-sidebar');
+        if (rs) {
+          rs.querySelectorAll('a[href^="#"]').forEach(function (a) {
+            a.addEventListener('click', function (ev) {
+              ev.preventDefault();
+              var href = a.getAttribute('href');
+              var id = href.substring(1);
+              var blockId = id === 'intro' ? 'block-intro' : 'block-' + id;
+              var block = document.getElementById(blockId);
+              if (block) openBlock(block);
+            });
+          });
+        }
+
+        // Code Highlighting
+        highlightCodeBlocks();
+        initSolutionToggles();
+      });
+
+      // ── Syntax Highlighter ────────────────────────────────────────────
+      function highlightCodeBlocks() {
+        document.querySelectorAll('pre code').forEach(function (codeBlock) {
+          var html = codeBlock.textContent;
+          // 1. Strings (light blue)
+          html = html.replace(/(".*?")/g, '<span class="cs-str">$1</span>');
+          // 2. Comments (grey)
+          html = html.replace(/(^|\s)(#.*$)/gm, '$1<span class="cs-comment">$2</span>');
+          // 3. YAML Keys (green)
+          html = html.replace(/^(\s*)([\w\-\.\/]+):/gm, '$1<span class="cs-key">$2</span>:');
+          // 4. Keywords
+          var kws = 'apiVersion|kind|metadata|spec|status|selector|containers|volumes|template|matchLabels|strategy|replicas|serviceAccountName|nodeSelector|tolerations|resources|requests|limits|livenessProbe|readinessProbe|securityContext|capabilities|env|envFrom|volumeMounts|image|name|kubectl|k'.split('|');
+          var kwRegex = new RegExp('\\b(' + kws.join('|') + ')\\b', 'g');
+          html = html.replace(kwRegex, '<span class="cs-kw">$1</span>');
+          // 5. Flags
+          html = html.replace(/(\s)(--[\w\-]+)/g, '$1<span class="cs-flag">$2</span>');
+          // 6. Section Headers
+          html = html.replace(/(^# ===.*===)/gm, '$1<span class="cs-section">$1</span>');
+          codeBlock.innerHTML = html;
         });
       }
 
@@ -3592,18 +3996,14 @@ k config use-context user-ctx</code></pre>
         document.querySelectorAll('.solution-toggle, .playground-toggle').forEach(function (btn) {
           btn.addEventListener('click', function () {
             var solution = this.nextElementSibling;
-            if (!solution || !solution.classList.contains('mock-solution') && !solution.classList.contains('playground-solution')) return;
+            if (!solution) return;
             var isOpen = solution.classList.toggle('is-open');
             this.setAttribute('aria-expanded', isOpen);
             this.textContent = isOpen ? 'Hide solution' : 'Show solution';
           });
         });
       }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initSolutionToggles);
-      } else {
-        initSolutionToggles();
-      }
+
     })();
   </script>
 </body>
