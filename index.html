@@ -532,6 +532,8 @@
       }
 
       nav {
+        display: none;
+        /* Hidden by default on mobile */
         position: fixed;
         top: var(--header-h);
         left: 0;
@@ -539,22 +541,32 @@
         width: 100%;
         min-width: 0;
         height: auto;
-        max-height: 70vh;
-        z-index: 99;
+        max-height: 80vh;
+        /* Increased height */
+        z-index: 999;
         overflow-y: auto;
-        transform: translateY(-110%);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.22s ease, opacity 0.22s ease;
         border-right: none;
         border-bottom: 1px solid var(--border);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        background: var(--surface);
       }
 
       nav.is-open {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
+        display: block;
+        /* Show when open */
+        animation: slideDown 0.25s ease-out forwards;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .layout {
@@ -579,6 +591,46 @@
     }
 
     /* Mobile */
+    /* Copy Button - Global */
+    .copy-btn {
+      position: sticky;
+      float: right;
+      top: 0;
+      right: 0;
+      margin-top: -0.5rem;
+      margin-right: -0.5rem;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #8b949e;
+      border-radius: 4px;
+      padding: 0.25rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      backdrop-filter: blur(2px);
+    }
+
+    pre:hover .copy-btn {
+      opacity: 1;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f0f6fc;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .copy-btn.copied {
+      color: #3fb950;
+      border-color: rgba(63, 185, 80, 0.4);
+      background: rgba(63, 185, 80, 0.1);
+    }
+
+    /* Mobile override for pre */
     @media (max-width: 480px) {
       :root {
         --header-h: 50px;
@@ -605,26 +657,34 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      h2 {
-        font-size: 1.3rem;
+      /* Ensure copy btn is visible on touch for mobile if needed, or rely on active state */
+      pre .copy-btn {
+        opacity: 1;
+        /* Always show on mobile since no hover */
+        background: rgba(255, 255, 255, 0.05);
       }
+    }
 
-      h3 {
-        font-size: 1.05rem;
-      }
+    h2 {
+      font-size: 1.3rem;
+    }
 
-      .cheat-card {
-        padding: 0.75rem;
-      }
+    h3 {
+      font-size: 1.05rem;
+    }
 
-      .cheat-card pre {
-        font-size: 0.75rem;
-      }
+    .cheat-card {
+      padding: 0.75rem;
+    }
 
-      .mock-question,
-      .playground-scenario {
-        padding: 0.9rem 1rem;
-      }
+    .cheat-card pre {
+      font-size: 0.75rem;
+    }
+
+    .mock-question,
+    .playground-scenario {
+      padding: 0.9rem 1rem;
+    }
     }
 
     /* Print */
@@ -1028,47 +1088,91 @@
     <main>
       <header id="intro">
         <h1 class="page-title">Certified Kubernetes Administrator (CKA)</h1>
-        <p class="subtitle">Detailed reference for CKA exam preparation—enough to prepare without other materials. Use
-          the sidebar to jump to any section. All key concepts, commands, YAML snippets, and diagrams are included.</p>
+        <p class="subtitle">Complete reference guide for the CKA exam. Use the navigation to jump between topics.</p>
 
-        <!-- Expanded Overview Content -->
-        <h2 id="section-overview">Why take the CKA?</h2>
-        <p>The <strong>Certified Kubernetes Administrator (CKA)</strong> program provides assurance that CKAs have the
-          skills, knowledge, and competency to perform the responsibilities of Kubernetes administrators.</p>
+        <div style="display: grid; gap: 2rem;">
 
-        <h3>What you will learn</h3>
-        <ul
-          style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
-            <strong>Cluster Architecture</strong><br>
-            <span style="font-size: 0.9em; color: var(--text-muted);">Installation, upgrades, etcd
-              backup/restore.</span>
-          </li>
-          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
-            <strong>Workloads & Scheduling</strong><br>
-            <span style="font-size: 0.9em; color: var(--text-muted);">Deployments, DaemonSets, resource limits,
-              affinity.</span>
-          </li>
-          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
-            <strong>Services & Networking</strong><br>
-            <span style="font-size: 0.9em; color: var(--text-muted);">ClusterIP, NodePort, Ingress, CNI, CoreDNS.</span>
-          </li>
-          <li style="background: var(--surface2); padding: 1rem; border-radius: 8px;">
-            <strong>Troubleshooting</strong><br>
-            <span style="font-size: 0.9em; color: var(--text-muted);">Fixing broken clusters, nodes, pods, and
-              networks.</span>
-          </li>
-        </ul>
+          <!-- Section 1: Exam Overview -->
+          <section>
+            <h2 id="section-overview-exam">Exam Overview</h2>
+            <div
+              style="background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+              <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem;">
+                <li style="display: flex; gap: 1rem; align-items: start;">
+                  <span style="font-size: 1.2rem;">⏱️</span>
+                  <div><strong>Duration:</strong> 2 Hours</div>
+                </li>
+                <li style="display: flex; gap: 1rem; align-items: start;">
+                  <span style="font-size: 1.2rem;">💻</span>
+                  <div><strong>Format:</strong> 15-20 Performance-based tasks (Command Line)</div>
+                </li>
+                <li style="display: flex; gap: 1rem; align-items: start;">
+                  <span style="font-size: 1.2rem;">📚</span>
+                  <div><strong>Resources:</strong> Official Kubernetes Documentation allowed (one tab)</div>
+                </li>
+                <li style="display: flex; gap: 1rem; align-items: start;">
+                  <span style="font-size: 1.2rem;">✅</span>
+                  <div><strong>Passing:</strong> 66% or higher</div>
+                </li>
+              </ul>
+            </div>
+          </section>
 
-        <h3>Exam Format</h3>
-        <p>The exam is an online, proctored, performance-based test. You will have <strong>2 hours</strong> to complete
-          approximately <strong>15-20 tasks</strong> in a terminal environment. You are allowed to access the official
-          Kubernetes documentation during the exam.</p>
+          <!-- Section 2: Curriculum -->
+          <section>
+            <h2 id="section-overview-curriculum">Curriculum Breakdown</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+              <div style="background: var(--surface2); padding: 1rem; border-radius: 6px;">
+                <h3 style="margin-top:0; color: var(--accent);">25% — Cluster Architecture</h3>
+                <p style="font-size: 0.9rem; margin: 0;">Installation, node management, upgrades, etcd backup/restore.
+                </p>
+              </div>
+              <div style="background: var(--surface2); padding: 1rem; border-radius: 6px;">
+                <h3 style="margin-top:0; color: var(--accent);">15% — Workloads & Scheduling</h3>
+                <p style="font-size: 0.9rem; margin: 0;">Deployments, DaemonSets, ConfigMaps, Secrets, scheduling
+                  constraints.</p>
+              </div>
+              <div style="background: var(--surface2); padding: 1rem; border-radius: 6px;">
+                <h3 style="margin-top:0; color: var(--accent);">20% — Services & Networking</h3>
+                <p style="font-size: 0.9rem; margin: 0;">ClusterIP, NodePort, Ingress, CoreDNS, CNI plugins.</p>
+              </div>
+              <div style="background: var(--surface2); padding: 1rem; border-radius: 6px;">
+                <h3 style="margin-top:0; color: var(--accent);">10% — Storage</h3>
+                <p style="font-size: 0.9rem; margin: 0;">PersistentVolumes, Claims, StorageClasses, access modes.</p>
+              </div>
+              <div style="background: var(--surface2); padding: 1rem; border-radius: 6px;">
+                <h3 style="margin-top:0; color: var(--accent);">30% — Troubleshooting</h3>
+                <p style="font-size: 0.9rem; margin: 0;">Cluster failures, node issues, pod crashes, network
+                  connectivity.</p>
+              </div>
+            </div>
+          </section>
 
-        <div
-          style="margin-top: 1.5rem; padding: 1rem; border-left: 4px solid var(--accent); background: var(--surface);">
-          <strong>Pro Tip:</strong> Speed and accuracy are key. Familiarize yourself with imperative
-          <code>kubectl</code> commands to save time generating YAML manifests.
+          <!-- Section 3: Essential Tips -->
+          <section>
+            <h2 id="section-overview-tips">Top 5 Exam Tips</h2>
+            <ol style="padding-left: 1.5rem; line-height: 1.8;">
+              <li><strong>Master Imperative Commands:</strong> Don't write YAML from scratch. Use
+                <code>kubectl run</code> and <code>kubectl create deployment</code> with
+                <code>--dry-run=client -o yaml</code>.
+              </li>
+              <li><strong>Know Your Context:</strong> The exam has multiple clusters. Always run the context-switching
+                command provided at the start of each question (e.g., <code>kubectl config use-context k8s</code>).</li>
+              <li><strong>Documentation Bookmarks:</strong> Familiarize yourself with the <a
+                  href="https://kubernetes.io/docs/home/" target="_blank">k8s docs</a> search. Know keywords like "pv",
+                "ingress", "etcd backup".</li>
+              <li><strong>Time Management:</strong> If a question takes too long, flag it and move on. Return to it
+                later.</li>
+              <li><strong>Alias:</strong> <code>alias k=kubectl</code> is pre-configured, but it's good practice to
+                verify. Save time typing!</li>
+            </ol>
+            <div
+              style="margin-top: 1rem; padding: 1rem; border-left: 4px solid var(--accent2); background: #eefbff; margin-bottom: 2rem;">
+              <strong>Note:</strong> This guide follows the latest CKA curriculum (v1.30+). Sections on the left cover
+              all required domains in detail.
+            </div>
+          </section>
+
         </div>
       </header>
 
@@ -3833,9 +3937,12 @@ k config use-context user-ctx</code></pre>
 
         if (navClose) navClose.addEventListener('click', closeMobileNav);
         if (navToggle && nav) {
-          navToggle.addEventListener('click', function () {
+          navToggle.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent immediate close
             nav.classList.toggle('is-open');
-            navToggle.setAttribute('aria-label', nav.classList.contains('is-open') ? 'Close menu' : 'Open menu');
+            var isOpen = nav.classList.contains('is-open');
+            navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+            navToggle.setAttribute('aria-expanded', isOpen);
           });
           // Close mob nav when clicking outside
           document.addEventListener('click', function (e) {
@@ -3970,9 +4077,56 @@ k config use-context user-ctx</code></pre>
         initSolutionToggles();
       });
 
-      // ── Syntax Highlighter ────────────────────────────────────────────
+      // ── Syntax Highlighter for ALL Code Blocks ───────────────────────
       function highlightCodeBlocks() {
-        document.querySelectorAll('pre code').forEach(function (codeBlock) {
+        document.querySelectorAll('pre').forEach(function (preBlock) {
+          // Check if already processed
+          if (preBlock.querySelector('.copy-btn')) return;
+
+          // Ensure relative positioning
+          if (getComputedStyle(preBlock).position === 'static') {
+            preBlock.style.position = 'relative';
+          }
+
+          // 1. Create Copy Button
+          // 1. Create Copy Button
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-btn';
+          // Clean SVG Icons
+          const iconCopy = '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>';
+          const iconCheck = '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" fill="currentColor"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>';
+
+          copyBtn.innerHTML = iconCopy;
+          copyBtn.ariaLabel = 'Copy code to clipboard';
+          copyBtn.title = 'Copy';
+
+          copyBtn.addEventListener('click', () => {
+            const codeEl = preBlock.querySelector('code');
+            const codeText = codeEl ? codeEl.innerText : preBlock.innerText;
+
+            navigator.clipboard.writeText(codeText).then(() => {
+              copyBtn.innerHTML = iconCheck;
+              copyBtn.classList.add('copied');
+              setTimeout(() => {
+                copyBtn.innerHTML = iconCopy;
+                copyBtn.classList.remove('copied');
+              }, 2000);
+            }).catch(err => {
+              console.error('Failed to copy!', err);
+            });
+          });
+
+          // Append as FIRST child to ensure it sits on top-right correctly
+          if (preBlock.firstChild) {
+            preBlock.insertBefore(copyBtn, preBlock.firstChild);
+          } else {
+            preBlock.appendChild(copyBtn);
+          }
+
+          // 2. Highlight Logic
+          const codeBlock = preBlock.querySelector('code');
+          if (!codeBlock) return;
+
           var html = codeBlock.textContent;
           // 1. Strings (light blue)
           html = html.replace(/(".*?")/g, '<span class="cs-str">$1</span>');
@@ -3987,7 +4141,8 @@ k config use-context user-ctx</code></pre>
           // 5. Flags
           html = html.replace(/(\s)(--[\w\-]+)/g, '$1<span class="cs-flag">$2</span>');
           // 6. Section Headers
-          html = html.replace(/(^# ===.*===)/gm, '$1<span class="cs-section">$1</span>');
+          html = html.replace(/(^# ===.*===)/gm, '<span class="cs-section">$1</span>');
+
           codeBlock.innerHTML = html;
         });
       }
