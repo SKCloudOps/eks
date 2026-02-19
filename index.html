@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CKA Exam Study Guide | Certified Kubernetes Administrator (CKA) Preparation &amp; Cheat Sheet</title>
-  <meta name="description" content="Free CKA study guide: cluster architecture, scheduling, networking, storage, RBAC, troubleshooting. Commands, YAML examples &amp; diagrams for Certified Kubernetes Administrator exam.">
-  <meta name="keywords" content="CKA, Certified Kubernetes Administrator, Kubernetes certification, CKA exam, CKA study guide, CKA preparation, Kubernetes admin, kubectl, K8s certification">
+  <meta name="description"
+    content="Free CKA study guide: cluster architecture, scheduling, networking, storage, RBAC, troubleshooting. Commands, YAML examples &amp; diagrams for Certified Kubernetes Administrator exam.">
+  <meta name="keywords"
+    content="CKA, Certified Kubernetes Administrator, Kubernetes certification, CKA exam, CKA study guide, CKA preparation, Kubernetes admin, kubectl, K8s certification">
   <meta name="author" content="CKA Study Guide">
   <meta name="robots" content="index, follow">
   <!-- Replace with your real page URL when you publish the site -->
@@ -13,17 +16,21 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="CKA Exam Study Guide | Certified Kubernetes Administrator Preparation">
-  <meta property="og:description" content="Free CKA study guide with commands, YAML examples and diagrams. Covers cluster architecture, scheduling, networking, storage, security and troubleshooting for the CKA exam.">
+  <meta property="og:description"
+    content="Free CKA study guide with commands, YAML examples and diagrams. Covers cluster architecture, scheduling, networking, storage, security and troubleshooting for the CKA exam.">
   <meta property="og:url" content="https://example.com/cka-preparation.html">
   <meta property="og:locale" content="en_US">
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CKA Exam Study Guide | Certified Kubernetes Administrator">
-  <meta name="twitter:description" content="Free CKA study guide: commands, YAML snippets and diagrams for Certified Kubernetes Administrator (CKA) exam preparation.">
+  <meta name="twitter:description"
+    content="Free CKA study guide: commands, YAML snippets and diagrams for Certified Kubernetes Administrator (CKA) exam preparation.">
   <meta name="theme-color" content="#ffffff">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --bg: #ffffff;
@@ -39,27 +46,40 @@
       --content-max: 720px;
       --header-h: 56px;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    html { font-size: 16px; }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
     /* Content blocks: only one open at a time */
     .content-block {
       display: none;
       overflow: hidden;
       animation: blockOpen 0.4s ease-out;
     }
+
     .content-block.is-open {
       display: block;
     }
+
     @keyframes blockOpen {
       from {
         opacity: 0;
         transform: translateY(-10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
+
     body {
       margin: 0;
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -68,6 +88,7 @@
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
     }
+
     .site-header {
       position: sticky;
       top: 0;
@@ -79,12 +100,14 @@
       align-items: center;
       padding: 0 1.25rem;
     }
+
     .site-header h1 {
       margin: 0;
       font-size: clamp(1rem, 2.5vw, 1.25rem);
       font-weight: 600;
       color: var(--text);
     }
+
     .site-header .badge {
       margin-left: 0.5rem;
       font-size: 0.7rem;
@@ -94,6 +117,7 @@
       border-radius: 4px;
       font-weight: 600;
     }
+
     .nav-toggle {
       display: none;
       margin-left: auto;
@@ -105,7 +129,12 @@
       cursor: pointer;
       font-size: 1.25rem;
     }
-    .layout { display: flex; min-height: calc(100vh - var(--header-h)); }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - var(--header-h));
+    }
+
     nav {
       position: sticky;
       top: var(--header-h);
@@ -118,6 +147,7 @@
       padding: 0.75rem 0;
       flex-shrink: 0;
     }
+
     nav a {
       display: block;
       padding: 0.5rem 1rem 0.5rem 1.25rem;
@@ -127,7 +157,12 @@
       border-left: 3px solid transparent;
       transition: color 0.15s, background 0.15s;
     }
-    nav a:hover { color: var(--accent2); background: var(--surface2); }
+
+    nav a:hover {
+      color: var(--accent2);
+      background: var(--surface2);
+    }
+
     nav .nav-header {
       display: flex;
       align-items: center;
@@ -136,6 +171,7 @@
       border-bottom: 1px solid var(--border);
       margin-bottom: 0.25rem;
     }
+
     nav .nav-section {
       font-size: 0.7rem;
       font-weight: 600;
@@ -145,6 +181,7 @@
       padding: 0;
       margin: 0;
     }
+
     .nav-close {
       display: none;
       padding: 0.35rem 0.6rem;
@@ -157,15 +194,32 @@
       cursor: pointer;
       font-family: inherit;
     }
-    .nav-close:hover { color: var(--text); background: var(--surface2); }
+
+    .nav-close:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
     main {
       flex: 1;
       min-width: 0;
       padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1.5rem, 5vw, 3rem) 4rem;
-      max-width: var(--content-max);
     }
-    .page-title { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; margin: 0 0 0.35rem; color: var(--text); }
-    .subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: clamp(0.9rem, 1.5vw, 1.05rem); line-height: 1.5; }
+
+    .page-title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+      color: var(--text);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      line-height: 1.5;
+    }
+
     h2 {
       font-size: clamp(1.25rem, 2.5vw, 1.5rem);
       font-weight: 600;
@@ -175,13 +229,50 @@
       color: var(--accent);
       scroll-margin-top: calc(var(--header-h) + 0.5rem);
     }
-    h3 { font-size: clamp(1.05rem, 2vw, 1.2rem); font-weight: 600; margin: 1.5rem 0 0.6rem; color: var(--text); }
-    h4 { font-size: 1rem; margin: 1rem 0 0.4rem; color: var(--text-muted); font-weight: 500; }
-    p { margin: 0.65rem 0; max-width: 70ch; }
-    ul, ol { margin: 0.65rem 0; padding-left: 1.5rem; max-width: 70ch; }
-    li { margin: 0.3rem 0; }
-    pre, code { font-family: 'JetBrains Mono', 'Consolas', monospace; background: var(--code-bg); border-radius: 6px; border: 1px solid var(--border); }
-    code { padding: 0.2em 0.4em; font-size: 0.875em; }
+
+    h3 {
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+      font-weight: 600;
+      margin: 1.5rem 0 0.6rem;
+      color: var(--text);
+    }
+
+    h4 {
+      font-size: 1rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0.65rem 0;
+      max-width: 70ch;
+    }
+
+    ul,
+    ol {
+      margin: 0.65rem 0;
+      padding-left: 1.5rem;
+      max-width: 70ch;
+    }
+
+    li {
+      margin: 0.3rem 0;
+    }
+
+    pre,
+    code {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      background: var(--code-bg);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    code {
+      padding: 0.2em 0.4em;
+      font-size: 0.875em;
+    }
+
     pre {
       padding: 1rem;
       overflow-x: auto;
@@ -189,9 +280,30 @@
       font-size: clamp(0.8rem, 1.2vw, 0.85rem);
       max-width: 100%;
     }
-    pre code { padding: 0; background: none; border: none; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; max-width: 70ch; }
-    .snippet-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    pre code {
+      padding: 0;
+      background: none;
+      border: none;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      max-width: 70ch;
+    }
+
+    .snippet-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
     .diagram {
       margin: 1.5rem 0;
       padding: 1.5rem;
@@ -200,12 +312,14 @@
       background: var(--surface);
       text-align: center;
     }
+
     .diagram svg {
       display: block;
       max-width: 100%;
       height: auto;
       margin: 0 auto;
     }
+
     .diagram figcaption {
       font-size: 0.8rem;
       color: var(--text-muted);
@@ -217,9 +331,27 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .step-list { list-style: none; padding-left: 0; max-width: 70ch; }
-    .step-list li { position: relative; padding-left: 1.5rem; margin: 0.5rem 0; }
-    .step-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 600; }
+
+    .step-list {
+      list-style: none;
+      padding-left: 0;
+      max-width: 70ch;
+    }
+
+    .step-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .step-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
     .site-footer {
       padding: 1rem 1.5rem;
       border-top: 1px solid var(--border);
@@ -228,66 +360,204 @@
       color: var(--text-muted);
       text-align: center;
     }
-    @media (max-width: 992px) {
-      :root { --content-max: 100%; }
-      main { padding-left: 1.5rem; padding-right: 1.5rem; }
+
+    /* ── Responsive breakpoints ─────────────────────────────────────── */
+
+    /* Large desktop — hide right sidebar when screen is tight */
+    @media (max-width: 1400px) {
+      .right-sidebar {
+        display: none;
+      }
     }
+
+    /* Tablet landscape */
+    @media (max-width: 992px) {
+      nav {
+        width: 220px;
+        min-width: 220px;
+      }
+
+      main {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      .cheat-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+
+    /* Tablet portrait & small laptop — collapsing nav becomes a drawer */
     @media (max-width: 768px) {
-      .nav-toggle { display: block; }
-      .nav-close { display: block; }
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-close {
+        display: block;
+      }
+
       nav {
         position: fixed;
         top: var(--header-h);
         left: 0;
         right: 0;
+        width: 100%;
+        min-width: 0;
         height: auto;
         max-height: 70vh;
         z-index: 99;
-        transform: translateY(-100%);
+        overflow-y: auto;
+        transform: translateY(-110%);
         opacity: 0;
         pointer-events: none;
-        transition: transform 0.2s, opacity 0.2s;
+        transition: transform 0.22s ease, opacity 0.22s ease;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
       }
+
       nav.is-open {
         transform: translateY(0);
         opacity: 1;
         pointer-events: auto;
       }
-      .layout { flex-direction: column; }
-      main { padding: 1.25rem 1rem 3rem; }
-      p, ul, ol, .card { max-width: none; }
+
+      .layout {
+        flex-direction: column;
+      }
+
+      main {
+        padding: 1.25rem 1rem 3rem;
+      }
+
+      .cheat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram {
+        overflow-x: auto;
+      }
+
+      .card {
+        max-width: none;
+      }
     }
-    @media (max-width: 576px) {
-      .site-header { padding: 0 0.75rem; }
-      main { padding: 1rem 0.75rem 2rem; }
-      pre { padding: 0.75rem; font-size: 0.8rem; }
-      .diagram { padding: 1rem; }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      :root {
+        --header-h: 50px;
+      }
+
+      .site-header {
+        padding: 0 0.75rem;
+      }
+
+      .site-header h1 {
+        font-size: 0.95rem;
+      }
+
+      main {
+        padding: 0.75rem 0.65rem 2.5rem;
+      }
+
+      pre {
+        padding: 0.65rem;
+        font-size: 0.78rem;
+        margin: 0.5rem -0.25rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      h3 {
+        font-size: 1.05rem;
+      }
+
+      .cheat-card {
+        padding: 0.75rem;
+      }
+
+      .cheat-card pre {
+        font-size: 0.75rem;
+      }
+
+      .mock-question,
+      .playground-scenario {
+        padding: 0.9rem 1rem;
+      }
     }
+
+    /* Print */
     @media print {
-      .site-header, nav, .nav-toggle, .site-footer { display: none !important; }
-      body { background: #fff; color: #111; }
-      main { max-width: none; padding: 0; }
-      .diagram { break-inside: avoid; }
+
+      .site-header,
+      nav,
+      .nav-toggle,
+      .right-sidebar,
+      .site-footer {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+        color: #111;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      .content-block {
+        display: block !important;
+      }
+
+      .diagram {
+        break-inside: avoid;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
     }
+
     /* Mock exam & playground */
-    .mock-question, .playground-scenario {
+    .mock-question,
+    .playground-scenario {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 1.25rem 1.5rem;
       margin: 1rem 0;
     }
-    .mock-question h4, .playground-scenario h4 {
+
+    .mock-question h4,
+    .playground-scenario h4 {
       margin: 0 0 0.5rem;
       font-size: 1.05rem;
       color: var(--accent2);
     }
-    .mock-context, .playground-context { color: var(--text-muted); margin: 0.5rem 0; }
-    .mock-task, .playground-task { margin: 0.75rem 0; font-weight: 500; }
-    .solution-toggle, .playground-toggle {
+
+    .mock-context,
+    .playground-context {
+      color: var(--text-muted);
+      margin: 0.5rem 0;
+    }
+
+    .mock-task,
+    .playground-task {
+      margin: 0.75rem 0;
+      font-weight: 500;
+    }
+
+    .solution-toggle,
+    .playground-toggle {
       display: inline-block;
       margin: 0.75rem 0 0;
       padding: 0.4rem 0.9rem;
@@ -301,23 +571,37 @@
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
     }
-    .solution-toggle:hover, .playground-toggle:hover {
+
+    .solution-toggle:hover,
+    .playground-toggle:hover {
       background: var(--border);
       color: var(--text);
     }
-    .mock-solution, .playground-solution {
+
+    .mock-solution,
+    .playground-solution {
       display: none;
       margin-top: 1rem;
       padding-top: 1rem;
       border-top: 1px dashed var(--border);
     }
-    .mock-solution.is-open, .playground-solution.is-open { display: block; }
-    .mock-solution pre, .playground-solution pre { margin: 0.5rem 0 0; }
+
+    .mock-solution.is-open,
+    .playground-solution.is-open {
+      display: block;
+    }
+
+    .mock-solution pre,
+    .playground-solution pre {
+      margin: 0.5rem 0 0;
+    }
+
     .playground-links {
       list-style: none;
       padding: 0;
       margin: 1rem 0;
     }
+
     .playground-links li {
       margin: 0.75rem 0;
       padding: 0.75rem 1rem;
@@ -325,13 +609,196 @@
       border: 1px solid var(--border);
       border-radius: 8px;
     }
+
     .playground-links a {
       font-weight: 600;
       color: var(--accent2);
       text-decoration: none;
     }
-    .playground-links a:hover { text-decoration: underline; }
-    .playground-links .link-desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    .playground-links a:hover {
+      text-decoration: underline;
+    }
+
+    .playground-links .link-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+
+    /* ── Cheat Sheet ─────────────────────────────────────────────── */
+    .cheat-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      /* single full-width column for readability */
+      gap: 1.75rem;
+      margin: 1.5rem 0;
+    }
+
+    .cheat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent2);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .cheat-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 0.65rem 1.1rem;
+    }
+
+    .cheat-card-header h4 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .cheat-card-body {
+      padding: 0;
+    }
+
+    /* Override global pre inside cheat cards */
+    .cheat-card pre {
+      margin: 0;
+      padding: 1.1rem 1.25rem;
+      background: #1e2530;
+      color: #cdd6f4;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      border-radius: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      tab-size: 2;
+    }
+
+    .cheat-card code {
+      background: transparent;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    /* Syntax colouring via CSS — applied with JS below */
+    .cheat-card .cs-comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+
+    /* # comments */
+    .cheat-card .cs-key {
+      color: #9cdcfe;
+    }
+
+    /* YAML keys  */
+    .cheat-card .cs-str {
+      color: #ce9178;
+    }
+
+    /* strings    */
+    .cheat-card .cs-kw {
+      color: #569cd6;
+      font-weight: 500;
+    }
+
+    /* kubectl, apiVersion etc */
+    .cheat-card .cs-flag {
+      color: #4fc1ff;
+    }
+
+    /* --flags    */
+    .cheat-card .cs-section {
+      color: #c586c0;
+      font-weight: 600;
+    }
+
+    /* === section === */
+
+    /* Two-column on very wide screens */
+    @media (min-width: 1600px) {
+      .cheat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cheat-card pre {
+        font-size: 0.82rem;
+        padding: 0.85rem 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cheat-card pre {
+        font-size: 0.77rem;
+        padding: 0.7rem 0.75rem;
+        line-height: 1.6;
+      }
+    }
+
+    /* Right sidebar — Quick Links */
+    .right-sidebar {
+      position: sticky;
+      top: var(--header-h);
+      width: 220px;
+      min-width: 220px;
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 1rem 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .right-sidebar .sidebar-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin: 0 0 0.75rem 0.25rem;
+    }
+
+    .right-sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .right-sidebar li {
+      margin: 0.25rem 0;
+    }
+
+    .right-sidebar a {
+      display: block;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .right-sidebar a:hover {
+      color: var(--accent2);
+      background: var(--surface2);
+    }
+
+    .right-sidebar .link-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      padding: 0.5rem;
+      border-top: 1px solid var(--border);
+      line-height: 1.4;
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -349,6 +816,7 @@
   }
   </script>
 </head>
+
 <body>
   <header class="site-header">
     <h1>CKA Study Guide</h1>
@@ -379,12 +847,15 @@
       <a href="#section-15">15 Mock Exams</a>
       <a href="#section-16">16 Ultimate Mocks</a>
       <a href="#section-17">17 Tips & Tricks</a>
+      <a href="#section-18">18 Cheat Sheet</a>
     </nav>
     <main>
 
       <header id="intro">
         <h1 class="page-title">Certified Kubernetes Administrator (CKA)</h1>
-        <p class="subtitle">Detailed standalone reference for CKA exam preparation—enough to prepare without other materials. Use the sidebar to jump to any section. All key concepts, commands, YAML snippets, and diagrams are included.</p>
+        <p class="subtitle">Detailed standalone reference for CKA exam preparation—enough to prepare without other
+          materials. Use the sidebar to jump to any section. All key concepts, commands, YAML snippets, and diagrams are
+          included.</p>
       </header>
 
       <!-- 01 Introduction -->
@@ -400,115 +871,179 @@
       </ul>
       <h4>Exam areas (weighted)</h4>
       <ul>
-        <li><strong>Cluster Architecture, Installation & Validation</strong> (25%): Design, install, configure, validate, manage HA, etcd, upgrade.</li>
-        <li><strong>Workloads & Scheduling</strong> (15%): Deployments, scaling, DaemonSets, resource limits, scheduling (manual, node selector, affinity, taints/tolerations), static pods.</li>
-        <li><strong>Services & Networking</strong> (20%): Networking model, Services (ClusterIP, NodePort, LoadBalancer), DNS, CNI, Ingress.</li>
+        <li><strong>Cluster Architecture, Installation & Validation</strong> (25%): Design, install, configure,
+          validate, manage HA, etcd, upgrade.</li>
+        <li><strong>Workloads & Scheduling</strong> (15%): Deployments, scaling, DaemonSets, resource limits, scheduling
+          (manual, node selector, affinity, taints/tolerations), static pods.</li>
+        <li><strong>Services & Networking</strong> (20%): Networking model, Services (ClusterIP, NodePort,
+          LoadBalancer), DNS, CNI, Ingress.</li>
         <li><strong>Storage</strong> (10%): PV, PVC, StorageClass, volume mounts.</li>
         <li><strong>Troubleshooting</strong> (30%): Application, control plane, worker nodes, network.</li>
-        <li>Plus: Security (RBAC, TLS, kubeconfig, NetworkPolicies), Logging/Monitoring, Application Lifecycle (rollouts, ConfigMaps, Secrets).</li>
-        <li><strong>2025 curriculum additions:</strong> Helm and Kustomize for cluster components; Gateway API (with Ingress); CRDs and operators; extension interfaces (CNI, CSI, CRI); CoreDNS; workload autoscaling (HPA); PodDisruptionBudgets. See sections 05, 06, 09, and 13.</li>
+        <li>Plus: Security (RBAC, TLS, kubeconfig, NetworkPolicies), Logging/Monitoring, Application Lifecycle
+          (rollouts, ConfigMaps, Secrets).</li>
+        <li><strong>2025 curriculum additions:</strong> Helm and Kustomize for cluster components; Gateway API (with
+          Ingress); CRDs and operators; extension interfaces (CNI, CSI, CRI); CoreDNS; workload autoscaling (HPA);
+          PodDisruptionBudgets. See sections 05, 06, 09, and 13.</li>
       </ul>
       <h3>Certification</h3>
-      <p>Certified Kubernetes Administrator (CKA): exam curriculum, candidate handbook, and exam tips are published by the Linux Foundation / CNCF. Use code <code>KUBERNETES15</code> when registering for CKA or CKAD for a 15% discount.</p>
+      <p>Certified Kubernetes Administrator (CKA): exam curriculum, candidate handbook, and exam tips are published by
+        the Linux Foundation / CNCF. Use code <code>KUBERNETES15</code> when registering for CKA or CKAD for a 15%
+        discount.</p>
 
       <!-- 02 Core Concepts -->
       <h2 id="section-02">02 — Core Concepts</h2>
       <h3>Cluster architecture</h3>
-      <p>A Kubernetes cluster has a <strong>control plane</strong> (master) and one or more <strong>worker nodes</strong>. The control plane runs the API server, etcd, scheduler, and controller manager. Workers run kubelet, kube-proxy, and the container runtime (e.g. containerd). <strong>Only the API server talks to etcd</strong>; all other components (scheduler, controller manager, kubelet) talk to the cluster through the API server.</p>
+      <p>A Kubernetes cluster has a <strong>control plane</strong> (master) and one or more <strong>worker
+          nodes</strong>. The control plane runs the API server, etcd, scheduler, and controller manager. Workers run
+        kubelet, kube-proxy, and the container runtime (e.g. containerd). <strong>Only the API server talks to
+          etcd</strong>; all other components (scheduler, controller manager, kubelet) talk to the cluster through the
+        API server.</p>
+
+      <h3>Docker vs ContainerD</h3>
+      <p>Kubernetes <strong>removed dockershim</strong> in v1.24. The supported container runtimes now use the
+        <strong>CRI (Container Runtime Interface)</strong> directly. <strong>containerd</strong> is the most common
+        runtime. Docker images still work — only the runtime changed.
+      </p>
+      <ul>
+        <li><strong>containerd</strong>: lightweight runtime; CLI tool is <code>ctr</code> (low-level) or
+          <strong>nerdctl</strong> (Docker-compatible). crictl works with any CRI runtime.
+        </li>
+        <li><code>crictl</code>: CRI-compatible CLI, used for debugging. Not for creating containers in production.</li>
+        <li><code>crictl ps</code>, <code>crictl images</code>, <code>crictl logs &lt;container-id&gt;</code>,
+          <code>crictl pods</code>
+        </li>
+      </ul>
+      <div class="snippet-label">Useful crictl commands</div>
+      <pre><code>crictl ps -a                        # list all containers
+crictl pods                         # list pods
+crictl images                       # list images
+crictl logs &lt;container-id&gt;          # container logs
+crictl inspect &lt;container-id&gt;       # container details
+nerdctl run -d --name web nginx     # nerdctl (Docker-like)</code></pre>
       <figure class="diagram">
         <svg viewBox="0 0 700 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-              <path d="M0 0 L8 4 L0 8 Z" fill="#0969da"/>
+              <path d="M0 0 L8 4 L0 8 Z" fill="#0969da" />
             </marker>
             <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-              <path d="M0 0 L8 4 L0 8 Z" fill="#1a7f37"/>
+              <path d="M0 0 L8 4 L0 8 Z" fill="#1a7f37" />
             </marker>
           </defs>
           <!-- Title -->
-          <text x="350" y="28" fill="#656d76" font-size="16" font-weight="600" text-anchor="middle">KUBERNETES CLUSTER</text>
+          <text x="350" y="28" fill="#656d76" font-size="16" font-weight="600" text-anchor="middle">KUBERNETES
+            CLUSTER</text>
           <!-- kubectl / client -->
-          <rect x="280" y="44" width="140" height="36" rx="6" fill="#eaeef2" stroke="#0969da" stroke-width="1.5"/>
-          <text x="350" y="66" fill="#1f2328" font-size="15" font-weight="600" text-anchor="middle">kubectl / clients</text>
-          <line x1="350" y1="80" x2="350" y2="108" stroke="#0969da" stroke-width="2" marker-end="url(#arrow)"/>
+          <rect x="280" y="44" width="140" height="36" rx="6" fill="#eaeef2" stroke="#0969da" stroke-width="1.5" />
+          <text x="350" y="66" fill="#1f2328" font-size="15" font-weight="600" text-anchor="middle">kubectl /
+            clients</text>
+          <line x1="350" y1="80" x2="350" y2="108" stroke="#0969da" stroke-width="2" marker-end="url(#arrow)" />
           <text x="350" y="98" fill="#656d76" font-size="13" text-anchor="middle">HTTPS</text>
           <!-- Control plane box -->
-          <rect x="40" y="118" width="620" height="100" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
-          <text x="350" y="142" fill="#1a7f37" font-size="15" font-weight="700" text-anchor="middle">CONTROL PLANE (Master)</text>
+          <rect x="40" y="118" width="620" height="100" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5" />
+          <text x="350" y="142" fill="#1a7f37" font-size="15" font-weight="700" text-anchor="middle">CONTROL PLANE
+            (Master)</text>
           <!-- API Server (highlighted - only one that talks to etcd) -->
-          <rect x="80" y="154" width="100" height="52" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5"/>
+          <rect x="80" y="154" width="100" height="52" rx="6" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5" />
           <text x="130" y="178" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">kube-</text>
           <text x="130" y="192" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">apiserver</text>
           <text x="130" y="202" fill="#656d76" font-size="11" text-anchor="middle">(only → etcd)</text>
           <!-- Arrow API to etcd -->
-          <line x1="180" y1="180" x2="228" y2="180" stroke="#0969da" stroke-width="2" marker-end="url(#arrow)"/>
+          <line x1="180" y1="180" x2="228" y2="180" stroke="#0969da" stroke-width="2" marker-end="url(#arrow)" />
           <!-- etcd -->
-          <rect x="228" y="154" width="80" height="52" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+          <rect x="228" y="154" width="80" height="52" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5" />
           <text x="268" y="180" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">etcd</text>
           <text x="268" y="198" fill="#656d76" font-size="11" text-anchor="middle">state store</text>
           <!-- Scheduler -->
-          <rect x="340" y="154" width="88" height="52" rx="6" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="340" y="154" width="88" height="52" rx="6" fill="#eaeef2" stroke="#d0d7de" />
           <text x="384" y="182" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">scheduler</text>
           <text x="384" y="198" fill="#656d76" font-size="11" text-anchor="middle">assigns node</text>
           <!-- Controller manager -->
-          <rect x="458" y="154" width="88" height="52" rx="6" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="458" y="154" width="88" height="52" rx="6" fill="#eaeef2" stroke="#d0d7de" />
           <text x="502" y="178" fill="#1f2328" font-size="12" font-weight="600" text-anchor="middle">controller</text>
           <text x="502" y="192" fill="#1f2328" font-size="12" font-weight="600" text-anchor="middle">manager</text>
           <!-- Dashed: scheduler &amp; controller use API server (not etcd) -->
-          <path d="M384 154 L384 118 L130 118 L130 154" stroke="#656d76" stroke-width="1" stroke-dasharray="4 3" fill="none"/>
+          <path d="M384 154 L384 118 L130 118 L130 154" stroke="#656d76" stroke-width="1" stroke-dasharray="4 3"
+            fill="none" />
           <text x="255" y="112" fill="#656d76" font-size="11" text-anchor="middle">use API server</text>
           <!-- Worker nodes -->
-          <rect x="40" y="238" width="300" height="72" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
-          <text x="190" y="262" fill="#1a7f37" font-size="14" font-weight="700" text-anchor="middle">WORKER NODE 1</text>
-          <rect x="56" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="40" y="238" width="300" height="72" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5" />
+          <text x="190" y="262" fill="#1a7f37" font-size="14" font-weight="700" text-anchor="middle">WORKER NODE
+            1</text>
+          <rect x="56" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de" />
           <text x="100" y="292" fill="#1f2328" font-size="13" font-weight="600" text-anchor="middle">kubelet</text>
-          <rect x="156" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="156" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de" />
           <text x="200" y="292" fill="#1f2328" font-size="13" font-weight="600" text-anchor="middle">kube-proxy</text>
-          <rect x="256" y="272" width="72" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="256" y="272" width="72" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de" />
           <text x="292" y="292" fill="#1f2328" font-size="12" font-weight="600" text-anchor="middle">runtime</text>
-          <rect x="360" y="238" width="300" height="72" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
-          <text x="510" y="262" fill="#1a7f37" font-size="14" font-weight="700" text-anchor="middle">WORKER NODE 2</text>
-          <rect x="376" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="360" y="238" width="300" height="72" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5" />
+          <text x="510" y="262" fill="#1a7f37" font-size="14" font-weight="700" text-anchor="middle">WORKER NODE
+            2</text>
+          <rect x="376" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de" />
           <text x="420" y="292" fill="#1f2328" font-size="13" font-weight="600" text-anchor="middle">kubelet</text>
-          <rect x="476" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="476" y="272" width="88" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de" />
           <text x="520" y="292" fill="#1f2328" font-size="13" font-weight="600" text-anchor="middle">kube-proxy</text>
-          <rect x="576" y="272" width="72" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="576" y="272" width="72" height="32" rx="4" fill="#eaeef2" stroke="#d0d7de" />
           <text x="612" y="292" fill="#1f2328" font-size="12" font-weight="600" text-anchor="middle">Pods</text>
           <!-- Arrows from control plane to workers -->
-          <line x1="350" y1="218" x2="190" y2="238" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow)"/>
-          <line x1="350" y1="218" x2="510" y2="238" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="350" y1="218" x2="190" y2="238" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow)" />
+          <line x1="350" y1="218" x2="510" y2="238" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow)" />
           <text x="350" y="232" fill="#656d76" font-size="11" text-anchor="middle">API</text>
         </svg>
-        <figcaption>Cluster layout: only the API server talks to etcd. Scheduler and controller manager use the API server. kubectl and other clients talk only to the API server. Workers run kubelet, kube-proxy, and container runtime (Pods).</figcaption>
+        <figcaption>Cluster layout: only the API server talks to etcd. Scheduler and controller manager use the API
+          server. kubectl and other clients talk only to the API server. Workers run kubelet, kube-proxy, and container
+          runtime (Pods).</figcaption>
       </figure>
 
       <h4>Control-plane components (kubeadm)</h4>
-      <p>With <strong>kubeadm</strong>, API server, etcd, scheduler, and controller manager run as <strong>static pods</strong> in <code>kube-system</code>. Manifest files live in <code>/etc/kubernetes/manifests/</code>. To inspect:</p>
+      <p>With <strong>kubeadm</strong>, API server, etcd, scheduler, and controller manager run as <strong>static
+          pods</strong> in <code>kube-system</code>. Manifest files live in <code>/etc/kubernetes/manifests/</code>. To
+        inspect:</p>
       <pre><code>kubectl get pods -n kube-system
 cat /etc/kubernetes/manifests/kube-apiserver.yaml
 cat /etc/kubernetes/manifests/kube-scheduler.yaml
 ps -aux | grep kube-apiserver</code></pre>
 
       <h4>kube-apiserver</h4>
-      <p>Primary component. <strong>Authenticates and validates</strong> requests, <strong>retrieves and updates</strong> data in etcd. It is the <strong>only</strong> component that talks to etcd. Scheduler, controller manager, and kubelet all interact with the cluster via the API server.</p>
+      <p>Primary component. <strong>Authenticates and validates</strong> requests, <strong>retrieves and
+          updates</strong> data in etcd. It is the <strong>only</strong> component that talks to etcd. Scheduler,
+        controller manager, and kubelet all interact with the cluster via the API server.</p>
 
       <h4>etcd</h4>
-      <p>Distributed <strong>key-value store</strong>; holds all cluster state. Listens on port <strong>2379</strong>. Use <code>etcdctl</code> to read/write: <code>etcdctl put key1 value1</code>, <code>etcdctl get key1</code>. With kubeadm, etcd runs as a pod; use <code>kubectl logs etcd-master -n kube-system</code> or <code>journalctl -u etcd.service</code> on manual setups.</p>
+      <p>Distributed <strong>key-value store</strong>; holds all cluster state. Listens on port <strong>2379</strong>.
+        Use <code>etcdctl</code> to read/write: <code>etcdctl put key1 value1</code>, <code>etcdctl get key1</code>.
+        With kubeadm, etcd runs as a pod; use <code>kubectl logs etcd-master -n kube-system</code> or
+        <code>journalctl -u etcd.service</code> on manual setups.
+      </p>
 
       <h4>kube-scheduler</h4>
-      <p>Responsible only for <strong>deciding which node</strong> a pod runs on. It does <strong>not</strong> place the pod on the node—that is done by <strong>kubelet</strong>. Scheduler watches for unscheduled pods and assigns a node by setting <code>nodeName</code> (or creating a Binding).</p>
+      <p>Responsible only for <strong>deciding which node</strong> a pod runs on. It does <strong>not</strong> place the
+        pod on the node—that is done by <strong>kubelet</strong>. Scheduler watches for unscheduled pods and assigns a
+        node by setting <code>nodeName</code> (or creating a Binding).</p>
 
       <h4>kube-controller-manager</h4>
-      <p>Runs <strong>controllers</strong> that watch cluster state and drive it toward the desired state. Examples: <strong>Node Controller</strong> (node health), <strong>Replication Controller</strong> (keep desired pod count), Deployment, Endpoints, Service Account, and others. All run in one process.</p>
+      <p>Runs <strong>controllers</strong> that watch cluster state and drive it toward the desired state. Examples:
+        <strong>Node Controller</strong> (node health), <strong>Replication Controller</strong> (keep desired pod
+        count), Deployment, Endpoints, Service Account, and others. All run in one process.
+      </p>
 
       <h4>kubelet</h4>
-      <p>Runs on each worker (and often on control-plane nodes). <strong>Sole point of contact</strong> for the cluster on that node: creates and runs pods, reports status. Scheduler only assigns; kubelet actually starts the containers. Not deployed by kubeadm by default on workers—you install it when joining nodes.</p>
+      <p>Runs on each worker (and often on control-plane nodes). <strong>Sole point of contact</strong> for the cluster
+        on that node: creates and runs pods, reports status. Scheduler only assigns; kubelet actually starts the
+        containers. Not deployed by kubeadm by default on workers—you install it when joining nodes.</p>
 
       <h4>kube-proxy</h4>
-      <p>Runs on every node. Implements <strong>Service</strong> semantics: maintains network rules (iptables or IPVS) so that traffic to a Service IP is forwarded to backend pods. With kubeadm it usually runs as a <strong>DaemonSet</strong> in <code>kube-system</code>.</p>
+      <p>Runs on every node. Implements <strong>Service</strong> semantics: maintains network rules (iptables or IPVS)
+        so that traffic to a Service IP is forwarded to backend pods. With kubeadm it usually runs as a
+        <strong>DaemonSet</strong> in <code>kube-system</code>.
+      </p>
 
       <h3>Pods</h3>
-      <p>Kubernetes does <strong>not</strong> run containers directly on the node. The smallest deployable unit is a <strong>Pod</strong>. A pod wraps one or more containers that share the same network namespace (same IP) and can share volumes. Typically one main application container per pod; multi-container pods are used for sidecars (e.g. log agent) or init tasks. Containers in a pod are usually not multiple instances of the same image.</p>
+      <p>Kubernetes does <strong>not</strong> run containers directly on the node. The smallest deployable unit is a
+        <strong>Pod</strong>. A pod wraps one or more containers that share the same network namespace (same IP) and can
+        share volumes. Typically one main application container per pod; multi-container pods are used for sidecars
+        (e.g. log agent) or init tasks. Containers in a pod are usually not multiple instances of the same image.
+      </p>
       <div class="snippet-label">Run a pod (imperative)</div>
       <pre><code>kubectl run nginx --image nginx
 kubectl get pods</code></pre>
@@ -528,7 +1063,8 @@ spec:
       <pre><code>kubectl create -f pod-definition.yaml</code></pre>
 
       <h3>ReplicaSets</h3>
-      <p>ReplicaSet maintains a stable set of replica pods. It requires a <code>selector</code> (matchLabels). ReplicationController is the older form.</p>
+      <p>ReplicaSet maintains a stable set of replica pods. It requires a <code>selector</code> (matchLabels).
+        ReplicationController is the older form.</p>
       <div class="snippet-label">ReplicaSet definition</div>
       <pre><code>apiVersion: apps/v1
 kind: ReplicaSet
@@ -555,7 +1091,10 @@ spec:
       <pre><code>kubectl create -f replicaset-definition.yaml
 kubectl get replicaset
 kubectl get pods</code></pre>
-      <p>Scale: <code>kubectl scale --replicas=6 -f replicaset-definition.yaml</code> or <code>kubectl scale --replicas=6 replicaset myapp-replicaset</code>. Or edit YAML and <code>kubectl apply -f replicaset-definition.yaml</code>.</p>
+      <p>Scale: <code>kubectl scale --replicas=6 -f replicaset-definition.yaml</code> or
+        <code>kubectl scale --replicas=6 replicaset myapp-replicaset</code>. Or edit YAML and
+        <code>kubectl apply -f replicaset-definition.yaml</code>.
+      </p>
 
       <h3>Deployments</h3>
       <p>Deployment manages ReplicaSets and Pods. Use it for declarative updates and rollouts.</p>
@@ -588,8 +1127,68 @@ kubectl get pods
 kubectl get all</code></pre>
       <p>Imperative create: <code>kubectl create deployment nginx --image=nginx</code>.</p>
 
+      <h3>Imperative commands — exam speed reference</h3>
+      <p>In the CKA exam, speed matters. Use imperative commands with <code>--dry-run=client -o yaml</code> to generate
+        YAML quickly, then edit as needed.</p>
+      <div class="snippet-label">Generate YAML templates fast</div>
+      <pre><code># Pod
+kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml
+
+# Deployment
+kubectl create deployment nginx --image=nginx --replicas=3 --dry-run=client -o yaml > deploy.yaml
+
+# Service (ClusterIP)
+kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
+
+# Service (NodePort)
+kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=client -o yaml
+
+# Job
+kubectl create job my-job --image=busybox --dry-run=client -o yaml -- echo hello
+
+# CronJob
+kubectl create cronjob my-cron --image=busybox --schedule="*/5 * * * *" --dry-run=client -o yaml -- echo hi
+
+# ConfigMap
+kubectl create configmap app-config --from-literal=KEY=VALUE --dry-run=client -o yaml
+
+# Secret
+kubectl create secret generic app-secret --from-literal=PASSWORD=pass --dry-run=client -o yaml
+
+# ServiceAccount
+kubectl create serviceaccount my-sa --dry-run=client -o yaml
+
+# Namespace
+kubectl create namespace dev
+
+# Role & RoleBinding
+kubectl create role pod-reader --verb=get,list --resource=pods -n dev
+kubectl create rolebinding dev-read --role=pod-reader --user=jane -n dev
+
+# ClusterRole & ClusterRoleBinding
+kubectl create clusterrole node-reader --verb=get,list --resource=nodes
+kubectl create clusterrolebinding node-read --clusterrole=node-reader --user=jane
+
+# Ingress
+kubectl create ingress my-ingress --rule="host/path=svc:80" --dry-run=client -o yaml</code></pre>
+      <div class="snippet-label">Quick edit and apply pattern</div>
+      <pre><code># Generate → Edit → Apply
+kubectl run mypod --image=nginx --dry-run=client -o yaml > mypod.yaml
+vi mypod.yaml   # add labels, resources, volumes, etc.
+kubectl apply -f mypod.yaml
+
+# Edit running resource
+kubectl edit deployment nginx
+
+# Replace (force update)
+kubectl replace --force -f pod.yaml</code></pre>
+
       <h3>Namespaces</h3>
-      <p>Objects live in a namespace (default is <code>default</code>). List pods in a namespace: <code>kubectl get pods --namespace=kube-system</code> or <code>-n kube-system</code>. Create in a namespace: <code>kubectl create -f pod-definition.yaml --namespace=dev</code>. Add <code>namespace: dev</code> under <code>metadata</code> in the YAML to fix the namespace.</p>
+      <p>Objects live in a namespace (default is <code>default</code>). List pods in a namespace:
+        <code>kubectl get pods --namespace=kube-system</code> or <code>-n kube-system</code>. Create in a namespace:
+        <code>kubectl create -f pod-definition.yaml --namespace=dev</code>. Add <code>namespace: dev</code> under
+        <code>metadata</code> in the YAML to fix the namespace.
+      </p>
       <div class="snippet-label">Create namespace</div>
       <pre><code>apiVersion: v1
 kind: Namespace
@@ -598,7 +1197,10 @@ metadata:
       <pre><code>kubectl create -f namespace-dev.yaml
 # or
 kubectl create namespace dev</code></pre>
-      <p>Switch default namespace: <code>kubectl config set-context $(kubectl config current-context) --namespace=dev</code>. All namespaces: <code>kubectl get pods --all-namespaces</code>.</p>
+      <p>Switch default namespace:
+        <code>kubectl config set-context $(kubectl config current-context) --namespace=dev</code>. All namespaces:
+        <code>kubectl get pods --all-namespaces</code>.
+      </p>
       <div class="snippet-label">ResourceQuota (limit resources in a namespace)</div>
       <pre><code>apiVersion: v1
 kind: ResourceQuota
@@ -615,7 +1217,8 @@ spec:
       <pre><code>kubectl create -f compute-quota.yaml</code></pre>
 
       <h3>Services</h3>
-      <p>Three types: <strong>NodePort</strong> (expose on node port), <strong>ClusterIP</strong> (virtual IP inside cluster), <strong>LoadBalancer</strong> (cloud load balancer).</p>
+      <p>Three types: <strong>NodePort</strong> (expose on node port), <strong>ClusterIP</strong> (virtual IP inside
+        cluster), <strong>LoadBalancer</strong> (cloud load balancer).</p>
       <div class="snippet-label">NodePort service</div>
       <pre><code>apiVersion: v1
 kind: Service
@@ -648,45 +1251,50 @@ kubectl get services
 curl http://&lt;node-ip&gt;:30008   # for NodePort</code></pre>
       <figure class="diagram">
         <svg viewBox="0 0 540 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="20" width="155" height="120" rx="8" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="20" y="20" width="155" height="120" rx="8" fill="#eaeef2" stroke="#d0d7de" />
           <text x="97" y="46" fill="#1a7f37" font-size="16" font-weight="600" text-anchor="middle">NodePort</text>
           <text x="97" y="66" fill="#656d76" font-size="13" text-anchor="middle">Node:30008 → :80</text>
           <text x="97" y="82" fill="#656d76" font-size="13" text-anchor="middle">→ Pod targetPort</text>
           <text x="97" y="106" fill="#1f2328" font-size="13" text-anchor="middle">External via</text>
           <text x="97" y="120" fill="#1f2328" font-size="13" text-anchor="middle">any node + nodePort</text>
-          <rect x="192" y="20" width="155" height="120" rx="8" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="192" y="20" width="155" height="120" rx="8" fill="#eaeef2" stroke="#d0d7de" />
           <text x="269" y="46" fill="#1a7f37" font-size="16" font-weight="600" text-anchor="middle">ClusterIP</text>
           <text x="269" y="66" fill="#656d76" font-size="13" text-anchor="middle">Virtual IP 10.96.x.x</text>
           <text x="269" y="82" fill="#656d76" font-size="13" text-anchor="middle">Cluster-internal</text>
           <text x="269" y="106" fill="#1f2328" font-size="13" text-anchor="middle">Frontend → Backend</text>
           <text x="269" y="120" fill="#1f2328" font-size="12" text-anchor="middle">svc.ns.svc.cluster.local</text>
-          <rect x="364" y="20" width="155" height="120" rx="8" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="364" y="20" width="155" height="120" rx="8" fill="#eaeef2" stroke="#d0d7de" />
           <text x="441" y="46" fill="#1a7f37" font-size="16" font-weight="600" text-anchor="middle">LoadBalancer</text>
           <text x="441" y="66" fill="#656d76" font-size="13" text-anchor="middle">Cloud LB → NodePort</text>
           <text x="441" y="82" fill="#656d76" font-size="13" text-anchor="middle">→ Service → Pods</text>
           <text x="441" y="106" fill="#1f2328" font-size="13" text-anchor="middle">External IP</text>
           <text x="441" y="120" fill="#1f2328" font-size="13" text-anchor="middle">(AWS/GCP/Azure)</text>
         </svg>
-        <figcaption>Service types: NodePort (expose on node port), ClusterIP (internal VIP), LoadBalancer (cloud LB).</figcaption>
+        <figcaption>Service types: NodePort (expose on node port), ClusterIP (internal VIP), LoadBalancer (cloud LB).
+        </figcaption>
       </figure>
 
       <!-- 03 Scheduling -->
       <h2 id="section-03">03 — Scheduling</h2>
       <h3>How scheduling works</h3>
-      <p>The scheduler watches for pods with no <code>nodeName</code>. It picks a node (filtering + scoring), then either sets <code>spec.nodeName</code> or creates a <strong>Binding</strong> object. The <strong>kubelet</strong> on that node then creates the pod. Without a scheduler, you can set <code>nodeName</code> yourself to force a node.</p>
+      <p>The scheduler watches for pods with no <code>nodeName</code>. It picks a node (filtering + scoring), then
+        either sets <code>spec.nodeName</code> or creates a <strong>Binding</strong> object. The
+        <strong>kubelet</strong> on that node then creates the pod. Without a scheduler, you can set
+        <code>nodeName</code> yourself to force a node.
+      </p>
       <figure class="diagram">
         <svg viewBox="0 0 480 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <rect x="24" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <rect x="24" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="68" y="52" fill="#1f2328" font-size="14" text-anchor="middle">Pod created</text>
-          <path d="M112 50 L136 50" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="136" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <path d="M112 50 L136 50" stroke="#1a7f37" stroke-width="2" />
+          <rect x="136" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="180" y="50" fill="#1f2328" font-size="14" text-anchor="middle">Scheduler</text>
           <text x="180" y="66" fill="#656d76" font-size="12" text-anchor="middle">picks node</text>
-          <path d="M224 50 L248 50" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="248" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <path d="M224 50 L248 50" stroke="#1a7f37" stroke-width="2" />
+          <rect x="248" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="292" y="52" fill="#1f2328" font-size="14" text-anchor="middle">nodeName set</text>
-          <path d="M336 50 L360 50" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="360" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#1a7f37"/>
+          <path d="M336 50 L360 50" stroke="#1a7f37" stroke-width="2" />
+          <rect x="360" y="24" width="88" height="52" rx="6" fill="#eaeef2" stroke="#1a7f37" />
           <text x="404" y="50" fill="#1f2328" font-size="14" text-anchor="middle">Kubelet</text>
           <text x="404" y="66" fill="#656d76" font-size="12" text-anchor="middle">runs pod</text>
         </svg>
@@ -707,10 +1315,14 @@ spec:
     ports:
     - containerPort: 8080
   nodeName: node02</code></pre>
-      <p>Alternatively create a <strong>Binding</strong> object (target = node) and POST it to <code>/api/v1/namespaces/&lt;ns&gt;/pods/&lt;name&gt;/binding</code>; the pod spec stays without nodeName until the binding is processed.</p>
+      <p>Alternatively create a <strong>Binding</strong> object (target = node) and POST it to
+        <code>/api/v1/namespaces/&lt;ns&gt;/pods/&lt;name&gt;/binding</code>; the pod spec stays without nodeName until
+        the binding is processed.
+      </p>
 
       <h3>Labels and selectors</h3>
-      <p>Labels are key-value pairs on objects. Selectors filter by labels. Services and ReplicaSets use selectors to target pods.</p>
+      <p>Labels are key-value pairs on objects. Selectors filter by labels. Services and ReplicaSets use selectors to
+        target pods.</p>
       <div class="snippet-label">Pod with labels</div>
       <pre><code>apiVersion: v1
 kind: Pod
@@ -726,10 +1338,12 @@ spec:
     ports:
     - containerPort: 8080</code></pre>
       <pre><code>kubectl get pods --selector app=App1</code></pre>
-      <p>Annotations (e.g. <code>buildversion: 1.34</code>) go under <code>metadata.annotations</code> for non-identifying info.</p>
+      <p>Annotations (e.g. <code>buildversion: 1.34</code>) go under <code>metadata.annotations</code> for
+        non-identifying info.</p>
 
       <h3>Taints and tolerations</h3>
-      <p>Taints restrict which pods can be scheduled on a node. Only pods with matching tolerations can run there. Effects: <code>NoSchedule</code>, <code>PreferNoSchedule</code>, <code>NoExecute</code>.</p>
+      <p>Taints restrict which pods can be scheduled on a node. Only pods with matching tolerations can run there.
+        Effects: <code>NoSchedule</code>, <code>PreferNoSchedule</code>, <code>NoExecute</code>.</p>
       <pre><code>kubectl taint nodes node1 app=blue:NoSchedule</code></pre>
       <div class="snippet-label">Pod with toleration</div>
       <pre><code>apiVersion: v1
@@ -748,7 +1362,9 @@ spec:
       <pre><code>kubectl describe node kubemaster | grep Taint</code></pre>
 
       <h3>Node selector</h3>
-      <p>Add <code>nodeSelector</code> to pod spec with a label that nodes must have. Label node first: <code>kubectl label nodes node1 disk=ssd</code>.</p>
+      <p>Add <code>nodeSelector</code> to pod spec with a label that nodes must have. Label node first:
+        <code>kubectl label nodes node1 disk=ssd</code>.
+      </p>
       <pre><code>apiVersion: v1
 kind: Pod
 metadata:
@@ -761,7 +1377,9 @@ spec:
     disk: ssd</code></pre>
 
       <h3>Resource requests and limits</h3>
-      <p>Default request: 0.5 CPU, 256Mi memory. Default limit: 1 CPU, 512Mi. Set per container in <code>spec.containers[].resources</code>.</p>
+      <p>Default request: 0.5 CPU, 256Mi memory. Default limit: 1 CPU, 512Mi. Set per container in
+        <code>spec.containers[].resources</code>.
+      </p>
       <pre><code>apiVersion: v1
 kind: Pod
 metadata:
@@ -807,7 +1425,11 @@ kubectl get daemonsets
 kubectl describe daemonsets monitoring-daemon</code></pre>
 
       <h3>Node affinity</h3>
-      <p>Like nodeSelector but with expressive rules. Types: <code>requiredDuringSchedulingIgnoredDuringExecution</code> (hard requirement), <code>preferredDuringSchedulingIgnoredDuringExecution</code> (soft). Use <code>matchExpressions</code> with operators <code>In</code>, <code>NotIn</code>, <code>Exists</code>, <code>DoesNotExist</code>.</p>
+      <p>Like nodeSelector but with expressive rules. Types: <code>requiredDuringSchedulingIgnoredDuringExecution</code>
+        (hard requirement), <code>preferredDuringSchedulingIgnoredDuringExecution</code> (soft). Use
+        <code>matchExpressions</code> with operators <code>In</code>, <code>NotIn</code>, <code>Exists</code>,
+        <code>DoesNotExist</code>.
+      </p>
       <pre><code>spec:
   affinity:
     nodeAffinity:
@@ -820,27 +1442,40 @@ kubectl describe daemonsets monitoring-daemon</code></pre>
       # preferredDuringSchedulingIgnoredDuringExecution for soft preference</code></pre>
 
       <h3>Multiple schedulers</h3>
-      <p>You can run a custom scheduler (e.g. <code>my-custom-scheduler</code>) alongside the default. In the pod spec set <code>schedulerName: my-custom-scheduler</code>. Only that scheduler will assign that pod. View events: <code>kubectl get events</code>.</p>
+      <p>You can run a custom scheduler (e.g. <code>my-custom-scheduler</code>) alongside the default. In the pod spec
+        set <code>schedulerName: my-custom-scheduler</code>. Only that scheduler will assign that pod. View events:
+        <code>kubectl get events</code>.
+      </p>
 
       <h3>Static pods</h3>
-      <p>Kubelet can run pods from a directory on the host (no API server). Configure kubelet with <code>--pod-manifest-path</code> or in config as <code>staticPodPath</code>. Kubelet creates both static pods and API-server pods. Static pods are mirrored in the API as read-only.</p>
+      <p>Kubelet can run pods from a directory on the host (no API server). Configure kubelet with
+        <code>--pod-manifest-path</code> or in config as <code>staticPodPath</code>. Kubelet creates both static pods
+        and API-server pods. Static pods are mirrored in the API as read-only.
+      </p>
 
       <!-- 04 Logging & Monitoring -->
       <h2 id="section-04">04 — Logging and Monitoring</h2>
       <h3>Application logs</h3>
-      <p>Container stdout/stderr are captured by kubelet and exposed via the API. Use <code>kubectl logs</code>. For a <strong>multi-container</strong> pod you must specify the container name.</p>
+      <p>Container stdout/stderr are captured by kubelet and exposed via the API. Use <code>kubectl logs</code>. For a
+        <strong>multi-container</strong> pod you must specify the container name.
+      </p>
       <pre><code>kubectl logs -f &lt;pod-name&gt;
 kubectl logs -f &lt;pod-name&gt; &lt;container-name&gt;
 kubectl logs &lt;pod-name&gt; --previous
 kubectl logs &lt;pod-name&gt; -f --previous</code></pre>
-      <p><code>-f</code> streams logs; <code>--previous</code> shows logs from the <strong>previous</strong> container instance (e.g. after a crash/restart).</p>
+      <p><code>-f</code> streams logs; <code>--previous</code> shows logs from the <strong>previous</strong> container
+        instance (e.g. after a crash/restart).</p>
       <h3>Cluster metrics</h3>
-      <p><strong>Metrics Server</strong> provides resource metrics (CPU/memory) for <code>kubectl top nodes</code> and <code>kubectl top pods</code>. It is not for long-term storage; use a monitoring stack (Prometheus, etc.) for that. Legacy Heapster is deprecated.</p>
+      <p><strong>Metrics Server</strong> provides resource metrics (CPU/memory) for <code>kubectl top nodes</code> and
+        <code>kubectl top pods</code>. It is not for long-term storage; use a monitoring stack (Prometheus, etc.) for
+        that. Legacy Heapster is deprecated.
+      </p>
 
       <!-- 05 Application Lifecycle -->
       <h2 id="section-05">05 — Application Lifecycle Management</h2>
       <h3>Rolling updates and rollback</h3>
-      <p>Deployment strategies: <strong>Recreate</strong> (all down then up), <strong>RollingUpdate</strong> (default).</p>
+      <p>Deployment strategies: <strong>Recreate</strong> (all down then up), <strong>RollingUpdate</strong> (default).
+      </p>
       <pre><code>kubectl rollout status deployment/myapp-deployment
 kubectl rollout history deployment/myapp-deployment
 kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
@@ -848,7 +1483,10 @@ kubectl apply -f deployment-definition.yaml
 kubectl rollout undo deployment/myapp-deployment</code></pre>
 
       <h3>ConfigMaps</h3>
-      <p>Create: imperative <code>kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod</code> or from file <code>--from-file=app_config.properties</code>.</p>
+      <p>Create: imperative
+        <code>kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod</code> or
+        from file <code>--from-file=app_config.properties</code>.
+      </p>
       <div class="snippet-label">ConfigMap YAML</div>
       <pre><code>apiVersion: v1
 kind: ConfigMap
@@ -877,7 +1515,10 @@ spec:
         name: app-config</code></pre>
 
       <h3>Secrets</h3>
-      <p>Store sensitive data (base64 in YAML). Create: <code>kubectl create secret generic app-secret --from-literal=DB_Host=mysql --from-literal=DB_User=root --from-literal=DB_Password=paswrd</code>. Encode for YAML: <code>echo -n "paswrd" | base64</code>.</p>
+      <p>Store sensitive data (base64 in YAML). Create:
+        <code>kubectl create secret generic app-secret --from-literal=DB_Host=mysql --from-literal=DB_User=root --from-literal=DB_Password=paswrd</code>.
+        Encode for YAML: <code>echo -n "paswrd" | base64</code>.
+      </p>
       <pre><code>apiVersion: v1
 kind: Secret
 metadata:
@@ -890,12 +1531,89 @@ data:
 kubectl get secrets
 kubectl describe secret app-secret
 kubectl get secret app-secret -o yaml</code></pre>
-      <p>Decode: <code>echo -n "bX1zcWw=" | base64 --decode</code>. Inject into pod with <code>envFrom: - secretRef: name: app-secret</code> (same structure as configMapRef).</p>
+      <p>Decode: <code>echo -n "bX1zcWw=" | base64 --decode</code>. Inject into pod with
+        <code>envFrom: - secretRef: name: app-secret</code> (same structure as configMapRef).
+      </p>
 
       <h3>Commands and arguments</h3>
-      <p>Override image <strong>CMD</strong> with <code>command</code> (args to entrypoint) and <strong>ENTRYPOINT</strong> with <code>args</code> in the container spec. In Kubernetes, <code>command</code> corresponds to Docker ENTRYPOINT and <code>args</code> to CMD. Example: <code>command: ["sleep"]</code>, <code>args: ["3600"]</code>.</p>
+      <p>Override image <strong>CMD</strong> with <code>command</code> (args to entrypoint) and
+        <strong>ENTRYPOINT</strong> with <code>args</code> in the container spec. In Kubernetes, <code>command</code>
+        corresponds to Docker ENTRYPOINT and <code>args</code> to CMD. Example: <code>command: ["sleep"]</code>,
+        <code>args: ["3600"]</code>.
+      </p>
+      <div class="snippet-label">Docker → Kubernetes mapping</div>
+      <pre><code># Dockerfile          → Pod spec
+# ENTRYPOINT ["python"] → command: ["python"]
+# CMD ["app.py"]       → args: ["app.py"]
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: command-demo
+spec:
+  containers:
+  - name: demo
+    image: ubuntu
+    command: ["sleep"]    # overrides ENTRYPOINT
+    args: ["5000"]        # overrides CMD</code></pre>
+      <h3>Environment variables</h3>
+      <p>Set env vars directly, from ConfigMaps, or from Secrets. Three injection methods:</p>
+      <pre><code>containers:
+- name: app
+  image: myapp
+  env:
+  # 1. Plain key-value
+  - name: APP_COLOR
+    value: pink
+  # 2. From ConfigMap key
+  - name: APP_ENV
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: APP_ENV
+  # 3. From Secret key
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: app-secret
+        key: DB_Password</code></pre>
+
+      <h3>Multi-container pod design patterns</h3>
+      <p>CKA tests multi-container pods. Three main patterns:</p>
+      <ul>
+        <li><strong>Sidecar:</strong> auxiliary container that enhances the main container (e.g. log shipper that reads
+          shared volume, Istio proxy).</li>
+        <li><strong>Ambassador:</strong> proxy container that handles connections to external services on behalf of the
+          main container (e.g. localhost proxy to reach different DB environments).</li>
+        <li><strong>Adapter:</strong> transforms data from the main container before exporting it (e.g. log format
+          normaliser, metrics adapter).</li>
+      </ul>
+      <div class="snippet-label">Sidecar example (log streamer)</div>
+      <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-sidecar
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: ['sh', '-c', 'while true; do echo "$(date) INFO app running" >> /var/log/app.log; sleep 5; done']
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  - name: sidecar
+    image: busybox
+    command: ['sh', '-c', 'tail -f /var/log/app.log']
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  volumes:
+  - name: log-volume
+    emptyDir: {}</code></pre>
       <h3>Init containers</h3>
-      <p>Run to completion before main containers start. Use for one-time setup or waiting for dependencies. If an init container fails, the pod is restarted (all init containers re-run). Order: initContainers run sequentially; then main containers start.</p>
+      <p>Run to completion before main containers start. Use for one-time setup or waiting for dependencies. If an init
+        container fails, the pod is restarted (all init containers re-run). Order: initContainers run sequentially; then
+        main containers start.</p>
       <pre><code>apiVersion: v1
 kind: Pod
 metadata:
@@ -916,7 +1634,11 @@ spec:
     command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']</code></pre>
 
       <h3>Liveness and readiness probes</h3>
-      <p>Probes make deployments <strong>self-healing</strong>. <strong>livenessProbe</strong>: if it fails, the container is restarted. <strong>readinessProbe</strong>: if it fails, the pod is removed from Service endpoints (no traffic until ready). Types: <code>httpGet</code> (HTTP path), <code>exec</code> (command), <code>tcpSocket</code> (port open).</p>
+      <p>Probes make deployments <strong>self-healing</strong>. <strong>livenessProbe</strong>: if it fails, the
+        container is restarted. <strong>readinessProbe</strong>: if it fails, the pod is removed from Service endpoints
+        (no traffic until ready). Types: <code>httpGet</code> (HTTP path), <code>exec</code> (command),
+        <code>tcpSocket</code> (port open).
+      </p>
       <div class="snippet-label">Probes example</div>
       <pre><code>containers:
 - name: app
@@ -935,7 +1657,10 @@ spec:
     periodSeconds: 10</code></pre>
 
       <h3>HorizontalPodAutoscaler (HPA)</h3>
-      <p><strong>Workload autoscaling</strong>: HPA scales a Deployment/ReplicaSet based on CPU (or custom metrics). Requires <strong>Metrics Server</strong> in the cluster for <code>kubectl top</code> and CPU-based scaling. Set <code>resources.requests</code> on the deployment so HPA can compute utilization.</p>
+      <p><strong>Workload autoscaling</strong>: HPA scales a Deployment/ReplicaSet based on CPU (or custom metrics).
+        Requires <strong>Metrics Server</strong> in the cluster for <code>kubectl top</code> and CPU-based scaling. Set
+        <code>resources.requests</code> on the deployment so HPA can compute utilization.
+      </p>
       <div class="snippet-label">HPA YAML</div>
       <pre><code>apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -962,23 +1687,26 @@ kubectl describe hpa myapp-hpa</code></pre>
       <!-- 06 Cluster Maintenance -->
       <h2 id="section-06">06 — Cluster Maintenance</h2>
       <h3>OS upgrades and node maintenance</h3>
-      <p><strong>Important:</strong> If a node is down for <strong>more than 5 minutes</strong>, the control plane may terminate pods that were on that node (they will be recreated elsewhere if managed by a controller).</p>
+      <p><strong>Important:</strong> If a node is down for <strong>more than 5 minutes</strong>, the control plane may
+        terminate pods that were on that node (they will be recreated elsewhere if managed by a controller).</p>
       <ul>
-        <li><strong>kubectl drain &lt;node&gt;</strong>: Evicts workloads from the node (pods are rescheduled elsewhere) and marks the node <strong>unschedulable</strong> (cordon). Use before OS upgrade or maintenance.</li>
+        <li><strong>kubectl drain &lt;node&gt;</strong>: Evicts workloads from the node (pods are rescheduled elsewhere)
+          and marks the node <strong>unschedulable</strong> (cordon). Use before OS upgrade or maintenance.</li>
         <li><strong>kubectl uncordon &lt;node&gt;</strong>: Marks the node schedulable again after it is back.</li>
-        <li><strong>kubectl cordon &lt;node&gt;</strong>: Only marks the node unschedulable; does <strong>not</strong> evict existing pods.</li>
+        <li><strong>kubectl cordon &lt;node&gt;</strong>: Only marks the node unschedulable; does <strong>not</strong>
+          evict existing pods.</li>
       </ul>
       <figure class="diagram">
         <svg viewBox="0 0 420 120" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="20" width="118" height="80" rx="8" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="20" y="20" width="118" height="80" rx="8" fill="#eaeef2" stroke="#d0d7de" />
           <text x="79" y="48" fill="#1a7f37" font-size="15" font-weight="600" text-anchor="middle">cordon</text>
           <text x="79" y="68" fill="#656d76" font-size="13" text-anchor="middle">No new pods</text>
           <text x="79" y="84" fill="#656d76" font-size="13" text-anchor="middle">Pods stay</text>
-          <rect x="151" y="20" width="118" height="80" rx="8" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="151" y="20" width="118" height="80" rx="8" fill="#eaeef2" stroke="#d0d7de" />
           <text x="210" y="48" fill="#0969da" font-size="15" font-weight="600" text-anchor="middle">drain</text>
           <text x="210" y="68" fill="#656d76" font-size="13" text-anchor="middle">Cordon + evict</text>
           <text x="210" y="84" fill="#656d76" font-size="13" text-anchor="middle">Pods move away</text>
-          <rect x="282" y="20" width="118" height="80" rx="8" fill="#eaeef2" stroke="#d0d7de"/>
+          <rect x="282" y="20" width="118" height="80" rx="8" fill="#eaeef2" stroke="#d0d7de" />
           <text x="341" y="48" fill="#1a7f37" font-size="15" font-weight="600" text-anchor="middle">uncordon</text>
           <text x="341" y="68" fill="#656d76" font-size="13" text-anchor="middle">Allow scheduling</text>
           <text x="341" y="84" fill="#656d76" font-size="13" text-anchor="middle">again</text>
@@ -987,7 +1715,8 @@ kubectl describe hpa myapp-hpa</code></pre>
       </figure>
 
       <h3>Kubernetes versions</h3>
-      <p>Kubernetes supports the last 3 minor versions. Upgrade one minor version at a time. kubeadm, kubelet, and control-plane components can be at different versions during upgrade.</p>
+      <p>Kubernetes supports the last 3 minor versions. Upgrade one minor version at a time. kubeadm, kubelet, and
+        control-plane components can be at different versions during upgrade.</p>
 
       <h3>Cluster upgrade (kubeadm)</h3>
       <p><strong>Master:</strong></p>
@@ -997,7 +1726,8 @@ kubeadm upgrade apply v1.12.0
 apt-get upgrade kubelet=1.12.0-00
 systemctl restart kubelet
 kubectl get nodes</code></pre>
-      <p><strong>Workers:</strong> drain, upgrade kubeadm and kubelet, update node config, restart kubelet, uncordon.</p>
+      <p><strong>Workers:</strong> drain, upgrade kubeadm and kubelet, update node config, restart kubelet, uncordon.
+      </p>
       <pre><code>kubectl drain node-1
 apt-get upgrade -y kubeadm=1.12.0-00 kubelet=1.12.0-00
 kubeadm upgrade node config --kubelet-version v1.12.0
@@ -1005,20 +1735,29 @@ systemctl restart kubelet
 kubectl uncordon node-1</code></pre>
 
       <h3>Backup and restore</h3>
-      <p><strong>Resource configs:</strong> store YAML in Git; or <code>kubectl get all --all-namespaces -o yaml &gt; all-deploy-services.yaml</code> (partial). Tools like Velero can backup/restore resources.</p>
+      <p><strong>Resource configs:</strong> store YAML in Git; or
+        <code>kubectl get all --all-namespaces -o yaml &gt; all-deploy-services.yaml</code> (partial). Tools like Velero
+        can backup/restore resources.
+      </p>
       <p><strong>ETCD snapshot:</strong></p>
       <pre><code>ETCDCTL_API=3 etcdctl snapshot save snapshot.db
 ETCDCTL_API=3 etcdctl snapshot status snapshot.db</code></pre>
-      <p>With kubeadm, etcd runs as a pod; use the correct endpoint and certs. Example (adjust paths/endpoints for your setup):</p>
+      <p>With kubeadm, etcd runs as a pod; use the correct endpoint and certs. Example (adjust paths/endpoints for your
+        setup):</p>
       <pre><code>ETCDCTL_API=3 etcdctl snapshot save snapshot.db \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
   --key=/etc/kubernetes/pki/etcd/server.key</code></pre>
-      <p>Restore: <code>etcdctl snapshot restore snapshot.db --data-dir=/var/lib/etcd-from-backup</code>, then point etcd to the new data-dir and restart control-plane components.</p>
+      <p>Restore: <code>etcdctl snapshot restore snapshot.db --data-dir=/var/lib/etcd-from-backup</code>, then point
+        etcd to the new data-dir and restart control-plane components.</p>
 
       <h3>PodDisruptionBudget (PDB)</h3>
-      <p>PDB limits voluntary disruptions (e.g. <code>kubectl drain</code>, node upgrades) so that a minimum number of pods stay available. <strong>minAvailable</strong>: at least N pods (number or percentage). <strong>maxUnavailable</strong>: at most N pods down (number or percentage). Drain respects PDBs and may block until pods can be rescheduled.</p>
+      <p>PDB limits voluntary disruptions (e.g. <code>kubectl drain</code>, node upgrades) so that a minimum number of
+        pods stay available. <strong>minAvailable</strong>: at least N pods (number or percentage).
+        <strong>maxUnavailable</strong>: at most N pods down (number or percentage). Drain respects PDBs and may block
+        until pods can be rescheduled.
+      </p>
       <div class="snippet-label">PDB example (minAvailable)</div>
       <pre><code>apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -1040,21 +1779,114 @@ kubectl describe pdb myapp-pdb</code></pre>
 
       <!-- 07 Security -->
       <h2 id="section-07">07 — Security</h2>
+
+      <h3>Kubernetes security primitives</h3>
+      <p>Security starts with the <strong>API server</strong> — it is the gatekeeper. Two key questions: <strong>who can
+          access?</strong> (authentication) and <strong>what can they do?</strong> (authorization). All access goes
+        through the API server, making it the single chokepoint for security.</p>
+
+      <h3>Authentication</h3>
+      <p>Kubernetes does <strong>not</strong> manage user accounts natively (no User object). It relies on external
+        mechanisms. Two types of accounts:</p>
+      <ul>
+        <li><strong>Users</strong> (humans): admins, developers — managed externally (certificates, LDAP, OIDC tokens).
+        </li>
+        <li><strong>Service Accounts</strong> (machines): used by pods and processes — managed by Kubernetes.</li>
+      </ul>
+      <p>Authentication methods: <strong>static password/token files</strong> (deprecated),
+        <strong>certificates</strong> (most common with kubeadm), <strong>OIDC</strong>, <strong>webhook</strong>. All
+        requests are authenticated by the API server before authorization.
+      </p>
+
+      <h3>Service Accounts</h3>
+      <p>ServiceAccounts are namespace-scoped. Every namespace has a <code>default</code> SA. Pods automatically mount
+        the SA token. Use custom SAs to give pods specific RBAC permissions.</p>
+      <pre><code># Create
+kubectl create serviceaccount dashboard-sa
+kubectl get serviceaccount
+
+# Use in pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-dashboard
+spec:
+  serviceAccountName: dashboard-sa
+  automountServiceAccountToken: false   # opt-out of auto-mount
+  containers:
+  - name: dashboard
+    image: my-dashboard:v1</code></pre>
+      <p>Since Kubernetes 1.24, ServiceAccount tokens are no longer auto-created as Secrets. Use
+        <code>kubectl create token &lt;sa-name&gt;</code> for short-lived tokens, or create a Secret with annotation
+        <code>kubernetes.io/service-account.name</code>.
+      </p>
+
       <h3>TLS in Kubernetes</h3>
-      <p>Cluster components use <strong>TLS</strong>: servers use <strong>server certificates</strong>, clients use <strong>client certificates</strong> for authentication. API server, etcd, kubelet, and other control-plane components each have certs (typically under <code>/etc/kubernetes/pki/</code> on kubeadm). Certificate API can issue signed certs for users; the controller manager handles signing.</p>
+      <p>Cluster components use <strong>TLS</strong>: servers use <strong>server certificates</strong>, clients use
+        <strong>client certificates</strong> for authentication. API server, etcd, kubelet, and other control-plane
+        components each have certs (typically under <code>/etc/kubernetes/pki/</code> on kubeadm). Certificate API can
+        issue signed certs for users; the controller manager handles signing.
+      </p>
+      <h4>Key certificate files (kubeadm)</h4>
+      <ul>
+        <li><code>ca.crt / ca.key</code> — Cluster CA (root of trust)</li>
+        <li><code>apiserver.crt / apiserver.key</code> — API server TLS</li>
+        <li><code>apiserver-kubelet-client.crt</code> — API → kubelet client cert</li>
+        <li><code>apiserver-etcd-client.crt</code> — API → etcd client cert</li>
+        <li><code>etcd/ca.crt, etcd/server.crt</code> — etcd TLS</li>
+        <li><code>front-proxy-ca.crt</code> — Aggregation layer</li>
+      </ul>
+
       <h3>Viewing certificates</h3>
       <pre><code>openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout</code></pre>
-      <p>Check subject, issuer, validity (not after). Same for other certs in <code>/etc/kubernetes/pki/</code> (ca.crt, apiserver-kubelet-client.crt, etc.).</p>
+      <p>Check subject, issuer, validity (not after), SANs (Subject Alternative Names). Same for other certs in
+        <code>/etc/kubernetes/pki/</code> (ca.crt, apiserver-kubelet-client.crt, etc.).
+      </p>
+
+      <h3>Certificate API — CSR workflow</h3>
+      <p>Kubernetes has a built-in <strong>Certificate Signing Request (CSR)</strong> API for issuing client
+        certificates. The controller manager signs the certificates using the cluster CA.</p>
+      <div class="snippet-label">Create and approve a user certificate</div>
+      <pre><code># 1. User generates key and CSR
+openssl genrsa -out jane.key 2048
+openssl req -new -key jane.key -subj "/CN=jane" -out jane.csr
+
+# 2. Admin creates CSR object (base64-encode the CSR)
+cat jane.csr | base64 | tr -d '\n'</code></pre>
+      <pre><code># 3. CSR YAML
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: jane
+spec:
+  request: &lt;base64-encoded-csr&gt;
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+  - client auth</code></pre>
+      <pre><code># 4. Approve and extract certificate
+kubectl create -f jane-csr.yaml
+kubectl get csr
+kubectl certificate approve jane
+kubectl get csr jane -o jsonpath='{.status.certificate}' | base64 --decode > jane.crt
+
+# 5. Deny a CSR
+kubectl certificate deny bad-user</code></pre>
       <h3>kubeconfig</h3>
-      <p>kubeconfig holds clusters (API server URL, CA), users (credentials: cert/key or token), and <strong>contexts</strong> (which cluster + which user + optional namespace). Default file: <code>~/.kube/config</code>.</p>
+      <p>kubeconfig holds clusters (API server URL, CA), users (credentials: cert/key or token), and
+        <strong>contexts</strong> (which cluster + which user + optional namespace). Default file:
+        <code>~/.kube/config</code>.
+      </p>
       <pre><code>kubectl config view
 kubectl config view --kubeconfig=my-custom-config
 kubectl config use-context &lt;context-name&gt;
 kubectl config current-context
 kubectl get pods --kubeconfig config</code></pre>
-      <p>To set default namespace for current context: <code>kubectl config set-context $(kubectl config current-context) --namespace=dev</code>.</p>
+      <p>To set default namespace for current context:
+        <code>kubectl config set-context $(kubectl config current-context) --namespace=dev</code>.
+      </p>
       <h3>RBAC — Role and RoleBinding</h3>
-      <p>Role: apiGroups, resources, verbs. RoleBinding: links subject (user/group/serviceaccount) to Role. Both are namespace-scoped.</p>
+      <p>Role: apiGroups, resources, verbs. RoleBinding: links subject (user/group/serviceaccount) to Role. Both are
+        namespace-scoped.</p>
       <pre><code>apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -1087,7 +1919,8 @@ kubectl describe rolebinding devuser-developer-binding
 kubectl auth can-i create pods --as=dev-user -n default</code></pre>
 
       <h3>ClusterRole and ClusterRoleBinding</h3>
-      <p>ClusterRole can define access to cluster-scoped resources (e.g. nodes) or to namespaced resources across all namespaces.</p>
+      <p>ClusterRole can define access to cluster-scoped resources (e.g. nodes) or to namespaced resources across all
+        namespaces.</p>
       <pre><code>apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -1114,7 +1947,8 @@ kubectl api-resources --namespaced=true
 kubectl api-resources --namespaced=false</code></pre>
 
       <h3>Network policy</h3>
-      <p>Controls ingress/egress to pods by selector. Default: no restrictions. Once a NetworkPolicy selects a pod, that pod denies traffic not allowed by any policy.</p>
+      <p>Controls ingress/egress to pods by selector. Default: no restrictions. Once a NetworkPolicy selects a pod, that
+        pod denies traffic not allowed by any policy.</p>
       <pre><code>apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -1134,30 +1968,65 @@ spec:
     - protocol: TCP
       port: 3306</code></pre>
       <pre><code>kubectl create -f policy-definition.yaml</code></pre>
+      <h3>Image security</h3>
+      <p>Default image registry is <strong>docker.io</strong>. Image <code>nginx</code> is really
+        <code>docker.io/library/nginx</code>. For private registries, create a <code>docker-registry</code> secret and
+        reference it in the pod spec.
+      </p>
+      <div class="snippet-label">Pull from private registry</div>
+      <pre><code># Create registry secret
+kubectl create secret docker-registry regcred \
+  --docker-server=private-registry.io \
+  --docker-username=registry-user \
+  --docker-password=registry-password \
+  --docker-email=registry-user@org.com</code></pre>
+      <pre><code># Use in pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-app
+spec:
+  containers:
+  - name: app
+    image: private-registry.io/apps/internal-app
+  imagePullSecrets:
+  - name: regcred</code></pre>
+
       <h3>Security context</h3>
-      <p>Restrict pod/container behavior: run as non-root user, read-only root filesystem, drop capabilities. Set at <code>spec.securityContext</code> (pod) or <code>spec.containers[].securityContext</code> (container).</p>
+      <p>Restrict pod/container behavior: run as non-root user, read-only root filesystem, drop capabilities. Set at
+        <code>spec.securityContext</code> (pod) or <code>spec.containers[].securityContext</code> (container).
+        Container-level settings override pod-level. Capabilities can only be set at <strong>container</strong> level.
+      </p>
       <pre><code>spec:
   securityContext:
     runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
   containers:
   - name: ubuntu
     image: ubuntu
     securityContext:
       runAsUser: 1000
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
       capabilities:
-        drop: [ALL]</code></pre>
+        add: ["NET_ADMIN", "SYS_TIME"]
+        drop: ["ALL"]</code></pre>
+      <pre><code># Check who's running inside the container
+kubectl exec my-pod -- whoami
+kubectl exec my-pod -- id</code></pre>
       <figure class="diagram">
         <svg viewBox="0 0 400 110" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <rect x="24" y="24" width="100" height="62" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <rect x="24" y="24" width="100" height="62" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="74" y="48" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">Role</text>
           <text x="74" y="64" fill="#656d76" font-size="12" text-anchor="middle">apiGroups, resources</text>
           <text x="74" y="78" fill="#656d76" font-size="12" text-anchor="middle">verbs</text>
-          <path d="M124 55 L148 55" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="148" y="24" width="104" height="62" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <path d="M124 55 L148 55" stroke="#1a7f37" stroke-width="2" />
+          <rect x="148" y="24" width="104" height="62" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="200" y="48" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">RoleBinding</text>
           <text x="200" y="66" fill="#656d76" font-size="12" text-anchor="middle">subjects, roleRef</text>
-          <path d="M252 55 L276 55" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="276" y="24" width="100" height="62" rx="6" fill="#eaeef2" stroke="#1a7f37"/>
+          <path d="M252 55 L276 55" stroke="#1a7f37" stroke-width="2" />
+          <rect x="276" y="24" width="100" height="62" rx="6" fill="#eaeef2" stroke="#1a7f37" />
           <text x="326" y="48" fill="#1f2328" font-size="14" font-weight="600" text-anchor="middle">User</text>
           <text x="326" y="66" fill="#656d76" font-size="12" text-anchor="middle">permissions</text>
         </svg>
@@ -1167,22 +2036,26 @@ spec:
       <!-- 08 Storage -->
       <h2 id="section-08">08 — Storage</h2>
       <h3>Persistent Volume (PV) and Persistent Volume Claim (PVC)</h3>
-      <p>PV is <strong>cluster-scoped</strong> storage (admin provisions); PVC is <strong>namespace-scoped</strong> (user requests storage). They bind when capacity and <code>accessModes</code> match. If no PV matches, PVC stays <strong>Pending</strong>. Access modes: ReadWriteOnce (RWO), ReadOnlyMany (ROX), ReadWriteMany (RWX).</p>
+      <p>PV is <strong>cluster-scoped</strong> storage (admin provisions); PVC is <strong>namespace-scoped</strong>
+        (user requests storage). They bind when capacity and <code>accessModes</code> match. If no PV matches, PVC stays
+        <strong>Pending</strong>. Access modes: ReadWriteOnce (RWO), ReadOnlyMany (ROX), ReadWriteMany (RWX).
+      </p>
       <figure class="diagram">
         <svg viewBox="0 0 500 110" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <rect x="24" y="24" width="130" height="62" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <rect x="24" y="24" width="130" height="62" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="89" y="48" fill="#1f2328" font-size="15" font-weight="600" text-anchor="middle">PV</text>
           <text x="89" y="66" fill="#656d76" font-size="13" text-anchor="middle">cluster-scoped</text>
-          <path d="M154 55 L178 55" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="178" y="24" width="130" height="62" rx="6" fill="#eaeef2" stroke="#0969da"/>
+          <path d="M154 55 L178 55" stroke="#1a7f37" stroke-width="2" />
+          <rect x="178" y="24" width="130" height="62" rx="6" fill="#eaeef2" stroke="#0969da" />
           <text x="243" y="48" fill="#1f2328" font-size="15" font-weight="600" text-anchor="middle">PVC</text>
           <text x="243" y="66" fill="#656d76" font-size="13" text-anchor="middle">namespace-scoped</text>
-          <path d="M308 55 L332 55" stroke="#1a7f37" stroke-width="2"/>
-          <rect x="332" y="24" width="130" height="62" rx="6" fill="#eaeef2" stroke="#1a7f37"/>
+          <path d="M308 55 L332 55" stroke="#1a7f37" stroke-width="2" />
+          <rect x="332" y="24" width="130" height="62" rx="6" fill="#eaeef2" stroke="#1a7f37" />
           <text x="397" y="48" fill="#1f2328" font-size="15" font-weight="600" text-anchor="middle">Pod</text>
           <text x="397" y="66" fill="#656d76" font-size="13" text-anchor="middle">volumeMounts</text>
         </svg>
-        <figcaption>Storage flow: PV (pool) → PVC (claim) → Pod (volumeMounts). PVC and Pod must be in same namespace.</figcaption>
+        <figcaption>Storage flow: PV (pool) → PVC (claim) → Pod (volumeMounts). PVC and Pod must be in same namespace.
+        </figcaption>
       </figure>
       <div class="snippet-label">PV definition</div>
       <pre><code>kind: PersistentVolume
@@ -1240,27 +2113,118 @@ metadata:
 provisioner: kubernetes.io/gce-pd</code></pre>
       <pre><code>kubectl create -f sc-definition.yaml
 kubectl get sc</code></pre>
-      <p>In PVC add <code>storageClassName: google-storage</code>. Then create PVC and use <code>claimName</code> in pod volume as above.</p>
+      <p>In PVC add <code>storageClassName: google-storage</code>. Then create PVC and use <code>claimName</code> in pod
+        volume as above.</p>
 
       <!-- 09 Networking -->
       <h2 id="section-09">09 — Networking</h2>
+
+      <h3>Networking prerequisites — Linux basics</h3>
+      <p>Understanding Linux networking is essential for the CKA. Key commands:</p>
+      <div class="snippet-label">Switching, routing, gateways</div>
+      <pre><code># List network interfaces
+ip link
+ip addr
+
+# Assign IP address to interface
+ip addr add 192.168.1.10/24 dev eth0
+
+# View routing table
+ip route show
+route
+
+# Add route
+ip route add 192.168.2.0/24 via 192.168.1.1
+
+# Default gateway
+ip route add default via 192.168.1.1
+
+# Enable IP forwarding (required for routing between networks)
+cat /proc/sys/net/ipv4/ip_forward   # 0=disabled, 1=enabled
+echo 1 > /proc/sys/net/ipv4/ip_forward
+# Permanent: set net.ipv4.ip_forward=1 in /etc/sysctl.conf
+sysctl --system</code></pre>
+      <div class="snippet-label">Network namespaces (how containers get isolated networking)</div>
+      <pre><code># Create network namespace
+ip netns add red
+ip netns add blue
+
+# List namespaces
+ip netns
+
+# Run command in namespace
+ip netns exec red ip link
+ip -n red link
+
+# Connect namespaces with veth pair
+ip link add veth-red type veth peer name veth-blue
+ip link set veth-red netns red
+ip link set veth-blue netns blue
+ip -n red addr add 192.168.15.1/24 dev veth-red
+ip -n blue addr add 192.168.15.2/24 dev veth-blue
+ip -n red link set veth-red up
+ip -n blue link set veth-blue up</code></pre>
+
+      <h3>Pod networking model</h3>
+      <p>Kubernetes networking rules: (1) every pod gets its own IP, (2) pods on the same node can communicate without
+        NAT, (3) pods on different nodes can communicate without NAT. The <strong>CNI plugin</strong> (Calico, Flannel,
+        Weave, Cilium) implements these rules. Pod CIDR is the IP range allocated to pods. Check with
+        <code>kubectl cluster-info dump | grep -i cidr</code>.
+      </p>
+      <pre><code># Check CNI configuration
+ls /etc/cni/net.d/
+cat /etc/cni/net.d/10-flannel.conflist
+
+# Check CNI plugin binary
+ls /opt/cni/bin/
+
+# Pod IP range (kubelet config)
+ps aux | grep kubelet | grep pod-cidr
+
+# Service IP range (API server)
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep service-cluster-ip-range</code></pre>
+
       <h3>Service networking</h3>
-      <p>Service gets a ClusterIP; kube-proxy programs iptables (or IPVS). Check: <code>kubectl get svc</code>, <code>kubectl describe svc &lt;name&gt;</code>. ClusterIP range is configured on API server.</p>
+      <p>Service gets a ClusterIP; kube-proxy programs iptables (or IPVS). Check: <code>kubectl get svc</code>,
+        <code>kubectl describe svc &lt;name&gt;</code>. ClusterIP range is configured on API server. kube-proxy mode:
+        <code>kubectl logs &lt;kube-proxy-pod&gt; -n kube-system | grep proxy</code>.
+      </p>
+      <pre><code># View iptables rules created by kube-proxy for a service
+iptables -L -t nat | grep &lt;service-name&gt;
+
+# kube-proxy mode
+kubectl logs &lt;kube-proxy-pod&gt; -n kube-system | grep "Using .* Proxier"
+# or check ConfigMap
+kubectl get configmap kube-proxy -n kube-system -o yaml | grep mode</code></pre>
 
       <h3>DNS and CoreDNS</h3>
-      <p>Pods use the <strong>kube-dns</strong> service (ClusterIP, usually 10.96.0.10) for DNS. CoreDNS runs in <code>kube-system</code>; config in ConfigMap <code>coredns</code>. Cluster domain is usually <code>cluster.local</code>.</p>
-      <p><strong>Service FQDN:</strong> <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>. Same-namespace pods can use just <code>&lt;service-name&gt;</code>.</p>
-      <p><strong>Pod FQDN:</strong> Pod IP is converted to a DNS name by replacing dots with dashes: <code>10-244-1-3.&lt;namespace&gt;.pod.cluster.local</code>. Example: pod IP 10.244.1.3 in namespace <code>apps</code> → <code>10-244-1-3.apps.pod.cluster.local</code>.</p>
+      <p>Pods use the <strong>kube-dns</strong> service (ClusterIP, usually 10.96.0.10) for DNS. CoreDNS runs in
+        <code>kube-system</code>; config in ConfigMap <code>coredns</code>. Cluster domain is usually
+        <code>cluster.local</code>.
+      </p>
+      <p><strong>Service FQDN:</strong> <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>.
+        Same-namespace pods can use just <code>&lt;service-name&gt;</code>.</p>
+      <p><strong>Pod FQDN:</strong> Pod IP is converted to a DNS name by replacing dots with dashes:
+        <code>10-244-1-3.&lt;namespace&gt;.pod.cluster.local</code>. Example: pod IP 10.244.1.3 in namespace
+        <code>apps</code> → <code>10-244-1-3.apps.pod.cluster.local</code>.
+      </p>
       <pre><code>kubectl run -it test --image=busybox:1.28 --rm --restart=Never -- nslookup nginx-service.apps.svc.cluster.local</code></pre>
       <pre><code>kubectl get pods -n kube-system
 kubectl get deployment -n kube-system
 kubectl get configmap coredns -n kube-system
 kubectl describe cm coredns -n kube-system
 kubectl get service -n kube-system</code></pre>
-      <p><strong>Corefile:</strong> CoreDNS config is in the <code>Corefile</code> key of the <code>coredns</code> ConfigMap. Edit with <code>kubectl edit configmap coredns -n kube-system</code>. Common plugins: <code>file</code> (zone files), <code>forward</code> (upstream DNS), <code>cache</code>, <code>loop</code>, <code>log</code>, <code>errors</code>. Add <code>log</code> and <code>errors</code> for debugging. <strong>Stub domains:</strong> forward specific domains to custom DNS (e.g. <code>consul.local</code> to a Consul server) by adding a <code>forward</code> block in the Corefile.</p>
+      <p><strong>Corefile:</strong> CoreDNS config is in the <code>Corefile</code> key of the <code>coredns</code>
+        ConfigMap. Edit with <code>kubectl edit configmap coredns -n kube-system</code>. Common plugins:
+        <code>file</code> (zone files), <code>forward</code> (upstream DNS), <code>cache</code>, <code>loop</code>,
+        <code>log</code>, <code>errors</code>. Add <code>log</code> and <code>errors</code> for debugging. <strong>Stub
+          domains:</strong> forward specific domains to custom DNS (e.g. <code>consul.local</code> to a Consul server)
+        by adding a <code>forward</code> block in the Corefile.
+      </p>
 
       <h3>Ingress</h3>
-      <p>Need an Ingress controller (e.g. nginx-ingress) and Ingress resources (rules). Ingress exposes HTTP/HTTPS routes to services.</p>
+      <p>Need an Ingress controller (e.g. nginx-ingress) and Ingress resources (rules). Ingress exposes HTTP/HTTPS
+        routes to services.</p>
       <div class="snippet-label">Ingress with paths</div>
       <pre><code>apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -1316,33 +2280,97 @@ kubectl get ingress
 kubectl describe ingress ingress-wear-watch</code></pre>
 
       <h3>Gateway API</h3>
-      <p>The <strong>Gateway API</strong> is the newer, more expressive way to expose HTTP/gRPC/TCP routes (successor concept to Ingress). Key resources: <code>Gateway</code> (infrastructure that receives traffic), <code>HTTPRoute</code> (rules for routing to backends). Install a Gateway controller (e.g. Gateway API implementation) and create Gateway + HTTPRoute resources. The exam may reference it; know it exists as the evolution of Ingress.</p>
+      <p>The <strong>Gateway API</strong> is the newer, more expressive way to expose HTTP/gRPC/TCP routes (successor
+        concept to Ingress). Key resources: <code>Gateway</code> (infrastructure that receives traffic),
+        <code>HTTPRoute</code> (rules for routing to backends). Install a Gateway controller (e.g. Gateway API
+        implementation) and create Gateway + HTTPRoute resources. The exam may reference it; know it exists as the
+        evolution of Ingress.
+      </p>
 
       <!-- 10 Design & Install -->
       <h2 id="section-10">10 — Design and Install Kubernetes Cluster</h2>
-      <p><strong>Design:</strong> Plan control-plane count (HA = multiple masters), etcd (stacked with API server or external cluster), load balancer in front of API servers. Choose node sizing and networking (pod CIDR, service CIDR).</p>
-      <p><strong>High availability:</strong> Multiple API server replicas behind a load balancer; etcd cluster (odd number, 3 or 5); scheduler and controller manager can run as active/standby (only one active).</p>
+      <p><strong>Design:</strong> Plan control-plane count (HA = multiple masters), etcd (stacked with API server or
+        external cluster), load balancer in front of API servers. Choose node sizing and networking (pod CIDR, service
+        CIDR).</p>
+      <p><strong>High availability:</strong> Multiple API server replicas behind a load balancer; etcd cluster (odd
+        number, 3 or 5); scheduler and controller manager can run as active/standby (only one active).</p>
 
       <!-- 11 kubeadm -->
       <h2 id="section-11">11 — Install Kubernetes the kubeadm Way</h2>
-      <p><strong>kubeadm</strong> bootstraps the control plane and generates certs, manifests, and kubeconfig. You then join worker nodes with <code>kubeadm join</code>. The exam rarely asks for a full install; <strong>upgrading an existing cluster</strong> (kubeadm upgrade plan / apply, drain/uncordon workers) is frequently tested.</p>
+      <p><strong>kubeadm</strong> bootstraps the control plane and generates certs, manifests, and kubeconfig. You then
+        join worker nodes with <code>kubeadm join</code>. The exam rarely asks for a full install; <strong>upgrading an
+          existing cluster</strong> (kubeadm upgrade plan / apply, drain/uncordon workers) is frequently tested.</p>
+      <h4>kubeadm init steps (reference)</h4>
+      <div class="snippet-label">Prerequisites on all nodes</div>
+      <pre><code># Disable swap (required)
+sudo swapoff -a
+sed -i '/ swap / s/^/#/' /etc/fstab
+
+# Enable kernel modules
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+# Sysctl params
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sudo sysctl --system
+
+# Install containerd, kubeadm, kubelet, kubectl
+# (follow official docs for your OS)
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl</code></pre>
+      <div class="snippet-label">Control plane init</div>
+      <pre><code># Initialize control plane
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=&lt;master-ip&gt;
+
+# Copy kubeconfig
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# Install CNI (e.g. Flannel)
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml</code></pre>
+      <div class="snippet-label">Join workers</div>
+      <pre><code># On worker nodes (use token from kubeadm init output):
+sudo kubeadm join &lt;master-ip&gt;:6443 --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;
+
+# If token expired, create a new one on master:
+kubeadm token create --print-join-command</code></pre>
 
       <!-- 12 Troubleshooting -->
       <h2 id="section-12">12 — Troubleshooting</h2>
       <h3>Application failure — step-by-step</h3>
       <ul class="step-list">
-        <li><strong>Is the service reachable?</strong> <code>curl http://&lt;node-ip&gt;:&lt;nodePort&gt;</code> or from inside cluster <code>curl http://&lt;svc-name&gt;.&lt;ns&gt;.svc.cluster.local:port</code>.</li>
-        <li><strong>Does the service have endpoints?</strong> <code>kubectl get endpoints &lt;service-name&gt;</code>. If empty, the service selector does not match any pod (wrong labels or pods not ready).</li>
-        <li><strong>Compare selector with pod labels:</strong> <code>kubectl describe service &lt;name&gt;</code> (see Selector) and <code>kubectl get pods --show-labels</code>. Fix selector or pod labels.</li>
-        <li><strong>Pod status:</strong> <code>kubectl get pods</code>, <code>kubectl describe pod &lt;pod-name&gt;</code>. Check events (image pull, CrashLoopBackOff, etc.).</li>
-        <li><strong>Container logs:</strong> <code>kubectl logs &lt;pod-name&gt;</code>, <code>kubectl logs &lt;pod-name&gt; -c &lt;container&gt;</code>, <code>kubectl logs &lt;pod-name&gt; --previous</code> for crashed container.</li>
+        <li><strong>Is the service reachable?</strong> <code>curl http://&lt;node-ip&gt;:&lt;nodePort&gt;</code> or from
+          inside cluster <code>curl http://&lt;svc-name&gt;.&lt;ns&gt;.svc.cluster.local:port</code>.</li>
+        <li><strong>Does the service have endpoints?</strong> <code>kubectl get endpoints &lt;service-name&gt;</code>.
+          If empty, the service selector does not match any pod (wrong labels or pods not ready).</li>
+        <li><strong>Compare selector with pod labels:</strong> <code>kubectl describe service &lt;name&gt;</code> (see
+          Selector) and <code>kubectl get pods --show-labels</code>. Fix selector or pod labels.</li>
+        <li><strong>Pod status:</strong> <code>kubectl get pods</code>,
+          <code>kubectl describe pod &lt;pod-name&gt;</code>. Check events (image pull, CrashLoopBackOff, etc.).
+        </li>
+        <li><strong>Container logs:</strong> <code>kubectl logs &lt;pod-name&gt;</code>,
+          <code>kubectl logs &lt;pod-name&gt; -c &lt;container&gt;</code>,
+          <code>kubectl logs &lt;pod-name&gt; --previous</code> for crashed container.
+        </li>
       </ul>
       <pre><code>kubectl get pods -o wide
 kubectl describe pod &lt;pod-name&gt;
 kubectl logs &lt;pod-name&gt; -f --previous</code></pre>
 
       <h3>Control plane failure</h3>
-      <p>Verify nodes are Ready, then check control-plane components. With kubeadm they are pods in <code>kube-system</code>; with manual install they are often systemd services.</p>
+      <p>Verify nodes are Ready, then check control-plane components. With kubeadm they are pods in
+        <code>kube-system</code>; with manual install they are often systemd services.
+      </p>
       <pre><code>kubectl get nodes
 kubectl get pods -n kube-system
 service kube-apiserver status
@@ -1353,12 +2381,49 @@ kubectl logs kube-apiserver-master -n kube-system
 sudo journalctl -u kube-apiserver</code></pre>
 
       <h3>Worker node failure</h3>
-      <p>If a node is <strong>NotReady</strong>, check <code>kubectl describe node &lt;node&gt;</code> (conditions, LastHeartbeatTime). On the node: kubelet status, logs, and cert validity (kubelet may have expired cert).</p>
+      <p>If a node is <strong>NotReady</strong>, check <code>kubectl describe node &lt;node&gt;</code> (conditions,
+        LastHeartbeatTime). On the node: kubelet status, logs, and cert validity (kubelet may have expired cert).</p>
       <pre><code>kubectl get nodes
 kubectl describe node worker-1
 service kubelet status
 sudo journalctl -u kubelet
 openssl x509 -in /var/lib/kubelet/worker-1.crt -text</code></pre>
+      <h4>Common worker node issues checklist</h4>
+      <ul>
+        <li><code>kubelet</code> not running → <code>systemctl start kubelet</code>, check
+          <code>journalctl -u kubelet</code>
+        </li>
+        <li>Config error → check <code>/var/lib/kubelet/config.yaml</code> and <code>/etc/kubernetes/kubelet.conf</code>
+        </li>
+        <li>Expired certificates → check cert dates with <code>openssl x509 -in &lt;cert&gt; -text -noout</code></li>
+        <li>Node conditions: <code>MemoryPressure</code>, <code>DiskPressure</code>, <code>PIDPressure</code> → check
+          resources</li>
+        <li>Container runtime down → <code>systemctl status containerd</code></li>
+      </ul>
+
+      <h3>Network troubleshooting</h3>
+      <p>When pods cannot communicate across nodes or DNS fails:</p>
+      <ul class="step-list">
+        <li><strong>Check CNI plugin:</strong> <code>kubectl get pods -n kube-system</code> — are Calico/Flannel/Weave
+          pods running? Check logs.</li>
+        <li><strong>CoreDNS running?</strong> <code>kubectl get pods -n kube-system -l k8s-app=kube-dns</code>. If
+          CrashLooping, check <code>kubectl logs &lt;coredns-pod&gt; -n kube-system</code>.</li>
+        <li><strong>DNS resolution:</strong>
+          <code>kubectl run test --image=busybox:1.28 --rm -it --restart=Never -- nslookup kubernetes</code>
+        </li>
+        <li><strong>kube-proxy running?</strong> <code>kubectl get ds kube-proxy -n kube-system</code>. Check iptables
+          rules: <code>iptables -L -t nat | grep &lt;svc&gt;</code></li>
+        <li><strong>Node networking:</strong> <code>ip link</code>, <code>ip addr</code>, <code>ip route</code> on
+          affected node. Check IP forwarding: <code>cat /proc/sys/net/ipv4/ip_forward</code></li>
+        <li><strong>Firewall/port issues:</strong> Ensure required ports are open (6443, 2379-2380, 10250-10252,
+          30000-32767)</li>
+      </ul>
+      <pre><code># Debug networking from inside a pod
+kubectl run netshoot --image=nicolaka/netshoot -it --rm --restart=Never -- bash
+# Inside: ping, nslookup, curl, traceroute, tcpdump, iperf, etc.
+
+# Test service from inside cluster
+kubectl run test --image=busybox:1.28 --rm -it --restart=Never -- wget -qO- http://&lt;svc&gt;.&lt;ns&gt;.svc.cluster.local:&lt;port&gt;</code></pre>
 
       <!-- 13 Other Topics -->
       <h2 id="section-13">13 — Other Topics</h2>
@@ -1372,35 +2437,56 @@ kubectl get nodes --sort-by=.metadata.name
 kubectl get nodes --sort-by=.status.capacity.cpu</code></pre>
 
       <h3>2025 curriculum: Helm and Kustomize</h3>
-      <p><strong>Helm</strong> packages Kubernetes manifests into <strong>charts</strong>. Use for cluster components and repeatable installs. Common commands: <code>helm install &lt;release&gt; &lt;chart&gt;</code>, <code>helm upgrade</code>, <code>helm list</code>, <code>helm uninstall</code>. Add repos: <code>helm repo add &lt;name&gt; &lt;url&gt;</code>, <code>helm repo update</code>.</p>
-      <p><strong>Kustomize</strong> customizes base YAML (overlays, patches, common labels). Built into kubectl: <code>kubectl apply -k &lt;dir&gt;</code> or <code>kustomize build &lt;dir&gt; | kubectl apply -f -</code>. Typical layout: <code>base/</code> (resources) + <code>kustomization.yaml</code>; overlays (e.g. <code>dev/</code>, <code>prod/</code>) reference the base and add patches.</p>
+      <p><strong>Helm</strong> packages Kubernetes manifests into <strong>charts</strong>. Use for cluster components
+        and repeatable installs. Common commands: <code>helm install &lt;release&gt; &lt;chart&gt;</code>,
+        <code>helm upgrade</code>, <code>helm list</code>, <code>helm uninstall</code>. Add repos:
+        <code>helm repo add &lt;name&gt; &lt;url&gt;</code>, <code>helm repo update</code>.
+      </p>
+      <p><strong>Kustomize</strong> customizes base YAML (overlays, patches, common labels). Built into kubectl:
+        <code>kubectl apply -k &lt;dir&gt;</code> or <code>kustomize build &lt;dir&gt; | kubectl apply -f -</code>.
+        Typical layout: <code>base/</code> (resources) + <code>kustomization.yaml</code>; overlays (e.g.
+        <code>dev/</code>, <code>prod/</code>) reference the base and add patches.
+      </p>
 
       <h3>CRDs and operators</h3>
-      <p><strong>Custom Resource Definitions (CRDs)</strong> extend the API with custom resources. After defining a CRD, you get new resource types (e.g. <code>kubectl get myresource</code>). <strong>Operators</strong> are controllers that manage custom resources and their lifecycle (install, upgrade, backup). They use CRDs + a controller process. List CRDs: <code>kubectl get crd</code>.</p>
+      <p><strong>Custom Resource Definitions (CRDs)</strong> extend the API with custom resources. After defining a CRD,
+        you get new resource types (e.g. <code>kubectl get myresource</code>). <strong>Operators</strong> are
+        controllers that manage custom resources and their lifecycle (install, upgrade, backup). They use CRDs + a
+        controller process. List CRDs: <code>kubectl get crd</code>.</p>
 
       <h3>Extension interfaces: CNI, CSI, CRI</h3>
-      <p>Kubernetes uses pluggable interfaces. <strong>CNI</strong> (Container Network Interface): pod networking; plugins (Calico, Flannel, Weave) implement the pod network. <strong>CSI</strong> (Container Storage Interface): storage drivers for PVs; dynamic provisioning via StorageClass uses a CSI driver. <strong>CRI</strong> (Container Runtime Interface): container runtimes (containerd, CRI-O); kubelet talks to the runtime via CRI. Configure/validate these when installing or troubleshooting the cluster.</p>
+      <p>Kubernetes uses pluggable interfaces. <strong>CNI</strong> (Container Network Interface): pod networking;
+        plugins (Calico, Flannel, Weave) implement the pod network. <strong>CSI</strong> (Container Storage Interface):
+        storage drivers for PVs; dynamic provisioning via StorageClass uses a CSI driver. <strong>CRI</strong>
+        (Container Runtime Interface): container runtimes (containerd, CRI-O); kubelet talks to the runtime via CRI.
+        Configure/validate these when installing or troubleshooting the cluster.</p>
 
       <!-- 14 Playground & Labs -->
       <h2 id="section-14">14 — Playground &amp; Lightning Labs</h2>
-      <p>Use the links below to practice in a real cluster, then try the scenarios on your own before revealing the solution.</p>
+      <p>Use the links below to practice in a real cluster, then try the scenarios on your own before revealing the
+        solution.</p>
 
       <h3>Online playgrounds</h3>
       <ul class="playground-links">
         <li>
-          <a href="https://killercoda.com/kubernetes" target="_blank" rel="noopener noreferrer">Killercoda — Kubernetes</a>
-          <div class="link-desc">Free browser-based Kubernetes labs; no local install. Multiple CKA-focused scenarios.</div>
+          <a href="https://killercoda.com/kubernetes" target="_blank" rel="noopener noreferrer">Killercoda —
+            Kubernetes</a>
+          <div class="link-desc">Free browser-based Kubernetes labs; no local install. Multiple CKA-focused scenarios.
+          </div>
         </li>
         <li>
-          <a href="https://www.katacoda.com/courses/kubernetes" target="_blank" rel="noopener noreferrer">Katacoda (legacy)</a>
-          <div class="link-desc">Kubernetes playgrounds (some scenarios may be deprecated; Killercoda is the successor).</div>
+          <a href="https://www.katacoda.com/courses/kubernetes" target="_blank" rel="noopener noreferrer">Katacoda
+            (legacy)</a>
+          <div class="link-desc">Kubernetes playgrounds (some scenarios may be deprecated; Killercoda is the successor).
+          </div>
         </li>
         <li>
           <a href="https://labs.play-with-k8s.com/" target="_blank" rel="noopener noreferrer">Play with Kubernetes</a>
           <div class="link-desc">Spin up a temporary cluster in the browser; good for quick tests.</div>
         </li>
         <li>
-          <a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener noreferrer">Kubernetes Basics (official)</a>
+          <a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank"
+            rel="noopener noreferrer">Kubernetes Basics (official)</a>
           <div class="link-desc">Official interactive tutorial with an in-browser terminal.</div>
         </li>
       </ul>
@@ -1410,7 +2496,10 @@ kubectl get nodes --sort-by=.status.capacity.cpu</code></pre>
       <div class="playground-scenario">
         <h4>Scenario 1: Deployment and Service</h4>
         <p class="playground-context">Namespace <code>app</code> exists. Create a deployment and expose it.</p>
-        <p class="playground-task"><strong>Task:</strong> Create a deployment named <code>nginx-deploy</code> with image <code>nginx:1.21</code>, 3 replicas. Expose it as a ClusterIP service <code>nginx-svc</code> on port 80. Use namespace <code>app</code>.</p>
+        <p class="playground-task"><strong>Task:</strong> Create a deployment named <code>nginx-deploy</code> with image
+          <code>nginx:1.21</code>, 3 replicas. Expose it as a ClusterIP service <code>nginx-svc</code> on port 80. Use
+          namespace <code>app</code>.
+        </p>
         <button type="button" class="playground-toggle" aria-expanded="false">Show solution</button>
         <div class="playground-solution">
           <pre><code>kubectl create deployment nginx-deploy --image=nginx:1.21 --replicas=3 -n app
@@ -1422,20 +2511,29 @@ kubectl get deploy,svc -n app</code></pre>
       <div class="playground-scenario">
         <h4>Scenario 2: ConfigMap and Pod</h4>
         <p class="playground-context">You need a pod that reads a config value from a ConfigMap.</p>
-        <p class="playground-task"><strong>Task:</strong> Create a ConfigMap <code>app-cm</code> with <code>APP_ENV=production</code>. Create a pod <code>busybox-cm</code> (image <code>busybox:1.28</code>) that runs <code>sleep 3600</code> and has environment variable <code>APP_ENV</code> from the ConfigMap.</p>
+        <p class="playground-task"><strong>Task:</strong> Create a ConfigMap <code>app-cm</code> with
+          <code>APP_ENV=production</code>. Create a pod <code>busybox-cm</code> (image <code>busybox:1.28</code>) that
+          runs <code>sleep 3600</code> and has environment variable <code>APP_ENV</code> from the ConfigMap.
+        </p>
         <button type="button" class="playground-toggle" aria-expanded="false">Show solution</button>
         <div class="playground-solution">
           <pre><code>kubectl create configmap app-cm --from-literal=APP_ENV=production
 kubectl run busybox-cm --image=busybox:1.28 --restart=Never -- sleep 3600 --overrides='
 {"spec":{"containers":[{"name":"busybox-cm","image":"busybox:1.28","command":["sleep","3600"],"env":[{"name":"APP_ENV","valueFrom":{"configMapKeyRef":{"name":"app-cm","key":"APP_ENV"}}}]}]}}'</code></pre>
-          <p style="margin-top:0.75rem;font-size:0.9rem;">Or create a YAML file with <code>env</code> and <code>valueFrom.configMapKeyRef</code> and <code>kubectl apply -f</code>.</p>
+          <p style="margin-top:0.75rem;font-size:0.9rem;">Or create a YAML file with <code>env</code> and
+            <code>valueFrom.configMapKeyRef</code> and <code>kubectl apply -f</code>.
+          </p>
         </div>
       </div>
 
       <div class="playground-scenario">
         <h4>Scenario 3: Node selector and drain</h4>
-        <p class="playground-context">Node <code>worker-1</code> has label <code>disk=ssd</code>. You need to run a pod there and later drain the node.</p>
-        <p class="playground-task"><strong>Task:</strong> Create a pod <code>ssd-pod</code> (image <code>nginx:alpine</code>) that is scheduled only on nodes with <code>disk=ssd</code>. Then cordon and drain <code>worker-1</code> (ignore DaemonSet pods).</p>
+        <p class="playground-context">Node <code>worker-1</code> has label <code>disk=ssd</code>. You need to run a pod
+          there and later drain the node.</p>
+        <p class="playground-task"><strong>Task:</strong> Create a pod <code>ssd-pod</code> (image
+          <code>nginx:alpine</code>) that is scheduled only on nodes with <code>disk=ssd</code>. Then cordon and drain
+          <code>worker-1</code> (ignore DaemonSet pods).
+        </p>
         <button type="button" class="playground-toggle" aria-expanded="false">Show solution</button>
         <div class="playground-solution">
           <pre><code>kubectl run ssd-pod --image=nginx:alpine --restart=Never --overrides='
@@ -1447,35 +2545,54 @@ kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data</code></pre>
 
       <!-- 15 Mock Exams -->
       <h2 id="section-15">15 — Mock Exams</h2>
-      <p>Time yourself (e.g. 10–15 minutes per question). Complete the task in your cluster or playground, then check the solution.</p>
+      <p>Time yourself (e.g. 10–15 minutes per question). Complete the task in your cluster or playground, then check
+        the solution.</p>
 
       <div class="mock-question">
         <h4>Mock 1: RBAC — read-only pods in a namespace</h4>
-        <p class="mock-context">Namespace <code>dev</code> exists. A user/service account should only list and get pods in <code>dev</code>, no create/delete.</p>
-        <p class="mock-task"><strong>Task:</strong> Create a Role that allows <code>get</code>, <code>list</code> on <code>pods</code> in namespace <code>dev</code>. Create a RoleBinding binding that Role to a user named <code>jane</code>.</p>
+        <p class="mock-context">Namespace <code>dev</code> exists. A user/service account should only list and get pods
+          in <code>dev</code>, no create/delete.</p>
+        <p class="mock-task"><strong>Task:</strong> Create a Role that allows <code>get</code>, <code>list</code> on
+          <code>pods</code> in namespace <code>dev</code>. Create a RoleBinding binding that Role to a user named
+          <code>jane</code>.
+        </p>
         <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
         <div class="mock-solution">
           <pre><code>kubectl create role pod-reader --verb=get,list --resource=pods -n dev
 kubectl create rolebinding jane-pod-reader --role=pod-reader --user=jane -n dev</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.9rem;">Or apply YAML with <code>kind: Role</code> (rules with apiGroups <code>[""]</code>, resources <code>["pods"]</code>, verbs <code>["get","list"]</code>) and <code>kind: RoleBinding</code> (roleRef, subjects with name <code>jane</code>).</p>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">Or apply YAML with <code>kind: Role</code> (rules with
+            apiGroups <code>[""]</code>, resources <code>["pods"]</code>, verbs <code>["get","list"]</code>) and
+            <code>kind: RoleBinding</code> (roleRef, subjects with name <code>jane</code>).
+          </p>
         </div>
       </div>
 
       <div class="mock-question">
         <h4>Mock 2: Multi-container pod and logs</h4>
-        <p class="mock-context">A pod has two containers: <code>main</code> and <code>sidecar</code>. It is failing and you need to inspect the previous instance’s logs.</p>
-        <p class="mock-task"><strong>Task:</strong> Write the exact <code>kubectl logs</code> command to stream logs from the <strong>previous</strong> instance of the <code>sidecar</code> container in pod <code>myapp-pod</code> (namespace <code>default</code>).</p>
+        <p class="mock-context">A pod has two containers: <code>main</code> and <code>sidecar</code>. It is failing and
+          you need to inspect the previous instance’s logs.</p>
+        <p class="mock-task"><strong>Task:</strong> Write the exact <code>kubectl logs</code> command to stream logs
+          from the <strong>previous</strong> instance of the <code>sidecar</code> container in pod
+          <code>myapp-pod</code> (namespace <code>default</code>).
+        </p>
         <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
         <div class="mock-solution">
           <pre><code>kubectl logs myapp-pod -c sidecar --previous -f</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.9rem;"><code>-c sidecar</code> selects the container, <code>--previous</code> shows the crashed/previous instance, <code>-f</code> streams.</p>
+          <p style="margin-top:0.5rem;font-size:0.9rem;"><code>-c sidecar</code> selects the container,
+            <code>--previous</code> shows the crashed/previous instance, <code>-f</code> streams.
+          </p>
         </div>
       </div>
 
       <div class="mock-question">
         <h4>Mock 3: Static pod</h4>
-        <p class="mock-context">The control plane uses static pods. You need to run a static pod that runs <code>busybox</code> with <code>sleep 3600</code>.</p>
-        <p class="mock-task"><strong>Task:</strong> Create a static pod manifest (YAML) named <code>static-busybox</code> on the control plane node. Assume the static pod path is <code>/etc/kubernetes/manifests</code>. Provide the manifest path and key fields.</p>
+        <p class="mock-context">The control plane uses static pods. You need to run a static pod that runs
+          <code>busybox</code> with <code>sleep 3600</code>.
+        </p>
+        <p class="mock-task"><strong>Task:</strong> Create a static pod manifest (YAML) named
+          <code>static-busybox</code> on the control plane node. Assume the static pod path is
+          <code>/etc/kubernetes/manifests</code>. Provide the manifest path and key fields.
+        </p>
         <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
         <div class="mock-solution">
           <pre><code># File: /etc/kubernetes/manifests/static-busybox.yaml
@@ -1489,14 +2606,19 @@ spec:
   - name: busybox
     image: busybox:1.28
     command: ["sleep", "3600"]</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.9rem;">Copy this file to the control plane node at <code>/etc/kubernetes/manifests/</code>. Kubelet will create the pod. No <code>kubectl apply</code> needed.</p>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">Copy this file to the control plane node at
+            <code>/etc/kubernetes/manifests/</code>. Kubelet will create the pod. No <code>kubectl apply</code> needed.
+          </p>
         </div>
       </div>
 
       <div class="mock-question">
         <h4>Mock 4: Service and endpoints</h4>
-        <p class="mock-context">A service <code>web-svc</code> in namespace <code>prod</code> is not getting traffic. Pods are running with label <code>app=web</code>.</p>
-        <p class="mock-task"><strong>Task:</strong> (1) Check if the service has endpoints. (2) If empty, fix the service so it targets pods with label <code>app=web</code>. Assume the service exists but has the wrong selector.</p>
+        <p class="mock-context">A service <code>web-svc</code> in namespace <code>prod</code> is not getting traffic.
+          Pods are running with label <code>app=web</code>.</p>
+        <p class="mock-task"><strong>Task:</strong> (1) Check if the service has endpoints. (2) If empty, fix the
+          service so it targets pods with label <code>app=web</code>. Assume the service exists but has the wrong
+          selector.</p>
         <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
         <div class="mock-solution">
           <pre><code>kubectl get endpoints web-svc -n prod
@@ -1510,8 +2632,12 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
 
       <div class="mock-question">
         <h4>Mock 5: etcd backup</h4>
-        <p class="mock-context">You need to take a snapshot of etcd for disaster recovery. The cluster was set up with kubeadm; etcd runs as a pod and listens on <code>https://127.0.0.1:2379</code> with certs under <code>/etc/kubernetes/pki/etcd/</code>.</p>
-        <p class="mock-task"><strong>Task:</strong> Run the <code>etcdctl snapshot save</code> command with the correct API version, endpoint, and cert flags. Save to <code>/tmp/etcd-snapshot.db</code>.</p>
+        <p class="mock-context">You need to take a snapshot of etcd for disaster recovery. The cluster was set up with
+          kubeadm; etcd runs as a pod and listens on <code>https://127.0.0.1:2379</code> with certs under
+          <code>/etc/kubernetes/pki/etcd/</code>.
+        </p>
+        <p class="mock-task"><strong>Task:</strong> Run the <code>etcdctl snapshot save</code> command with the correct
+          API version, endpoint, and cert flags. Save to <code>/tmp/etcd-snapshot.db</code>.</p>
         <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
         <div class="mock-solution">
           <pre><code>ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd-snapshot.db \
@@ -1519,24 +2645,837 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
   --key=/etc/kubernetes/pki/etcd/server.key</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.9rem;">Run from the control plane node (or from inside the etcd pod). Verify with <code>ETCDCTL_API=3 etcdctl snapshot status /tmp/etcd-snapshot.db</code>.</p>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">Run from the control plane node (or from inside the etcd pod).
+            Verify with <code>ETCDCTL_API=3 etcdctl snapshot status /tmp/etcd-snapshot.db</code>.</p>
+        </div>
+      </div>
+
+      <div class="mock-question">
+        <h4>Mock 6: PV and PVC binding</h4>
+        <p class="mock-context">You need to create a PersistentVolume and a PersistentVolumeClaim, then mount it in a
+          pod.</p>
+        <p class="mock-task"><strong>Task:</strong> Create a PV named <code>pv-log</code> with 100Mi capacity,
+          accessMode <code>ReadWriteMany</code>, hostPath <code>/pv/log</code>. Create a PVC named
+          <code>claim-log-1</code> requesting 50Mi with <code>ReadWriteMany</code>. Create a pod <code>logger</code>
+          (image <code>nginx</code>) mounting the PVC at <code>/var/log/nginx</code>.
+        </p>
+        <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
+        <div class="mock-solution">
+          <pre><code># pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-log
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: /pv/log
+---
+# pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-log-1
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Mi
+---
+# pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: logger
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - mountPath: /var/log/nginx
+      name: log-vol
+  volumes:
+  - name: log-vol
+    persistentVolumeClaim:
+      claimName: claim-log-1</code></pre>
+          <pre><code>kubectl apply -f pv.yaml -f pvc.yaml -f pod.yaml
+kubectl get pv,pvc,pod</code></pre>
+        </div>
+      </div>
+
+      <div class="mock-question">
+        <h4>Mock 7: NetworkPolicy — deny all ingress</h4>
+        <p class="mock-context">Namespace <code>secure</code> exists with pods labeled <code>app=db</code>. You need to
+          deny all ingress traffic except from pods labeled <code>app=api</code> on port 5432.</p>
+        <p class="mock-task"><strong>Task:</strong> Create a NetworkPolicy in namespace <code>secure</code> that selects
+          pods with label <code>app=db</code>, denies all ingress, and only allows ingress from pods with
+          <code>app=api</code> on TCP port 5432.
+        </p>
+        <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
+        <div class="mock-solution">
+          <pre><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-policy
+  namespace: secure
+spec:
+  podSelector:
+    matchLabels:
+      app: db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: api
+    ports:
+    - protocol: TCP
+      port: 5432</code></pre>
+          <pre><code>kubectl apply -f netpol.yaml
+kubectl get networkpolicy -n secure
+kubectl describe netpol db-policy -n secure</code></pre>
+        </div>
+      </div>
+
+      <div class="mock-question">
+        <h4>Mock 8: Cluster upgrade (kubeadm)</h4>
+        <p class="mock-context">Your cluster runs v1.30.0. You need to upgrade the control plane to v1.31.0.</p>
+        <p class="mock-task"><strong>Task:</strong> Upgrade kubeadm, then the control plane, then kubelet and kubectl on
+          the control plane node. Show the commands in order.</p>
+        <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
+        <div class="mock-solution">
+          <pre><code># 1. Upgrade kubeadm
+sudo apt-mark unhold kubeadm
+sudo apt-get update && sudo apt-get install -y kubeadm=1.31.0-*
+sudo apt-mark hold kubeadm
+
+# 2. Plan and apply
+sudo kubeadm upgrade plan
+sudo kubeadm upgrade apply v1.31.0
+
+# 3. Drain the node
+kubectl drain &lt;control-plane-node&gt; --ignore-daemonsets
+
+# 4. Upgrade kubelet and kubectl
+sudo apt-mark unhold kubelet kubectl
+sudo apt-get install -y kubelet=1.31.0-* kubectl=1.31.0-*
+sudo apt-mark hold kubelet kubectl
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+
+# 5. Uncordon
+kubectl uncordon &lt;control-plane-node&gt;
+kubectl get nodes</code></pre>
+        </div>
+      </div>
+
+      <div class="mock-question">
+        <h4>Mock 9: Ingress with TLS</h4>
+        <p class="mock-context">Service <code>webapp-svc</code> exists on port 80 in namespace <code>apps</code>. You
+          have a TLS cert and key.</p>
+        <p class="mock-task"><strong>Task:</strong> Create a TLS secret <code>webapp-tls</code> and an Ingress
+          <code>webapp-ingress</code> that terminates TLS on host <code>webapp.example.com</code> and routes to
+          <code>webapp-svc</code>.
+        </p>
+        <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
+        <div class="mock-solution">
+          <pre><code># Create TLS secret
+kubectl create secret tls webapp-tls --cert=tls.crt --key=tls.key -n apps
+
+# Ingress YAML
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  namespace: apps
+spec:
+  tls:
+  - hosts:
+    - webapp.example.com
+    secretName: webapp-tls
+  rules:
+  - host: webapp.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp-svc
+            port:
+              number: 80</code></pre>
+        </div>
+      </div>
+
+      <div class="mock-question">
+        <h4>Mock 10: JSONPath and sorting</h4>
+        <p class="mock-context">You need to extract specific information from the cluster using JSONPath.</p>
+        <p class="mock-task"><strong>Task:</strong> (1) List all node names sorted by CPU capacity. (2) Output a
+          custom-columns table showing pod name and container image for all pods in all namespaces. (3) Get the
+          InternalIP of all nodes.</p>
+        <button type="button" class="solution-toggle" aria-expanded="false">Show solution</button>
+        <div class="mock-solution">
+          <pre><code># 1. Nodes sorted by CPU
+kubectl get nodes --sort-by=.status.capacity.cpu
+
+# 2. Custom columns: pod name + image
+kubectl get pods -A -o=custom-columns='NAME:.metadata.name,IMAGE:.spec.containers[*].image'
+
+# 3. InternalIP of all nodes
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
+
+# Alternative using range for formatted output:
+kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}'</code></pre>
         </div>
       </div>
 
       <h2 id="section-16">16 — Ultimate Mocks</h2>
-      <p>Extended scenario-based mocks: multi-step troubleshooting, storage (PV/PVC), networking (NetworkPolicy, Ingress), and cluster upgrades. Use the same format: try the scenario in a playground, then compare with the solutions in the course docs or your notes.</p>
+      <p>Extended scenario-based mocks: multi-step troubleshooting, storage (PV/PVC), networking (NetworkPolicy,
+        Ingress), and cluster upgrades. Use the same format: try the scenario in a playground, then compare with the
+        solutions in the course docs or your notes.</p>
+      <p><strong>Ultimate mock strategy:</strong> Set a 2-hour timer, attempt all questions sequentially. Flag hard
+        questions and return to them. Prioritize high-weight questions (troubleshooting = 30%). Practice with Killer.sh
+        (free retake included with CKA exam purchase).</p>
 
       <h2 id="section-17">17 — Tips and Tricks</h2>
-      <p><strong>Test pods for networking:</strong> Run a temporary pod for DNS/connectivity tests: <code>kubectl run dnsutils --image=busybox:1.28 --restart=Never --rm -it -- nslookup kubernetes.default.svc.cluster.local</code>. For a long-lived debug pod: <code>kubectl run debug --image=nicolaka/netshoot -it --rm --restart=Never -- bash</code>.</p>
-      <p><strong>Useful one-liners:</strong> <code>kubectl get pods -A -o wide</code>; <code>kubectl get events -A --sort-by='.lastTimestamp'</code>; <code>kubectl describe node | grep -A5 "Allocated resources"</code>. Set default namespace: <code>kubectl config set-context --current --namespace=&lt;ns&gt;</code>.</p>
+      <h3>Exam environment setup (do this first!)</h3>
+      <p>The CKA exam uses a browser-based terminal. Set up shortcuts immediately:</p>
+      <div class="snippet-label">Shell aliases and settings (~/.bashrc)</div>
+      <pre><code># Essential aliases — set these at the START of the exam
+alias k=kubectl
+alias kn='kubectl config set-context --current --namespace'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get svc'
+alias kgn='kubectl get nodes'
+alias kga='kubectl get all'
+alias kaf='kubectl apply -f'
+alias kdp='kubectl describe pod'
+alias kl='kubectl logs'
+alias ke='kubectl exec -it'
+
+# Enable kubectl autocompletion
+source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
+
+# Set default editor
+export KUBE_EDITOR=vi
+# or
+export EDITOR=vi</code></pre>
+      <div class="snippet-label">Vim settings (~/.vimrc)</div>
+      <pre><code># Paste this into ~/.vimrc for YAML editing
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set number
+set autoindent</code></pre>
+
+      <h3>Time management</h3>
+      <ul>
+        <li><strong>2 hours, ~17 questions.</strong> Average ~7 minutes per question.</li>
+        <li><strong>Don't get stuck:</strong> Flag difficult questions, move on, come back.</li>
+        <li><strong>High-weight first:</strong> Prioritize questions worth more marks.</li>
+        <li><strong>Use imperative commands:</strong> Faster than writing YAML from scratch.</li>
+        <li><strong>Bookmark the docs:</strong> Kubernetes.io docs are allowed. Pre-bookmark key pages.</li>
+      </ul>
+
+      <h3>Essential bookmarks for the exam</h3>
+      <ul>
+        <li><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/" target="_blank" rel="noopener">kubectl
+            Cheat Sheet</a></li>
+        <li><a href="https://kubernetes.io/docs/concepts/" target="_blank" rel="noopener">Concepts</a> → Workloads,
+          Services, Storage, Config</li>
+        <li><a href="https://kubernetes.io/docs/tasks/" target="_blank" rel="noopener">Tasks</a> → Administer a Cluster,
+          Manage TLS, Configure Pods</li>
+        <li><a href="https://kubernetes.io/docs/reference/" target="_blank" rel="noopener">API Reference</a></li>
+      </ul>
+
+      <h3>Test pods for networking</h3>
+      <p>Run a temporary pod for DNS/connectivity tests:
+        <code>kubectl run dnsutils --image=busybox:1.28 --restart=Never --rm -it -- nslookup kubernetes.default.svc.cluster.local</code>.
+        For a long-lived debug pod:
+        <code>kubectl run debug --image=nicolaka/netshoot -it --rm --restart=Never -- bash</code>.
+      </p>
+
+      <h3>Useful one-liners</h3>
+      <pre><code># All pods with node info
+kubectl get pods -A -o wide
+
+# Events sorted by time
+kubectl get events -A --sort-by='.lastTimestamp'
+
+# Node resource usage
+kubectl describe node | grep -A5 "Allocated resources"
+
+# Set default namespace
+kubectl config set-context --current --namespace=&lt;ns&gt;
+
+# Find which node a pod runs on
+kubectl get pod &lt;name&gt; -o jsonpath='{.spec.nodeName}'
+
+# Watch pods (live updates)
+kubectl get pods -w
+
+# Delete a pod stuck in Terminating
+kubectl delete pod &lt;name&gt; --force --grace-period=0
+
+# Get all images running in the cluster
+kubectl get pods -A -o jsonpath='{range .items[*]}{.spec.containers[*].image}{"\n"}{end}' | sort | uniq
+
+# Check component statuses
+kubectl get componentstatuses   # may be deprecated
+kubectl get --raw='/readyz?verbose'
+
+# Quick pod for testing
+kubectl run tmp --image=busybox:1.28 --rm -it --restart=Never -- sh
+
+# Decode a secret
+kubectl get secret &lt;name&gt; -o jsonpath='{.data.password}' | base64 --decode
+
+# Find static pod manifests path
+ps aux | grep kubelet | grep config
+grep staticPodPath /var/lib/kubelet/config.yaml</code></pre>
+
+      <h3>Common exam mistakes to avoid</h3>
+      <ul>
+        <li>❌ Forgetting to switch context (<code>kubectl config use-context &lt;context&gt;</code>) — each question may
+          use a different cluster</li>
+        <li>❌ Wrong namespace — always check the question for namespace and use <code>-n &lt;ns&gt;</code></li>
+        <li>❌ YAML indentation errors — use <code>kubectl apply -f file.yaml</code> and read the error</li>
+        <li>❌ Not verifying the answer — always run <code>kubectl get</code> / <code>kubectl describe</code> to confirm
+        </li>
+        <li>❌ Spending too long on one question — flag it and move on</li>
+        <li>❌ Forgetting <code>--dry-run=client -o yaml</code> — the fastest way to generate templates</li>
+      </ul>
+
+      <!--18 Cheat Sheet -->
+      <h2 id="section-18">18 — CKA Exam Cheat Sheet</h2>
+      <p>Quick-reference cards for every exam domain. Print this section or keep it open during practice sessions. Each
+        card contains the most commonly tested commands and YAML patterns from exam dumps.</p>
+
+      <div class="cheat-grid">
+
+        <div class="cheat-card">
+          <h4>kubectl Quick Reference</h4>
+          <pre><code># Create resources fast
+k run pod1 --image=nginx
+k create deploy d1 --image=nginx --replicas=3
+k expose deploy d1 --port=80 --name=d1-svc
+k create ns dev
+k create sa my-sa
+k create cm cfg --from-literal=k=v
+k create secret generic s1 --from-literal=p=s
+k create job j1 --image=busybox -- echo hi
+k create cronjob cj --image=b --schedule="* * * * *" -- sh
+
+# Generate YAML
+k run x --image=nginx --dry-run=client -o yaml > x.yaml
+k create deploy x --image=nginx --dry-run=client -o yaml
+
+# Inspect
+k get pods -A -o wide
+k describe pod &lt;name&gt;
+k logs &lt;pod&gt; -c &lt;container&gt; --previous
+k exec -it &lt;pod&gt; -- sh
+k get events --sort-by='.lastTimestamp'
+
+# Edit / Patch / Replace
+k edit deploy &lt;name&gt;
+k patch svc s1 -p '{"spec":{"type":"NodePort"}}'
+k replace --force -f pod.yaml
+k delete pod x --force --grace-period=0
+
+# Context & Namespace
+k config use-context &lt;ctx&gt;
+k config set-context --current --namespace=dev</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>Pod Skeleton</h4>
+          <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  namespace: default
+  labels:
+    app: myapp
+spec:
+  serviceAccountName: my-sa     # optional
+  nodeSelector:                  # optional
+    disk: ssd
+  tolerations:                   # optional
+  - key: "node-role"
+    operator: "Exists"
+    effect: "NoSchedule"
+  initContainers:                # optional
+  - name: init
+    image: busybox
+    command: ['sh','-c','sleep 5']
+  containers:
+  - name: app
+    image: nginx:1.21
+    ports:
+    - containerPort: 80
+    env:
+    - name: KEY
+      value: val
+    envFrom:
+    - configMapRef:
+        name: my-cm
+    - secretRef:
+        name: my-secret
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 256Mi
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 80
+      initialDelaySeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 80
+    volumeMounts:
+    - name: data
+      mountPath: /data
+    securityContext:
+      runAsUser: 1000
+      runAsNonRoot: true
+      capabilities:
+        drop: ["ALL"]
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: my-pvc
+  # OR emptyDir:
+  # - name: tmp
+  #   emptyDir: {}</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>Deployment + Service</h4>
+          <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-svc
+spec:
+  type: NodePort        # or ClusterIP
+  selector:
+    app: webapp
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080     # only for NodePort</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>RBAC Pattern</h4>
+          <pre><code># Imperative (fastest in exam)
+k create role dev-role \
+  --verb=get,list,create,delete \
+  --resource=pods -n dev
+
+k create rolebinding dev-bind \
+  --role=dev-role --user=jane -n dev
+
+k create clusterrole node-viewer \
+  --verb=get,list --resource=nodes
+
+k create clusterrolebinding node-bind \
+  --clusterrole=node-viewer --user=jane
+
+# Check permissions
+k auth can-i create pods --as=jane -n dev
+k auth can-i '*' '*' --as=system:serviceaccount:default:my-sa
+
+# ServiceAccount in pod
+spec:
+  serviceAccountName: my-sa</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>ETCD Backup & Restore</h4>
+          <pre><code># BACKUP
+ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+# Verify
+ETCDCTL_API=3 etcdctl snapshot status /tmp/etcd.db
+
+# RESTORE
+ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd.db \
+  --data-dir=/var/lib/etcd-restored
+
+# Then update etcd manifest:
+vi /etc/kubernetes/manifests/etcd.yaml
+# Change: hostPath.path → /var/lib/etcd-restored
+# Wait for etcd pod to restart
+
+# Find etcd certs (from pod spec)
+k describe pod etcd-master -n kube-system | grep -A5 cert</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>Cluster Upgrade Sequence</h4>
+          <pre><code># === CONTROL PLANE ===
+apt-mark unhold kubeadm
+apt-get update && apt-get install -y kubeadm=1.XX.0-*
+apt-mark hold kubeadm
+kubeadm upgrade plan
+kubeadm upgrade apply v1.XX.0
+kubectl drain &lt;cp-node&gt; --ignore-daemonsets
+apt-mark unhold kubelet kubectl
+apt-get install -y kubelet=1.XX.0-* kubectl=1.XX.0-*
+apt-mark hold kubelet kubectl
+systemctl daemon-reload && systemctl restart kubelet
+kubectl uncordon &lt;cp-node&gt;
+
+# === WORKER NODES ===
+kubectl drain &lt;worker&gt; --ignore-daemonsets
+# SSH to worker:
+apt-mark unhold kubeadm kubelet
+apt-get install -y kubeadm=1.XX.0-* kubelet=1.XX.0-*
+kubeadm upgrade node
+systemctl daemon-reload && systemctl restart kubelet
+apt-mark hold kubeadm kubelet
+# Back on control plane:
+kubectl uncordon &lt;worker&gt;</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>Storage: PV + PVC + SC</h4>
+          <pre><code># PersistentVolume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes: [ReadWriteOnce]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/data
+---
+# PersistentVolumeClaim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: ""   # empty = static binding
+---
+# StorageClass (dynamic)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+
+# Mount in pod:
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: pvc1
+  containers:
+  - volumeMounts:
+    - mountPath: /data
+      name: data</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>Networking Cheat Sheet</h4>
+          <pre><code># NetworkPolicy (allow specific ingress)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api
+  namespace: prod
+spec:
+  podSelector:
+    matchLabels:
+      app: db
+  policyTypes: [Ingress, Egress]
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: api
+    - namespaceSelector:
+        matchLabels:
+          env: prod
+    ports:
+    - port: 3306
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: cache
+    ports:
+    - port: 6379
+
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: app.example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api-svc
+            port:
+              number: 80</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>Troubleshooting Checklist</h4>
+          <pre><code># 1. Check nodes
+k get nodes
+k describe node &lt;node&gt;  # conditions, taints
+
+# 2. Check control plane pods
+k get pods -n kube-system
+k logs kube-apiserver-master -n kube-system
+k logs kube-scheduler-master -n kube-system
+
+# 3. Check kubelet (on node)
+systemctl status kubelet
+journalctl -u kubelet -f
+cat /var/lib/kubelet/config.yaml
+
+# 4. Check service &amp; endpoints
+k get svc,endpoints &lt;svc-name&gt;
+# If endpoints empty → wrong selector
+
+# 5. Pod debugging
+k get pods -o wide
+k describe pod &lt;name&gt;   # check Events
+k logs &lt;pod&gt; --previous
+k exec -it &lt;pod&gt; -- sh
+
+# 6. DNS test
+k run dns-test --image=busybox:1.28 --rm -it \
+  --restart=Never -- nslookup kubernetes
+
+# 7. Network test
+k run net-test --image=nicolaka/netshoot \
+  --rm -it --restart=Never -- bash
+
+# 8. Certificate check
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt \
+  -text -noout | grep -A2 Validity</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>DaemonSet / Job / CronJob</h4>
+          <pre><code># DaemonSet
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: log-agent
+spec:
+  selector:
+    matchLabels:
+      app: log-agent
+  template:
+    metadata:
+      labels:
+        app: log-agent
+    spec:
+      containers:
+      - name: agent
+        image: fluentd
+---
+# Job (run to completion)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-job
+spec:
+  completions: 3
+  parallelism: 2
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl","-Mbignum=bpi",
+                  "-wle","print bpi(2000)"]
+      restartPolicy: Never
+---
+# CronJob
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup
+spec:
+  schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: busybox
+            command: ["/bin/sh","-c","date"]
+          restartPolicy: OnFailure</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>JSONPath & Output</h4>
+          <pre><code># Single value
+k get pod x -o jsonpath='{.spec.nodeName}'
+
+# All pod names
+k get pods -o jsonpath='{.items[*].metadata.name}'
+
+# Range (formatted)
+k get nodes -o jsonpath='
+{range .items[*]}
+  {.metadata.name}{"\t"}
+  {.status.capacity.cpu}{"\n"}
+{end}'
+
+# Filter with condition
+k get nodes -o jsonpath='
+{.items[*].status.addresses
+[?(@.type=="InternalIP")].address}'
+
+# Custom columns
+k get pods -A -o custom-columns=\
+NAME:.metadata.name,\
+NODE:.spec.nodeName,\
+IMAGE:.spec.containers[0].image
+
+# Sort
+k get pods --sort-by=.metadata.creationTimestamp
+k get pv --sort-by=.spec.capacity.storage
+
+# Output to file (exam pattern)
+k get nodes -o json > /opt/output.json
+k get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/os.txt
+
+# Count
+k get pods -A --no-headers | wc -l</code></pre>
+        </div>
+
+        <div class="cheat-card">
+          <h4>CSR / Certificates</h4>
+          <pre><code># Generate key + CSR
+openssl genrsa -out user.key 2048
+openssl req -new -key user.key \
+  -subj "/CN=user/O=group" -out user.csr
+
+# Create K8s CSR object
+cat user.csr | base64 | tr -d '\n'
+
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: user
+spec:
+  request: &lt;base64-csr&gt;
+  signerName: kubernetes.io/kube-apiserver-client
+  usages: [client auth]
+
+# Approve &amp; extract
+k certificate approve user
+k get csr user -o jsonpath='{.status.certificate}' \
+  | base64 -d > user.crt
+
+# Add to kubeconfig
+k config set-credentials user \
+  --client-certificate=user.crt \
+  --client-key=user.key
+k config set-context user-ctx \
+  --cluster=kubernetes --user=user
+k config use-context user-ctx</code></pre>
+        </div>
+
+      </div><!-- end cheat-grid -->
 
     </main>
+    <aside class="right-sidebar" id="right-sidebar">
+      <div class="sidebar-title">Quick Links</div>
+      <ul>
+        <!-- Add your own links below -->
+        <li><a href="#section-18">Cheat Sheet</a></li>
+        <li><a href="#section-15">Mock Exams</a></li>
+        <li><a href="#section-12">Troubleshooting</a></li>
+        <li><a href="#section-07">Security</a></li>
+        <li><a href="#section-09">Networking</a></li>
+        <li><a href="#section-06">Cluster Maintenance</a></li>
+      </ul>
+      <div class="link-note">
+        Edit this sidebar in the HTML source to add your own links.
+      </div>
+    </aside>
   </div>
   <footer class="site-footer">
     CKA Study Guide — Standalone reference for Certified Kubernetes Administrator exam preparation.
   </footer>
   <script>
-    (function() {
+    (function () {
       var t = document.getElementById('nav-toggle');
       var c = document.getElementById('nav-close');
       var n = document.getElementById('nav');
@@ -1578,7 +3517,7 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
           intro.parentNode.insertBefore(blockIntro, intro);
           blockIntro.appendChild(intro);
         }
-        main.querySelectorAll('h2[id^="section-"]').forEach(function(h2) {
+        main.querySelectorAll('h2[id^="section-"]').forEach(function (h2) {
           var id = h2.getAttribute('id');
           var block = document.createElement('div');
           block.id = 'block-' + id;
@@ -1590,13 +3529,13 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
             next = next.nextElementSibling;
           }
           h2.parentNode.insertBefore(block, h2);
-          nodes.forEach(function(node) { block.appendChild(node); });
+          nodes.forEach(function (node) { block.appendChild(node); });
         });
       }
 
       function openBlock(block) {
         if (!block) return;
-        main.querySelectorAll('.content-block').forEach(function(b) { b.classList.remove('is-open'); });
+        main.querySelectorAll('.content-block').forEach(function (b) { b.classList.remove('is-open'); });
         block.classList.remove('is-open');
         block.offsetHeight;
         block.classList.add('is-open');
@@ -1611,12 +3550,12 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
 
       if (c) c.addEventListener('click', closeNav);
       if (t && n) {
-        t.addEventListener('click', function() {
+        t.addEventListener('click', function () {
           n.classList.toggle('is-open');
           t.setAttribute('aria-label', n.classList.contains('is-open') ? 'Close menu' : 'Open menu');
         });
-        n.querySelectorAll('a[href^="#"]').forEach(function(a) {
-          a.addEventListener('click', function(ev) {
+        n.querySelectorAll('a[href^="#"]').forEach(function (a) {
+          a.addEventListener('click', function (ev) {
             var id = a.getAttribute('href');
             if (id === '#') return;
             ev.preventDefault();
@@ -1627,15 +3566,31 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
             openBlock(block);
           });
         });
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
           if (n.classList.contains('is-open') && !n.contains(e.target) && e.target !== t)
             closeNav();
         });
       }
 
+      // Right sidebar link handling
+      var rs = document.getElementById('right-sidebar');
+      if (rs) {
+        rs.querySelectorAll('a[href^="#"]').forEach(function (a) {
+          a.addEventListener('click', function (ev) {
+            var id = a.getAttribute('href');
+            if (id === '#') return;
+            ev.preventDefault();
+            var hash = id.slice(1);
+            var blockId = hash === 'intro' ? 'block-intro' : 'block-' + hash;
+            var block = document.getElementById(blockId);
+            openBlock(block);
+          });
+        });
+      }
+
       function initSolutionToggles() {
-        document.querySelectorAll('.solution-toggle, .playground-toggle').forEach(function(btn) {
-          btn.addEventListener('click', function() {
+        document.querySelectorAll('.solution-toggle, .playground-toggle').forEach(function (btn) {
+          btn.addEventListener('click', function () {
             var solution = this.nextElementSibling;
             if (!solution || !solution.classList.contains('mock-solution') && !solution.classList.contains('playground-solution')) return;
             var isOpen = solution.classList.toggle('is-open');
@@ -1652,4 +3607,5 @@ kubectl get endpoints web-svc -n prod     # should list pod IPs now</code></pre>
     })();
   </script>
 </body>
+
 </html>
