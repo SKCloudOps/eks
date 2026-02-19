@@ -1262,6 +1262,185 @@
       font-size: inherit;
       outline: none;
     }
+
+    /* AI Assistant CSS */
+    .ai-fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 6.5rem;
+      /* Left of terminal button */
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: white;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .ai-fab:hover {
+      transform: scale(1.1);
+    }
+
+    .ai-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 6.5rem;
+      width: 350px;
+      height: 500px;
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      z-index: 1002;
+      display: none;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      font-family: var(--font-sans);
+    }
+
+    .ai-container.open {
+      display: flex;
+    }
+
+    .ai-header {
+      background: var(--surface2);
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ai-controls span {
+      margin-left: 0.8rem;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .ai-controls span:hover {
+      opacity: 1;
+    }
+
+    .ai-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ai-welcome {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .api-key-input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    #api-key-input {
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    #save-api-key {
+      padding: 0.5rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .ai-chat-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      background: var(--bg);
+    }
+
+    .message {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      max-width: 85%;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .message.bot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+
+    .message.user {
+      background: var(--accent);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+
+    .chat-input-area {
+      padding: 0.75rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.5rem;
+      background: var(--surface);
+    }
+
+    #chat-input {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      outline: none;
+    }
+
+    #send-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .ai-container {
+        width: 100%;
+        height: 60vh;
+        bottom: 0;
+        right: 0;
+        border-radius: 12px 12px 0 0;
+      }
+
+      .ai-fab {
+        bottom: 1.5rem;
+        right: 5.5rem;
+      }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -4415,6 +4594,165 @@ worker-2   Ready    <none>          10d   v1.30.0`;
       }
 
       initTerminal();
+
+      // ─── CKA MENTOR (AI ASSISTANT) ──────────────────────────────────
+      function initAI() {
+        const aiBtn = document.createElement('button');
+        aiBtn.className = 'ai-fab';
+        aiBtn.innerHTML = '🤖';
+        aiBtn.title = 'Open CKA Mentor';
+        document.body.appendChild(aiBtn);
+
+        const aiContainer = document.createElement('div');
+        aiContainer.className = 'ai-container';
+        aiContainer.innerHTML = `
+          <div class="ai-header">
+            <span>CKA Mentor (Gemini)</span>
+            <div class="ai-controls">
+              <span class="ai-settings" title="Settings">⚙️</span>
+              <span class="ai-close">×</span>
+            </div>
+          </div>
+          <div class="ai-body" id="ai-body">
+            <div class="ai-welcome">
+              <p>Hello! I'm your CKA AI Mentor.</p>
+              <p>To get started, please enter your free <strong>Google Gemini API Key</strong>.</p>
+              <div class="api-key-input-wrapper">
+                <input type="password" id="api-key-input" placeholder="Paste Gemini API Key here">
+                <button id="save-api-key">Save Key</button>
+              </div>
+              <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">
+                Key is stored locally in your browser. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #4ec9b0;">Get a free key here</a>.
+              </p>
+            </div>
+            <div class="ai-chat-view" style="display: none;">
+               <div class="chat-messages" id="chat-messages">
+                 <div class="message bot">
+                   Hi! Ask me anything about Kubernetes, kubectl, or the CKA exam.
+                 </div>
+               </div>
+               <div class="chat-input-area">
+                 <input type="text" id="chat-input" placeholder="Ask a question...">
+                 <button id="send-btn">➤</button>
+               </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(aiContainer);
+
+        // Elements
+        const apiKeyInput = aiContainer.querySelector('#api-key-input');
+        const saveKeyBtn = aiContainer.querySelector('#save-api-key');
+        const welcomeView = aiContainer.querySelector('.ai-welcome');
+        const chatView = aiContainer.querySelector('.ai-chat-view');
+        const chatMessages = aiContainer.querySelector('#chat-messages');
+        const chatInput = aiContainer.querySelector('#chat-input');
+        const sendBtn = aiContainer.querySelector('#send-btn');
+        const settingsBtn = aiContainer.querySelector('.ai-settings');
+        const closeBtn = aiContainer.querySelector('.ai-close');
+
+        // State
+        let apiKey = localStorage.getItem('cka_gemini_key');
+
+        // Initialize View
+        if (apiKey) {
+          welcomeView.style.display = 'none';
+          chatView.style.display = 'flex';
+        }
+
+        // Toggle Visibility
+        aiBtn.addEventListener('click', () => {
+          aiContainer.classList.add('open');
+          aiBtn.style.display = 'none';
+          if (apiKey && chatView.style.display === 'none') {
+            // User might have cleared key
+          }
+        });
+
+        closeBtn.addEventListener('click', () => {
+          aiContainer.classList.remove('open');
+          aiBtn.style.display = 'flex';
+        });
+
+        settingsBtn.addEventListener('click', () => {
+          // Clear key and show welcome
+          if (confirm('Clear API Key and reset?')) {
+            localStorage.removeItem('cka_gemini_key');
+            apiKey = null;
+            welcomeView.style.display = 'block';
+            chatView.style.display = 'none';
+          }
+        });
+
+        // Save Key Logic
+        saveKeyBtn.addEventListener('click', () => {
+          const key = apiKeyInput.value.trim();
+          if (key) {
+            localStorage.setItem('cka_gemini_key', key);
+            apiKey = key;
+            welcomeView.style.display = 'none';
+            chatView.style.display = 'flex';
+          }
+        });
+
+        // Chat Logic
+        function appendMessage(text, isUser) {
+          const msgDiv = document.createElement('div');
+          msgDiv.className = 'message ' + (isUser ? 'user' : 'bot');
+          msgDiv.innerText = text;
+          chatMessages.appendChild(msgDiv);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function askGemini(question) {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: "You are an expert Kubernetes Certified Administrator (CKA) tutor. Answer this concise and helpful: " + question }] }]
+              })
+            });
+
+            if (!response.ok) throw new Error('API Error');
+
+            const data = await response.json();
+            const answer = data.candidates[0].content.parts[0].text;
+            return answer;
+
+          } catch (error) {
+            console.error(error);
+            return "Error connecting to AI. Please check your API key.";
+          }
+        }
+
+        async function handleSend() {
+          const text = chatInput.value.trim();
+          if (!text) return;
+
+          appendMessage(text, true);
+          chatInput.value = '';
+
+          // Show typing indicator
+          const loadingDiv = document.createElement('div');
+          loadingDiv.className = 'message bot loading';
+          loadingDiv.innerText = '...';
+          chatMessages.appendChild(loadingDiv);
+
+          const answer = await askGemini(text);
+          loadingDiv.remove();
+          appendMessage(answer, false);
+        }
+
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') handleSend();
+        });
+      }
+
+      initAI();
 
     })();
   </script>
