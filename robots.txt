@@ -1,0 +1,8 @@
+Sitemap: https://skcloudops.github.io/k8s/sitemap.xml
+
+User-agent: *
+Allow: /
+Disallow: /tmp/
+Disallow: /.gemini/
+Disallow: /*.py
+Disallow: /*.sh
