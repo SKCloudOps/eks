@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps Interview Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --border: #252535;
+    --accent: #00e5ff;
+    --accent2: #ff3d71;
+    --accent3: #a78bfa;
+    --accent4: #34d399;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --heading: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    padding: 80px 40px 60px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,229,255,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(167,139,250,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    background: rgba(0,229,255,.1);
+    border: 1px solid rgba(0,229,255,.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    color: var(--heading);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--accent); }
+
+  .header-desc {
+    color: var(--muted);
+    max-width: 560px;
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .5px;
+    padding: 6px 14px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    transition: all .2s;
+    cursor: pointer;
+    background: var(--card);
+  }
+  .nav-pill:hover { color: var(--accent); border-color: var(--accent); }
+  .nav-pill.c1 { --hc: var(--accent); }
+  .nav-pill.c2 { --hc: var(--accent2); }
+  .nav-pill.c3 { --hc: #f59e0b; }
+  .nav-pill.c4 { --hc: var(--accent4); }
+  .nav-pill.c5 { --hc: var(--accent3); }
+  .nav-pill.c6 { --hc: #fb7185; }
+  .nav-pill.c7 { --hc: #60a5fa; }
+  .nav-pill:hover { color: var(--hc, var(--accent)); border-color: var(--hc, var(--accent)); background: rgba(0,0,0,.2); }
+
+  /* ── LAYOUT ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 72px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    min-width: 32px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+
+  .section-line {
+    height: 2px;
+    flex: 1;
+    background: linear-gradient(to right, var(--section-color, var(--accent)), transparent);
+  }
+
+  /* ── Q&A CARDS ── */
+  .qa-grid { display: flex; flex-direction: column; gap: 16px; }
+
+  .qa-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--section-color, var(--accent));
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color .2s, background .2s;
+  }
+  .qa-card:hover { background: #1e1e2e; }
+
+  .qa-question {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 18px 20px;
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    color: var(--heading);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .q-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--section-color, var(--accent));
+    background: rgba(0,229,255,.08);
+    padding: 2px 6px;
+    border-radius: 2px;
+    min-width: 36px;
+    text-align: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .q-chevron {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--muted);
+    transition: transform .3s;
+    font-size: 18px;
+    margin-top: 1px;
+  }
+  .qa-card.open .q-chevron { transform: rotate(180deg); }
+
+  .qa-answer {
+    display: none;
+    padding: 0 20px 20px 70px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+  .qa-card.open .qa-answer { display: block; }
+
+  .qa-answer p { margin-bottom: 10px; }
+  .qa-answer ul, .qa-answer ol { padding-left: 20px; margin-bottom: 10px; }
+  .qa-answer li { margin-bottom: 6px; }
+  .qa-answer strong { color: var(--heading); font-weight: 500; }
+  .qa-answer code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .qa-answer pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: rgba(0,0,0,.4);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 12px 0;
+    color: var(--accent4);
+    line-height: 1.6;
+  }
+
+  /* compare table */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .compare-head { background: rgba(0,229,255,.08); padding: 10px 14px; font-family: 'Syne', sans-serif; font-weight: 600; color: var(--heading); }
+  .compare-cell { background: var(--bg); padding: 8px 14px; }
+  .compare-cell:nth-child(even) { border-left: 1px solid var(--border); }
+
+  /* ── COLOR VARS PER SECTION ── */
+  .s-general { --section-color: #00e5ff; }
+  .s-git { --section-color: #f97316; }
+  .s-jenkins { --section-color: #f59e0b; }
+  .s-selenium { --section-color: #34d399; }
+  .s-config { --section-color: #a78bfa; }
+  .s-docker { --section-color: #fb7185; }
+  .s-monitoring { --section-color: #60a5fa; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+  .stat {
+    flex: 1;
+    min-width: 120px;
+    background: var(--card);
+    padding: 20px 24px;
+    text-align: center;
+  }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'IBM Plex Mono', monospace; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .5px;
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 50px 20px 40px; }
+    main { padding: 40px 20px; }
+    .qa-answer { padding-left: 20px; }
+    h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="badge">// Interview Prep 2024</div>
+    <h1>DevOps<br><span>Interview Guide</span></h1>
+    <p class="header-desc">86 curated Q&As across Git, Jenkins, Selenium, Chef, Puppet, Ansible, Docker & Nagios. Click any question to expand.</p>
+    <nav class="nav-pills">
+      <a class="nav-pill c1" href="#general">General</a>
+      <a class="nav-pill c2" href="#git">Git / SCM</a>
+      <a class="nav-pill c3" href="#jenkins">Jenkins / CI</a>
+      <a class="nav-pill c4" href="#selenium">Selenium</a>
+      <a class="nav-pill c5" href="#config">Chef · Puppet · Ansible</a>
+      <a class="nav-pill c6" href="#docker">Docker</a>
+      <a class="nav-pill c7" href="#monitoring">Nagios / Monitoring</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-val">86</span><span class="stat-label">Questions</span></div>
+    <div class="stat"><span class="stat-val">7</span><span class="stat-label">Topics</span></div>
+    <div class="stat"><span class="stat-val">14</span><span class="stat-label">General Q&As</span></div>
+    <div class="stat"><span class="stat-val">12</span><span class="stat-label">Git Q&As</span></div>
+    <div class="stat"><span class="stat-val">13</span><span class="stat-label">Jenkins Q&As</span></div>
+    <div class="stat"><span class="stat-val">10</span><span class="stat-label">Docker Q&As</span></div>
+  </div>
+
+  <!-- SECTION 1: GENERAL -->
+  <section class="section s-general" id="general">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">General DevOps</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q1</span>
+          What do you know about DevOps?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>DevOps is a culture and practice that synergizes the efforts of <strong>development and operations teams</strong> to accelerate software delivery with a minimal failure rate. It is a value-added approach where engineers collaborate throughout the entire product lifecycle—from design to deployment—enabling continuous development, integration, testing, and monitoring.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q2</span>
+          How is DevOps different from Agile methodology?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">DevOps</div><div class="compare-head">Agile</div>
+            <div class="compare-cell">Culture bridging Dev + Ops teams</div><div class="compare-cell">Software development methodology</div>
+            <div class="compare-cell">Continuous development, testing, integration, deployment & monitoring</div><div class="compare-cell">Iterative, incremental small releases with customer feedback</div>
+            <div class="compare-cell">Addresses gaps between Developers & IT Operations</div><div class="compare-cell">Addresses gaps between Customer & Developers</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q3</span>
+          Which are some of the most popular DevOps tools?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Selenium</strong> — Continuous Testing</li>
+            <li><strong>Puppet / Chef / Ansible</strong> — Configuration Management</li>
+            <li><strong>Git</strong> — Source Code Management</li>
+            <li><strong>Jenkins</strong> — Continuous Integration</li>
+            <li><strong>Docker</strong> — Containerization</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q4</span>
+          What are the different phases in DevOps?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Plan</strong> — Define the type of application and create a development roadmap.</li>
+            <li><strong>Code</strong> — Application is coded per end-user requirements.</li>
+            <li><strong>Build</strong> — Integrate various code modules from the previous step.</li>
+            <li><strong>Test</strong> — Most crucial step; test and rebuild if necessary.</li>
+            <li><strong>Integrate</strong> — Merge code from multiple programmers into one.</li>
+            <li><strong>Deploy</strong> — Deploy to cloud; ensure changes don't disrupt high-traffic sites.</li>
+            <li><strong>Operate</strong> — Perform operations on the code as required.</li>
+            <li><strong>Monitor</strong> — Track performance and make changes to meet user requirements.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q5</span>
+          Mention some of the core benefits of DevOps.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>Technical:</strong> Continuous software delivery · Less complex problems · Early defect detection & faster correction.</p>
+          <p><strong>Business:</strong> Faster feature delivery · Stable operating environments · Improved team collaboration.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q6</span>
+          How will you approach a project that needs to implement DevOps?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Stage 1:</strong> Assess the existing process (2–3 weeks) — identify areas of improvement and create a roadmap.</li>
+            <li><strong>Stage 2:</strong> Create a Proof of Concept (PoC); once approved, kick off the actual rollout plan.</li>
+            <li><strong>Stage 3:</strong> Implement DevOps step by step — version control → integration → testing → deployment → delivery → monitoring.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q7</span>
+          What is the difference between Continuous Delivery and Continuous Deployment?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">Continuous Delivery</div><div class="compare-head">Continuous Deployment</div>
+            <div class="compare-cell">Ensures code can be safely deployed to production</div><div class="compare-cell">Every change passing automated tests is deployed automatically</div>
+            <div class="compare-cell">Delivers every change to a production-like environment via automated testing</div><div class="compare-cell">Makes the release process faster and more robust</div>
+            <div class="compare-cell">Requires manual approval before production</div><div class="compare-cell">No explicit developer approval; requires mature monitoring culture</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q8</span>
+          What is the role of configuration management in DevOps?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Enables management of and changes to multiple systems.</li>
+            <li>Standardizes resource configurations to manage IT infrastructure.</li>
+            <li>Helps with administration of multiple servers and maintains infrastructure integrity.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q9</span>
+          How does continuous monitoring help maintain the entire architecture?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Detects, identifies, and reports faults or threats in the entire infrastructure.</li>
+            <li>Ensures all services, applications, and resources run on servers properly.</li>
+            <li>Monitors server status and application health.</li>
+            <li>Enables continuous audit, transaction inspection, and controlled monitoring.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q10</span>
+          What is the role of AWS in DevOps?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Flexible services</strong> — Ready-to-use services; no installation needed.</li>
+            <li><strong>Built for scale</strong> — Manage a single instance or scale to thousands.</li>
+            <li><strong>Automation</strong> — Automate tasks to free up time for innovation.</li>
+            <li><strong>Secure</strong> — IAM for user permissions and policies.</li>
+            <li><strong>Large partner ecosystem</strong> — Broad ecosystem that integrates with and extends AWS.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q11</span>
+          Name three important DevOps KPIs.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Mean Time to Failure Recovery (MTTR)</strong> — Average time to recover from a failure.</li>
+            <li><strong>Deployment Frequency</strong> — How often deployments occur.</li>
+            <li><strong>Percentage of Failed Deployments</strong> — Number of times deployments fail.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q12</span>
+          Explain "Infrastructure as Code" (IaC) as it relates to configuration management.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Writing code to manage configuration, deployment, and automatic provisioning.</li>
+            <li>Managing data centers with machine-readable definition files rather than physical hardware configs.</li>
+            <li>Ensuring all servers and infrastructure are provisioned consistently.</li>
+            <li>Administering cloud computing environments (IaaS).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q13</span>
+          How is IaC implemented using AWS?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>AWS IaC allows developers to write, test, and maintain infrastructure entities in a descriptive manner using formats such as <strong>JSON</strong> or <strong>YAML</strong>. This replaces manual script-file approaches and enables faster, more consistent deployment of infrastructure changes via tools like AWS CloudFormation.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-general">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q14</span>
+          Why has DevOps gained prominence over the last few years?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Companies like <strong>Netflix</strong> and <strong>Facebook</strong> invest heavily in DevOps to automate and accelerate deployments. Facebook's continuous deployment and code ownership models help it scale while maintaining quality. Netflix uses fully automated processes to serve 100M+ users.</p>
+          <p>DevOps enables: higher release success rates · reduced bug-fix lead times · continuous delivery via automation · overall reduction in manpower costs.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 2: GIT -->
+  <section class="section s-git" id="git">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Source Code Management — Git</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q15</span>
+          Explain the difference between a centralized and distributed VCS.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">Centralized VCS (e.g. SVN)</div><div class="compare-head">Distributed VCS (e.g. Git)</div>
+            <div class="compare-cell">All file versions on a central server</div><div class="compare-cell">Every developer has a full copy of all versions</div>
+            <div class="compare-cell">No local full copy for developers</div><div class="compare-cell">Team can work offline; not reliant on a single location</div>
+            <div class="compare-cell">Server crash = all data lost</div><div class="compare-cell">Server crash = data safe with every developer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q16</span>
+          What git command downloads a repository from GitHub?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer"><code>git clone &lt;url&gt;</code></div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q17</span>
+          How do you push a file from local to a GitHub repository?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre>git remote add origin &lt;repo-url&gt;
+git push origin master</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q18</span>
+          How is a bare repository different from a standard git init?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>Standard (<code>git init</code>):</strong> Creates a working directory + a <code>.git</code> subfolder containing revision history.</p>
+          <p><strong>Bare (<code>git init --bare</code>):</strong> No working/checked-out copy. Revision history stored in the root folder (not <code>.git</code>). Used as a remote/shared repository.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q19</span>
+          Which CLI command renames files in Git?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer"><p><code>git mv</code> is used to rename or move files while keeping Git history intact.</p></div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q20</span>
+          What is the process for reverting a public commit?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>Option 1:</strong> Fix the bad file in a new commit and push:</p>
+          <pre>git commit -m "fix: revert bad change"</pre>
+          <p><strong>Option 2:</strong> Create a revert commit that undoes all changes in the bad commit:</p>
+          <pre>git revert &lt;commit-id&gt;
+# e.g. git revert 56de0938f</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q21</span>
+          Explain the difference between git fetch and git pull.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">git fetch</div><div class="compare-head">git pull</div>
+            <div class="compare-cell">Downloads new data only; does NOT integrate it</div><div class="compare-cell">Downloads new data AND merges it into current branch</div>
+            <div class="compare-cell">Safe to run at any time; updates remote-tracking branches</div><div class="compare-cell">Can cause merge conflicts if local changes exist</div>
+            <div class="compare-cell"><code>git fetch origin</code></div><div class="compare-cell"><code>git pull origin master</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q22</span>
+          What is Git stash?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Git stash saves your modified tracked files onto a stack of unfinished changes so you can switch branches without committing. You can reapply them later with <code>git stash pop</code>.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q23</span>
+          Explain the concept of branching in Git.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>You always work on the <strong>master</strong> (or main) branch by default.</li>
+            <li>Create a new branch to develop a feature in isolation: <code>git checkout -b feature-name</code></li>
+            <li>Circles on a branch diagram represent individual commits.</li>
+            <li>After work is complete, merge the feature branch back into master.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q24</span>
+          What is the difference between Git Merge and Git Rebase?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>Git Merge:</strong> Incorporates changes by creating an extra merge commit. Preserves exact history but can pollute feature branch history.</p>
+          <p><strong>Git Rebase:</strong> Moves the base of your feature branch onto master, creating new commits for each original commit. Produces a cleaner, linear history but rewrites project history.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q25</span>
+          How do you find files changed in a particular commit?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre>git diff-tree -r &lt;commit-hash&gt;
+# e.g. git diff-tree -r 87e673f21b</pre>
+          <p>The <code>-r</code> flag lists individual files. The commit hash lists all changed/added files in that commit.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-git">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q26</span>
+          What is a merge conflict in Git, and how can it be resolved?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>A merge conflict occurs when two branches have competing commits and Git can't automatically decide which changes to keep.</p>
+          <p><strong>Via GitHub conflict editor:</strong> Go to Pull Requests → click the conflicted PR → Resolve Conflicts → choose changes → Mark as resolved → Commit merge.</p>
+          <p><strong>Via command line:</strong> Open the conflicted file, look for <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers, edit to keep desired changes, remove markers, then:</p>
+          <pre>git add .
+git commit -m "Resolved merge conflict"</pre>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 3: JENKINS -->
+  <section class="section s-jenkins" id="jenkins">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Continuous Integration — Jenkins</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q27</span>
+          Explain the master-slave architecture of Jenkins.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>The <strong>Jenkins Master</strong> pulls code from a remote GitHub repository on every commit.</li>
+            <li>It distributes the workload to all Jenkins slaves.</li>
+            <li>On request from the master, <strong>slaves</strong> carry out builds, tests, and produce test reports.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q28</span>
+          What is a Jenkinsfile?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>A <strong>Jenkinsfile</strong> is a text file checked into source control that contains the definition of a Jenkins pipeline. It enables code review of the pipeline, provides an audit trail, and serves as a single source of truth.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q29</span>
+          Which command runs Jenkins from the command line?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer"><code>java -jar Jenkins.war</code></div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q30</span>
+          What concepts are key aspects of the Jenkins pipeline?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Pipeline</strong> — User-defined CD model; defines the entire build/test/deliver process.</li>
+            <li><strong>Node</strong> — A machine in the Jenkins environment capable of executing a pipeline.</li>
+            <li><strong>Step</strong> — A single task telling Jenkins what to do at a specific point.</li>
+            <li><strong>Stage</strong> — A conceptually distinct subset of tasks (Build, Test, Deploy).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q31</span>
+          Which file is used to define dependency in Maven?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer"><p><strong>pom.xml</strong> (Project Object Model) is used to define dependencies in Maven.</p></div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q32</span>
+          Explain the two types of Jenkins pipelines and their syntax.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>A. Scripted Pipeline</strong> — Based on Groovy DSL; uses <code>node</code> blocks.</p>
+          <pre>node {
+  stage('Build') { /* build steps */ }
+  stage('Test')  { /* test steps */  }
+  stage('Deploy'){ /* deploy steps */}
+}</pre>
+          <p><strong>B. Declarative Pipeline</strong> — Simpler, friendlier syntax using a <code>pipeline</code> block.</p>
+          <pre>pipeline {
+  agent any
+  stages {
+    stage('Build')  { steps { /* ... */ } }
+    stage('Test')   { steps { /* ... */ } }
+    stage('Deploy') { steps { /* ... */ } }
+  }
+}</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q33</span>
+          How do you create a backup and copy files in Jenkins?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Periodically back up your <code>JENKINS_HOME</code> directory. It contains: build job configurations · slave node configurations · build history.</p>
+          <p>To clone or replicate a job, copy its directory. To rename a job, rename the directory.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q34</span>
+          How can you copy Jenkins from one server to another?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Copy the corresponding job directory to the new installation.</li>
+            <li>Clone a job by duplicating the directory with a different name.</li>
+            <li>Rename a job by renaming its directory.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q35</span>
+          Name three security mechanisms Jenkins uses to authenticate users.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Internal database to store user data and credentials.</li>
+            <li>LDAP (Lightweight Directory Access Protocol) server.</li>
+            <li>Authentication mechanism used by the deployed application server.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q36</span>
+          How is a custom build of a core plugin deployed?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ol>
+            <li>Copy the <code>.hpi</code> file to <code>$JENKINS_HOME/plugins</code></li>
+            <li>Remove the plugin's development directory</li>
+            <li>Create an empty file called <code>&lt;plugin&gt;.hpi.pinned</code></li>
+            <li>Restart Jenkins</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q37</span>
+          How can you temporarily turn off Jenkins security if admins are locked out?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>In <code>JENKINS_HOME/config.xml</code>, find the XML element <code>&lt;useSecurity&gt;</code> and change it from <code>true</code> to <code>false</code>. Security will be disabled on next restart.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q38</span>
+          What are the ways a build can be scheduled/run in Jenkins?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>By source code management commits (SCM polling or webhooks)</li>
+            <li>After completion of other builds (downstream triggering)</li>
+            <li>Scheduled at a specified time (cron syntax)</li>
+            <li>Manual build requests</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-jenkins">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q39</span>
+          What commands can you use to restart Jenkins manually?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre>(Jenkins_url)/restart      # Forces restart immediately
+(Jenkins_url)/safeRestart  # Waits for all builds to complete first</pre>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 4: SELENIUM -->
+  <section class="section s-selenium" id="selenium">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Continuous Testing — Selenium</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q40</span>
+          What are the different Selenium components?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Selenium IDE</strong> — Simple framework with Firefox plug-in; used for prototyping.</li>
+            <li><strong>Selenium RC</strong> — Testing framework; write test code in any language (Java, PHP, Perl, C#, etc.).</li>
+            <li><strong>Selenium WebDriver</strong> — Better approach to automate browser activities; doesn't rely on JavaScript.</li>
+            <li><strong>Selenium Grid</strong> — Works with RC to run tests on different nodes across browsers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q41</span>
+          What are the different exceptions in Selenium WebDriver?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>TimeoutException</strong> — Command didn't complete in stipulated time.</li>
+            <li><strong>NoSuchElementException</strong> — Element with specific attributes not found on the page.</li>
+            <li><strong>ElementNotVisibleException</strong> — Element in DOM but not visible (e.g., hidden input).</li>
+            <li><strong>SessionNotFoundException</strong> — WebDriver action performed after browser was quit.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q42</span>
+          Can Selenium test an application on an Android browser?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Yes. Selenium can test Android browser apps using an <strong>Android driver</strong>. Use the <strong>Selendroid</strong> or <strong>Appium</strong> framework for native or web apps on Android.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q43</span>
+          What are the different test types that Selenium supports?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Functional</strong> — Black-box testing based on software specification.</li>
+            <li><strong>Regression</strong> — Finds new errors after code alterations in functional/non-functional areas.</li>
+            <li><strong>Load Testing</strong> — Monitors response under load to study system behavior.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q44</span>
+          How can you access the text of a web element?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Use the <code>getText()</code> method — returns a String value without parameters. Used for verifying messages, labels, and errors.</p>
+          <pre>String text = driver.findElement(By.id("text")).getText();</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q45</span>
+          How can you handle keyboard and mouse actions using Selenium?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Use the <strong>Advanced User Interactions API</strong> (Actions class):</p>
+          <ul>
+            <li><code>clickAndHold()</code> — Click without releasing mouse</li>
+            <li><code>dragAndDrop()</code> — Click-hold at source and drop at target</li>
+            <li><code>keyDown(modifier_key)</code> — Press Ctrl, Shift, Fn, etc.</li>
+            <li><code>keyUp(modifier_key)</code> — Release a modifier key</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q46</span>
+          Which option is NOT a WebElement method?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>B) <code>size()</code></strong> is not a WebElement method. <code>getText()</code>, <code>getTagName()</code>, and <code>sendKeys()</code> are valid WebElement methods.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q47</span>
+          When do we use findElement() vs findElements()?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>findElement()</strong> — Returns the <em>first</em> matching element on the page.</p>
+          <pre>WebElement el = driver.findElement(By.xpath("//div[@id='ex']//ul//li"));</pre>
+          <p><strong>findElements()</strong> — Returns a <em>List</em> of all matching elements.</p>
+          <pre>List&lt;WebElement&gt; list = driver.findElements(By.xpath("//div[@id='ex']//ul//li"));</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q48</span>
+          What are driver.close() and driver.quit() in WebDriver?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>driver.close()</strong> — Closes only the current focused browser window.</li>
+            <li><strong>driver.quit()</strong> — Closes ALL browser windows and ends the WebDriver session via <code>driver.dispose()</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-selenium">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q49</span>
+          How can you submit a form using Selenium?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre>WebElement el = driver.findElement(By.id("ElementID"));
+el.submit();</pre>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 5: CONFIG MANAGEMENT -->
+  <section class="section s-config" id="config">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Configuration Management — Chef, Puppet, Ansible</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q50</span>
+          Why are SSL certificates used in Chef?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>SSL certificates ensure each node has access to the right data between the Chef server and client. Every node has a private/public key pair — the public key is stored on the Chef server. When a certificate (containing the node's private key) is sent, the server compares it against the stored public key to identify the node and grant access.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q51</span>
+          Which command stops/disables the 'httpd' service at boot?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer"><code># systemctl disable httpd.service</code></div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q52</span>
+          What is Test Kitchen in Chef?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Test Kitchen is a command-line tool that spins up an instance and tests a cookbook on it before deploying to actual nodes.</p>
+          <pre>$ kitchen create    # create instances
+$ kitchen converge  # combine multiple instances
+$ kitchen verify    # verify instances
+$ kitchen destroy   # destroy instances
+$ kitchen setup     # setup instances</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q53</span>
+          How does chef-apply differ from chef-client?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>chef-apply</strong> — Runs a <em>specific recipe</em> on the client: <code>$ chef-apply recipe_name.rb</code></p>
+          <p><strong>chef-client</strong> — Applies <em>all cookbooks</em> in the server's run list to the client: <code>$ knife chef-client</code></p>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q54</span>
+          What is the command to sign requested certificates in Puppet?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre># puppetca --sign hostname-of-agent
+# Example: puppetca --sign ChefAgent</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q55</span>
+          Which open source tools make Puppet more powerful?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Jira</strong> — Track configuration changes; maintenance through internal procedures.</li>
+            <li><strong>Git</strong> — Version control for Puppet code (with Puppet's code manager app).</li>
+            <li><strong>Jenkins</strong> — Continuous integration pipeline for passing changes through.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q56</span>
+          What are resources in Puppet?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Basic units of any configuration management tool.</li>
+            <li>Represent features of a node (software packages, services, etc.).</li>
+            <li>A resource declaration in a catalog describes the action to perform.</li>
+            <li>When a catalog executes, it sets the node to the desired state.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q57</span>
+          What is a class in Puppet?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Classes are named blocks in a manifest that configure various node functionalities (services, files, packages). They are added to a node's catalog and executed only when explicitly invoked.</p>
+          <pre>class apache (String $version = 'latest') {
+  package { 'httpd': ensure => $version, before => File['/etc/httpd.conf'] }
+}</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q58</span>
+          What is an Ansible role?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>An Ansible role is an independent block of tasks, variables, files, and templates embedded inside a playbook. It promotes reuse and organization of automation code.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q59</span>
+          When should I use '{{ }}' in Ansible?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Always use <code>{{ }}</code> for variables <em>except</em> in conditional statements (e.g., <code>when: foo is defined</code>) since conditionals are already run through Jinja. It helps distinguish strings from undefined variables and prevents Ansible from treating lines as dictionary declarations.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q60</span>
+          What is the best way to make content reusable/redistributable in Ansible?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Roles</strong> — Manage tasks in a playbook; easily shared via Ansible Galaxy.</li>
+            <li><strong>include</strong> — Add a submodule or another file to multiple playbooks.</li>
+            <li><strong>import</strong> — Like <code>include</code> but ensures a file is added only once (prevents recursion issues).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-config">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q61</span>
+          How is Ansible different from Puppet?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">Ansible</div><div class="compare-head">Puppet</div>
+            <div class="compare-cell">Agentless installation</div><div class="compare-cell">Agent-based installation</div>
+            <div class="compare-cell">Based on Python</div><div class="compare-cell">Based on Ruby</div>
+            <div class="compare-cell">Config files in YAML</div><div class="compare-cell">Config files in DSL</div>
+            <div class="compare-cell">No Windows support</div><div class="compare-cell">All popular OS's supported</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 6: DOCKER -->
+  <section class="section s-docker" id="docker">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Containerization — Docker</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q62</span>
+          Explain the architecture of Docker.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>Client-Server architecture</strong> — Docker Client translates commands via REST API to Docker Daemon.</li>
+            <li><strong>Docker Daemon</strong> — Accepts requests, interacts with OS to build images and run containers.</li>
+            <li><strong>Docker Image</strong> — Template of instructions used to create containers.</li>
+            <li><strong>Docker Container</strong> — Executable package of application + dependencies.</li>
+            <li><strong>Docker Registry</strong> — Service to host and distribute Docker images.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q63</span>
+          What are the advantages of Docker over virtual machines?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">Virtual Machine</div><div class="compare-head">Docker</div>
+            <div class="compare-cell">Occupies a lot of memory space</div><div class="compare-cell">Containers occupy less space</div>
+            <div class="compare-cell">Long boot-up time</div><div class="compare-cell">Short boot-up time</div>
+            <div class="compare-cell">Multiple VMs = unstable performance</div><div class="compare-cell">Better performance (single Docker engine)</div>
+            <div class="compare-cell">Difficult to scale</div><div class="compare-cell">Easy to scale up</div>
+            <div class="compare-cell">Portability issues across platforms</div><div class="compare-cell">Easily portable across platforms</div>
+            <div class="compare-cell">Data volumes cannot be shared</div><div class="compare-cell">Data volumes shared across containers</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q64</span>
+          How do you share Docker containers with different nodes?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Use <strong>Docker Swarm</strong> — a tool that creates and manages a cluster of swarm nodes. A swarm has two node types: <strong>manager node</strong> and <strong>worker nodes</strong>.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q65</span>
+          What are the commands used to create a Docker swarm?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre># Initialize manager node
+docker swarm init --advertise-addr &lt;MANAGER-IP&gt;
+
+# Add a worker node (run on the worker host with the token from init)
+docker swarm join --token &lt;TOKEN&gt; &lt;MANAGER-IP&gt;:2377</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q66</span>
+          How do you run multiple containers using a single service?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Use <strong>Docker Compose</strong>. Each container runs in isolation but can interact with others. All Docker Compose files are YAML files.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q67</span>
+          What is a Dockerfile used for?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>A Dockerfile is used to <strong>build Docker images</strong> via the <code>docker build</code> command. Once built, images are uploaded to a Docker registry, and users can pull them to create containers anywhere.</p>
+          <p>Flow: <code>Dockerfile → Docker Image → Docker Hub → Containers</code></p>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q68</span>
+          Explain the differences between Docker images and Docker containers.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">Docker Images</div><div class="compare-head">Docker Containers</div>
+            <div class="compare-cell">Templates for containers</div><div class="compare-cell">Runtime instances of an image</div>
+            <div class="compare-cell">Built using a Dockerfile</div><div class="compare-cell">Created from Docker images</div>
+            <div class="compare-cell">Stored in Docker registry/hub</div><div class="compare-cell">Stored in the Docker daemon</div>
+            <div class="compare-cell">Read-only filesystem layers</div><div class="compare-cell">Read-write filesystem layer on top</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q69</span>
+          What can be used instead of YAML for Docker Compose?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>A <strong>JSON</strong> file can be used instead of YAML:</p>
+          <pre>docker-compose -f docker-compose.json up</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q70</span>
+          How do you create a Docker container?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <pre># Pull image and create container
+docker run -t -i mysql
+
+# List running containers
+docker ps</pre>
+          <p>Docker creates the container from the image, simultaneously creating a read-write container layer on top of the image's read-only layers.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q71</span>
+          What is the difference between a registry and a repository?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="compare">
+            <div class="compare-head">Registry</div><div class="compare-head">Repository</div>
+            <div class="compare-cell">Open-source server-side service for hosting/distributing images</div><div class="compare-cell">Collection of multiple versions of Docker images</div>
+            <div class="compare-cell">Distinguishes images by tag names; e.g., Docker Hub</div><div class="compare-cell">Public or private; stored inside a registry</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q72</span>
+          What cloud platforms support Docker?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>AWS</strong> · <strong>Microsoft Azure</strong> · <strong>Google Cloud Platform</strong> · <strong>Rackspace</strong></p>
+        </div>
+      </div>
+
+      <div class="qa-card s-docker">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q73</span>
+          What is the purpose of the expose and publish commands in Docker?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>EXPOSE</strong> (Dockerfile instruction) — Documents which ports the container listens on within a Docker network. Example: <code>EXPOSE 8080</code></p>
+          <p><strong>--publish / -p</strong> (docker run flag) — Maps a host port to a container port, accessible outside Docker. Example: <code>docker run -d -p 80:80</code></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 7: MONITORING -->
+  <section class="section s-monitoring" id="monitoring">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Continuous Monitoring — Nagios</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="qa-grid">
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q74</span>
+          How does Nagios help in continuous monitoring?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Enables server monitoring and checks if they are sufficiently utilized or have task failures.</li>
+            <li>Verifies the status of servers and services.</li>
+            <li>Inspects infrastructure health.</li>
+            <li>Checks if applications are working correctly and web servers are reachable.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q76</span>
+          What is Nagios Remote Plugin Executor (NRPE)?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>NRPE enables executing Nagios plugins on remote Linux/Unix machines to monitor metrics like disk usage and CPU load. It consists of two parts:</p>
+          <ul>
+            <li><strong>check_nrpe plugin</strong> — Resides on the local monitoring machine.</li>
+            <li><strong>NRPE daemon</strong> — Runs on the remote Linux/Unix machine.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q77</span>
+          What port numbers does Nagios use for monitoring?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Port <strong>5666</strong></li>
+            <li>Port <strong>5667</strong></li>
+            <li>Port <strong>5668</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q78</span>
+          What are active and passive checks in Nagios?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>Active Checks:</strong> Initiated by the Nagios process itself; regularly scheduled. Nagios executes a plugin, which checks the host/service state and reports back.</p>
+          <p><strong>Passive Checks:</strong> Initiated by external applications/processes. Results are submitted to Nagios for processing via an external command file. Useful for monitoring services Nagios can't check directly.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q80</span>
+          Explain the main configuration file and its location in Nagios.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>The main configuration file contains directives that affect how Nagios operates. Both the Nagios process and CGIs read it.</p>
+          <pre>/usr/local/nagios/etc/resource.cfg</pre>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q81</span>
+          What is the Nagios Network Analyzer?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Provides in-depth visibility into network traffic sources and security threats.</li>
+            <li>Gives a central view of network traffic and bandwidth data.</li>
+            <li>Allows admins to gather high-level health info about the network.</li>
+            <li>Enables proactive resolution of outages, abnormal behavior, and threats.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q82</span>
+          What are the benefits of HTTP and SSL certificate monitoring with Nagios?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p><strong>HTTP monitoring:</strong> Increased availability · Fast detection of outages · Web transaction & performance monitoring.</p>
+          <p><strong>SSL certificate monitoring:</strong> Increased website availability · Frequent application availability · Increased security (alerts before certificates expire).</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q83</span>
+          Explain virtualization with Nagios.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Nagios runs on VMware, Microsoft Virtual PC, Xen, Amazon EC2, and more. It monitors: CPU usage · Memory · Networking · VM status — ensuring quick detection of failures with reduced administrative overhead.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q84</span>
+          Name the three variables that affect recursion and inheritance in Nagios.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li><strong>name</strong> — Template name; allows other definitions to inherit from this object.</li>
+            <li><strong>use</strong> — Specifies the template object to inherit properties/variables from.</li>
+            <li><strong>register</strong> — Indicates whether the object definition should be registered with Nagios [0/1].</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q85</span>
+          Why is Nagios said to be object-oriented?
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Nagios uses an <strong>object configuration format</strong> that allows object definitions to inherit properties from other definitions, similar to OOP inheritance. Object types include: Services · Hosts · Commands · Time Periods.</p>
+        </div>
+      </div>
+
+      <div class="qa-card s-monitoring">
+        <button class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q86</span>
+          Explain what state stalking is in Nagios.
+          <span class="q-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <ul>
+            <li>Used for logging purposes — when enabled, Nagios watches a host/service very carefully.</li>
+            <li>Logs any changes it sees in the output of check results.</li>
+            <li>Helps in the analysis of log files for troubleshooting.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  DevOps Interview Guide &nbsp;·&nbsp; 86 Questions &nbsp;·&nbsp; Based on Simplilearn content
+</footer>
+
+<script>
+  function toggle(btn) {
+    const card = btn.closest('.qa-card');
+    card.classList.toggle('open');
+  }
+
+  // Smooth scroll for nav pills
+  document.querySelectorAll('.nav-pill').forEach(pill => {
+    pill.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(pill.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
