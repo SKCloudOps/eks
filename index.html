@@ -252,7 +252,7 @@
         <button type="button" class="nav-close" aria-label="Close menu" id="nav-close">×</button>
       </div>
 
-      <a href="#section-01">01 Introduction</a>
+      <a href="#section-01">01 Introduction & Foundations</a>
       <a href="#section-02">02 Core Concepts</a>
       <a href="#section-03">03 Scheduling</a>
       <a href="#section-04">04 Logging & Monitoring</a>
@@ -261,15 +261,14 @@
       <a href="#section-07">07 Security</a>
       <a href="#section-08">08 Storage</a>
       <a href="#section-09">09 Networking</a>
-      <a href="#section-10">10 Design & Install</a>
-      <a href="#section-11">11 kubeadm</a>
-      <a href="#section-12">12 Troubleshooting</a>
-      <a href="#section-13">13 Other Topics</a>
-      <a href="#section-14">14 Playground & Labs</a>
-      <a href="#section-15">15 Mock Exams</a>
-      <a href="#section-16">16 Ultimate Mocks</a>
-      <a href="#section-17">17 Tips & Tricks</a>
-      <a href="#section-18">18 Cheat Sheet</a>
+      <a href="#section-10">10 Cluster Design & Installation</a>
+      <a href="#section-11">11 kubeadm Installation</a>
+      <a href="#section-12">12 Helm</a>
+      <a href="#section-13">13 Kustomize</a>
+      <a href="#section-14">14 Troubleshooting</a>
+      <a href="#section-15">15 Advanced Kubectl & JSON Path</a>
+      <a href="#section-16">16 Practice & Exam Preparation</a>
+      <a href="#section-17">17 Cheat Sheet</a>
 
     </nav>
     <main>
@@ -278,8 +277,20 @@
         <p class="subtitle">Complete reference guide for the CKA exam. Use the navigation to jump between topics.</p>
       </header>
 
-      <!-- 01 Introduction -->
-      <h2 id="section-01">01 — Introduction</h2>
+      <!-- 01 Introduction & Foundations -->
+      <h2 id="section-01">01 — Introduction & Foundations</h2>
+
+      <div class="cka-definition">
+        <div class="cka-def-term">CKA — Certified Kubernetes Administrator</div>
+        <div class="cka-def-body">A performance-based certification from the Linux Foundation / CNCF that validates your ability to perform Kubernetes administration tasks. The exam is 2 hours, uses live clusters, and allows access to official Kubernetes documentation. Passing score: 66%.</div>
+      </div>
+
+      <h3>Course Introduction</h3>
+      <p>This study guide aligns with the full CKA curriculum. It covers cluster architecture, workloads, networking, storage, security, and troubleshooting with commands, YAML examples, and CKA-focused definitions.</p>
+
+      <h3>Certification Overview</h3>
+      <p>The CKA is part of the <strong>Kubernetes Trilogy</strong>: CKA (Administrator), CKAD (Application Developer), and CKS (Security Specialist). Use code <code>KUBERNETES15</code> for a 15% discount at registration.</p>
+
       <h3>Course focus</h3>
       <p>This material focuses on the <strong>administration</strong> part of Kubernetes, aligned with the CKA exam.</p>
       <h4>Pre-requisites</h4>
@@ -301,17 +312,42 @@
         <li><strong>Troubleshooting</strong> (30%): Application, control plane, worker nodes, network.</li>
         <li>Plus: Security (RBAC, TLS, kubeconfig, NetworkPolicies), Logging/Monitoring, Application Lifecycle
           (rollouts, ConfigMaps, Secrets).</li>
-        <li><strong>2025 curriculum additions:</strong> Helm and Kustomize for cluster components; Gateway API (with
-          Ingress); CRDs and operators; extension interfaces (CNI, CSI, CRI); CoreDNS; workload autoscaling (HPA);
-          PodDisruptionBudgets. See sections 05, 06, 09, and 13.</li>
+        <li><strong>2025 curriculum additions:</strong> Helm and Kustomize for cluster components (sections 12, 13); Gateway API with Ingress; CRDs and operators; extension interfaces (CNI, CSI, CRI); CoreDNS; workload autoscaling (HPA); PodDisruptionBudgets.</li>
       </ul>
+      <h3>Course Release Notes</h3>
+      <p>This guide aligns with the CKA 2025–2026 curriculum. Updates include: Helm & Kustomize (sections 12–13), Gateway API, Admission Controllers, HPA/VPA, PodDisruptionBudgets, CoreDNS, and extension interfaces (CNI, CSI, CRI).</p>
+
       <h3>Certification</h3>
       <p>Certified Kubernetes Administrator (CKA): exam curriculum, candidate handbook, and exam tips are published by
         the Linux Foundation / CNCF. Use code <code>KUBERNETES15</code> when registering for CKA or CKAD for a 15%
         discount.</p>
 
+      <h3>The Kubernetes Trilogy</h3>
+      <p>CKA (Administrator) → CKAD (Application Developer) → CKS (Security Specialist). Each builds on the previous; CKA is the foundation for cluster operations.</p>
+
+      <h3>Notes & Resources</h3>
+      <p>Use the notes panel (N) in this guide to capture your own notes per section. Bookmark <a href="https://kubernetes.io/docs/" target="_blank" rel="noopener">kubernetes.io/docs</a> for the exam.</p>
+
+      <h3>FAQ</h3>
+      <ul>
+        <li><strong>How long is the CKA exam?</strong> 2 hours, performance-based.</li>
+        <li><strong>Can I use documentation?</strong> Yes, one tab to kubernetes.io/docs.</li>
+        <li><strong>Passing score?</strong> 66%.</li>
+        <li><strong>What's next after CKA?</strong> CKAD (Application Developer) or CKS (Security Specialist).</li>
+      </ul>
+
       <!-- 02 Core Concepts -->
       <h2 id="section-02">02 — Core Concepts</h2>
+
+      <div class="cka-definition">
+        <div class="cka-def-term">Control Plane</div>
+        <div class="cka-def-body">The brain of the cluster. Hosts kube-apiserver, etcd, kube-scheduler, kube-controller-manager, and optionally cloud-controller-manager. Manages cluster state, scheduling, and reconciliation. Can run as static pods or systemd services.</div>
+      </div>
+
+      <div class="cka-definition">
+        <div class="cka-def-term">Worker Node</div>
+        <div class="cka-def-body">A machine (VM or bare metal) that runs your workloads. Runs kubelet, kube-proxy, and a container runtime (containerd/CRI-O). Hosts Pods and communicates with the control plane via the API server.</div>
+      </div>
 
       <h3>Cluster Architecture</h3>
       <p>A Kubernetes cluster consists of a <strong>Control Plane</strong> (the brain) and <strong>Worker Nodes</strong>
@@ -332,21 +368,30 @@
         is designed to scale horizontally.
       </p>
 
-      <h4>etcd</h4>
+      <h4>Kube API Server</h4>
+      <p>Same as kube-apiserver — the front-end API for the cluster. All components communicate through it.</p>
+
+      <h4>etcd / ETCD in Kubernetes</h4>
+      <div class="cka-definition">
+        <div class="cka-def-term">etcd</div>
+        <div class="cka-def-body">Distributed key-value store used as Kubernetes' backing store. Uses RAFT consensus. Only kube-apiserver talks to etcd. CKA exam: know <code>etcdctl</code>/<code>etcdutl</code> for snapshot backup/restore, <code>--endpoints</code>, and <code>ETCDCTL_API=3</code>.</div>
+      </div>
       <p>A consistent and highly-available <strong>key-value store</strong> used as Kubernetes' backing store for all
         cluster data.
         <br><em>Pro Tip:</em> It uses the <strong>RAFT algorithm</strong> for consensus. It is the "single source of
         truth" — if data is in etcd, it exists; otherwise, it does not.
       </p>
+      <h4>ETCD Commands</h4>
+      <p>Use <code>etcdctl</code> (etcd v3) or <code>etcdutl</code> for snapshots. Set <code>ETCDCTL_API=3</code>. See Cluster Maintenance for backup/restore.</p>
 
-      <h4>kube-scheduler</h4>
+      <h4>Kube Scheduler</h4>
       <p>Watches for newly created Pods with no assigned node and selects a node for them to run on.
         <br><em>Process:</em>
         <br>1. <strong>Filtering:</strong> Ruling out nodes that don't meet requirements (CPU/RAM, Taints, Affinity).
         <br>2. <strong>Scoring:</strong> Ranking the remaining nodes to find the best fit.
       </p>
 
-      <h4>kube-controller-manager</h4>
+      <h4>Kube Controller Manager</h4>
       <p>A daemon that runs controller processes. Logically, each controller is a separate process, but they are
         compiled into a single binary.
         <br><em>Responsibility:</em> <strong>Reconciliation Loop</strong>. It continuously watches the <em>current
@@ -361,14 +406,14 @@
 
       <h3>Node Components</h3>
 
-      <h4>kubelet</h4>
+      <h4>Kubelet</h4>
       <p>An agent that runs on each node. It registers the node with the API server and ensures that containers are
         running in a Pod.
         <br><em>Mechanism:</em> It takes a set of PodSpecs (from API server or static files) and ensures the containers
         described are running and healthy. It does <strong>not</strong> manage containers not created by Kubernetes.
       </p>
 
-      <h4>kube-proxy</h4>
+      <h4>Kube Proxy</h4>
       <p>A network proxy running on each node. It maintains network rules that allow network communication to your Pods
         from inside or outside the cluster.
         <br><em>Implementation:</em> Commonly uses <strong>iptables</strong> or <strong>IPVS</strong> to forward traffic
@@ -381,6 +426,8 @@
       </p>
 
       <h3>Docker vs ContainerD (CRI)</h3>
+      <h4>Docker Deprecation Note</h4>
+      <p>Kubernetes v1.24+ no longer supports Docker Engine as a container runtime. Docker images still work — they use the OCI format. Use containerd or CRI-O instead.</p>
       <p><strong>Fact:</strong> Kubernetes removed the "dockershim" in v1.24. This means Kubernetes can no longer use
         the Docker Engine directly as a runtime. It now uses <strong>containerd</strong> or <strong>CRI-O</strong> via
         the CRI.</p>
@@ -414,6 +461,10 @@ crictl inspect &lt;container-id&gt;       # deep dive into container status</cod
       <h3>Workloads</h3>
 
       <h4>Pods</h4>
+      <div class="cka-definition">
+        <div class="cka-def-term">Pod</div>
+        <div class="cka-def-body">Smallest deployable unit. One or more containers sharing network and storage. Ephemeral — when a pod dies, it is not resurrected; a controller creates a new one. CKA: use <code>kubectl run ... --dry-run=client -o yaml</code> to generate YAML fast.</div>
+      </div>
       <p>The smallest deployable object in Kubernetes. A Pod determines how to run a container.
         <br><em>Key Concept:</em> Containers in a pod share the <strong>same network namespace</strong> (IP address),
         storage volumes, and process namespace (sometimes).
@@ -425,6 +476,8 @@ crictl inspect &lt;container-id&gt;       # deep dive into container status</cod
         <figcaption>Pod lifecycle: <strong>Pending</strong> (waiting for scheduling) &rarr; <strong>Running</strong> (containers running) &rarr; <strong>Succeeded</strong> / <strong>Failed</strong> / <strong>Unknown</strong>.</figcaption>
       </figure>
 
+      <h4>Pods with YAML</h4>
+      <p>Define pods in YAML with <code>apiVersion</code>, <code>kind: Pod</code>, <code>metadata</code>, and <code>spec.containers</code>. Use <code>kubectl apply -f pod.yaml</code> or generate with <code>kubectl run ... --dry-run=client -o yaml</code>.</p>
       <div class="snippet-label">Run a pod (imperative)</div>
       <pre><code>kubectl run nginx --image nginx
 kubectl get pods -wide</code></pre>
@@ -435,6 +488,10 @@ kubectl get pods -wide</code></pre>
       </p>
 
       <h4>Deployments</h4>
+      <div class="cka-definition">
+        <div class="cka-def-term">Deployment</div>
+        <div class="cka-def-body">Manages ReplicaSets for stateless apps. Declarative updates: rolling update, rollback. CKA: <code>kubectl rollout status/history/undo</code>, <code>kubectl set image</code>, <code>kubectl scale</code>. Deployment creates ReplicaSet which creates Pods.</div>
+      </div>
       <p>The standard way to manage stateless applications. A Deployment manages ReplicaSets and provides declarative
         updates (Rolling Updates, Rollbacks).
         <br><em>Capabilities:</em> Scaling, pausing/resuming updates, rolling back to previous revisions.
@@ -444,15 +501,23 @@ kubectl get pods -wide</code></pre>
       <pre><code>kubectl create deployment webapp --image=nginx --replicas=3
 kubectl get deploy,rs,po</code></pre>
 
+      <h4>Scaling Applications</h4>
       <p>Scale: <code>kubectl scale --replicas=5 deployment/webapp</code> or edit via
-        <code>kubectl edit deploy webapp</code>.
+        <code>kubectl edit deploy webapp</code>. HPA for auto-scaling (see Application Lifecycle).
       </p>
       <figure class="diagram">
         <img src="assets/k8s-deployment-replicaset-pod.png" alt="Workloads hierarchy: Deployment → ReplicaSet → Pod" width="400" height="200" style="max-width:100%;height:auto;display:block;">
         <figcaption><strong>Workloads hierarchy:</strong> Deployment manages ReplicaSets; ReplicaSet maintains pod count via selector; Pod runs containers.</figcaption>
       </figure>
 
-      <h3>Imperative commands — exam speed reference</h3>
+      <h3>Kubectl & Configuration</h3>
+      <h4>Imperative vs Declarative</h4>
+      <p>Imperative: <code>kubectl run</code>, <code>kubectl create</code> — direct commands. Declarative: <code>kubectl apply -f file.yaml</code> — desired state in YAML. Exam tip: use imperative with <code>--dry-run=client -o yaml</code> to generate, then edit.</p>
+      <h4>Kubectl Explain</h4>
+      <p>Documentation in terminal: <code>kubectl explain pod</code>, <code>kubectl explain pod.spec.containers</code>. Use <code>--recursive</code> for full structure.</p>
+      <h4>Kubectl Apply</h4>
+      <p>Declarative updates: <code>kubectl apply -f file.yaml</code>. Creates or updates resources. Use <code>-f -</code> to read from stdin.</p>
+      <h4>Imperative commands — exam speed reference</h4>
       <p>In the CKA exam, speed matters. Use imperative commands with <code>--dry-run=client -o yaml</code> to
         generate
         YAML quickly, then edit as needed.</p>
@@ -510,6 +575,10 @@ kubectl edit deployment nginx
 kubectl replace --force -f pod.yaml</code></pre>
 
       <h3>Namespaces</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Namespace</div>
+        <div class="cka-def-body">Virtual cluster within a physical cluster. Isolates resources; most objects are namespaced. System namespaces: <code>kube-system</code>, <code>kube-public</code>, <code>kube-node-lease</code>. CKA: <code>-n</code>/<code>--namespace</code>, <code>--all-namespaces</code>, <code>kubectl config set-context --current --namespace=dev</code>.</div>
+      </div>
       <p>Objects live in a namespace (default is <code>default</code>). List pods in a namespace:
         <code>kubectl get pods --namespace=kube-system</code> or <code>-n kube-system</code>. Create in a namespace:
         <code>kubectl create -f pod-definition.yaml --namespace=dev</code>. Add <code>namespace: dev</code> under
@@ -543,8 +612,17 @@ spec:
       <pre><code>kubectl create -f compute-quota.yaml</code></pre>
 
       <h3>Services</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Service</div>
+        <div class="cka-def-body">Abstracts a set of Pods behind a stable network endpoint. Types: ClusterIP (internal VIP, default), NodePort (node IP + port 30000–32767), LoadBalancer (cloud LB). Selector matches Pod labels to form Endpoints.</div>
+      </div>
+      <h4>Services & Networking Basics</h4>
       <p>Three types: <strong>NodePort</strong> (expose on node port), <strong>ClusterIP</strong> (virtual IP inside
         cluster), <strong>LoadBalancer</strong> (cloud load balancer).</p>
+      <h4>ClusterIP</h4>
+      <p>Default type. Internal VIP; only reachable from within the cluster. Use for backend services.</p>
+      <h4>LoadBalancer</h4>
+      <p>Cloud-provider LB; creates external IP. Requires cloud integration (e.g. AWS ELB, GCP LB).</p>
       <div class="snippet-label">NodePort service</div>
       <pre><code>apiVersion: v1
 kind: Service
@@ -746,6 +824,10 @@ kubectl get pods -L app,env    # show specific labels as columns</code></pre>
       </p>
 
       <h3>Taints and Tolerations</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Taints & Tolerations</div>
+        <div class="cka-def-body"><strong>Taints</strong> on nodes repel pods; <strong>tolerations</strong> on pods allow them onto tainted nodes. Effects: NoSchedule (block new), PreferNoSchedule (soft avoid), NoExecute (block + evict existing). CKA: <code>kubectl taint nodes node01 key=value:NoSchedule</code>, remove with <code>key=value:NoSchedule-</code>.</div>
+      </div>
       <p>Taints on <strong>nodes</strong> repel pods. Tolerations on <strong>pods</strong> allow them onto tainted
         nodes. Think of taints as a &ldquo;keep out&rdquo; sign on the node and tolerations as a &ldquo;VIP
         pass&rdquo; on the pod.</p>
@@ -820,7 +902,7 @@ spec:
       <pre><code># Remove the control-plane taint (single-node clusters)
 kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-</code></pre>
 
-      <h3>nodeSelector</h3>
+      <h3>Node Selectors</h3>
       <p>The simplest form of node selection constraint. Label a node, then reference those labels with
         <code>nodeSelector</code> in the pod spec. The scheduler only considers nodes that match
         <strong>all</strong> the specified labels.
@@ -951,8 +1033,12 @@ spec:
         <li><strong>Step 3 &mdash; Pod spec:</strong> Add both a toleration for the taint AND a node affinity rule
           for the label. This ensures <em>only</em> your pods can run there, and they always prefer that node.</li>
       </ul>
+      <h4>Taints vs Affinity</h4>
+      <p>Taints <em>repel</em> pods (unless tolerated); Affinity <em>attracts</em> pods to nodes. Use both for dedicated nodes: taint to block others, affinity to pull your workload.</p>
 
-      <h3>Resource Requirements and Limits</h3>
+      <h3>Resource Limits</h3>
+      <h4>Editing Pods & Deployments</h4>
+      <p>Use <code>kubectl edit deployment &lt;name&gt;</code> or <code>kubectl edit pod &lt;name&gt;</code>. For immutable pod fields, delete and recreate. Deployments support in-place edits (triggers rollout).</p>
       <p><strong>Requests</strong> &mdash; the <em>guaranteed</em> allocation. The scheduler uses requests to decide
         which node has enough capacity.<br>
         <strong>Limits</strong> &mdash; the <em>maximum</em> a container can consume at runtime.
@@ -1074,6 +1160,10 @@ kubectl describe resourcequota compute-quota -n dev
 
 
       <h3>DaemonSets</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">DaemonSet</div>
+        <div class="cka-def-body">Ensures one pod per node (or subset via nodeSelector). Used for log collectors, node monitoring, CNI, CSI node plugin. Auto-deploys to new nodes. CKA: <code>kubectl get ds</code>, tolerations for control-plane nodes, <code>nodeSelector</code> for GPU-only nodes.</div>
+      </div>
       <p>Ensures <strong>exactly one copy of a Pod</strong> runs on every node (or a subset of nodes selected via
         <code>nodeSelector</code> or node affinity). When a new node is added to the cluster, the DaemonSet
         controller automatically creates a pod on it. When a node is removed, the pod is garbage collected.
@@ -1149,6 +1239,10 @@ kubectl get pods -l app=monitoring-daemon -o wide
 kubectl rollout undo daemonset monitoring-daemon -n kube-system</code></pre>
 
       <h3>Static Pods</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Static Pod</div>
+        <div class="cka-def-body">Managed by kubelet from a manifest directory (<code>/etc/kubernetes/manifests/</code>). Not created by API server; appear as mirror pods. Control-plane components run as static pods via kubeadm. To delete: remove manifest file. CKA: check <code>staticPodPath</code> in kubelet config.</div>
+      </div>
       <p>Pods managed <strong>directly by the kubelet</strong> on a specific node, without going through the API
         server or any controller. The kubelet watches a local manifest directory and automatically creates/deletes
         pods based on the YAML files it finds there.</p>
@@ -1427,9 +1521,26 @@ spec:
   - name: app
     image: nginx</code></pre>
 
+      <h3>Admission Controllers (2025)</h3>
+      <h4>Validating Admission Controllers</h4>
+      <p>Validate requests; accept or reject. Examples: PodSecurity, ResourceQuota, LimitRanger.</p>
+      <h4>Mutating Admission Controllers</h4>
+      <p>Modify objects before persistence. Examples: DefaultStorageClass, ServiceAccount injection.</p>
+      <div class="cka-definition">
+        <div class="cka-def-term">Admission Controller</div>
+        <div class="cka-def-body">Intercepts requests to the API server after authentication/authorization, before persistence. <strong>Validating:</strong> accept or reject (e.g., PodSecurity, ResourceQuota). <strong>Mutating:</strong> modify objects (e.g., DefaultStorageClass, ServiceAccount). CKA: know they run in-order; use <code>kube-apiserver --enable-admission-plugins</code>.</div>
+      </div>
+      <p>Admission controllers enforce cluster policies. <strong>Validating</strong> controllers only validate (e.g., <code>PodSecurity</code>, <code>LimitRanger</code>). <strong>Mutating</strong> controllers can modify objects (e.g., <code>DefaultStorageClass</code>, inject default values). Configure via <code>--enable-admission-plugins</code> and <code>--disable-admission-plugins</code> on kube-apiserver.</p>
+
       <!-- 04 Logging & Monitoring -->
       <h2 id="section-04">04 — Logging and Monitoring</h2>
-      <h3>Application logs</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Logging & Monitoring (CKA)</div>
+        <div class="cka-def-body">Application logs via <code>kubectl logs</code> (stdout/stderr). Use <code>--previous</code> for crashed containers. Cluster metrics: <strong>Metrics Server</strong> powers <code>kubectl top nodes/pods</code>. HPA requires Metrics Server for CPU-based scaling.</div>
+      </div>
+      <h3>Monitor Cluster Components</h3>
+      <p>Check control-plane pods: <code>kubectl get pods -n kube-system</code>. For node metrics: <code>kubectl top nodes</code>. Verify scheduler, API server, etcd are running.</p>
+      <h3>Managing Application Logs</h3>
       <p>Container stdout/stderr are captured by kubelet and exposed via the API. Use <code>kubectl logs</code>. For a
         <strong>multi-container</strong> pod you must specify the container name.
       </p>
@@ -1447,9 +1558,10 @@ kubectl logs &lt;pod-name&gt; -f --previous</code></pre>
 
       <!-- 05 Application Lifecycle -->
       <h2 id="section-05">05 — Application Lifecycle Management</h2>
-      <h3>Rolling updates and rollback</h3>
-      <p>Deployment strategies: <strong>Recreate</strong> (all down then up), <strong>RollingUpdate</strong>
-        (default).
+      <h3>Deployment Strategies</h3>
+      <p><strong>RollingUpdate</strong> (default): Gradually replace old pods. <strong>Recreate</strong>: Kill all, then create new. Configure via <code>spec.strategy</code>.</p>
+      <h3>Rolling Updates</h3>
+      <p>Gradually replace old ReplicaSet pods with new ones. Configure <code>maxSurge</code> and <code>maxUnavailable</code>.
       </p>
       <figure class="diagram">
         <img src="assets/k8s-rolling-update.png" alt="Rolling update: gradually replace old ReplicaSet with new" width="540" height="160" style="max-width:100%;height:auto;display:block;">
@@ -1460,8 +1572,17 @@ kubectl rollout history deployment/myapp-deployment
 kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
 kubectl apply -f deployment-definition.yaml
 kubectl rollout undo deployment/myapp-deployment</code></pre>
+      <h3>Rollbacks</h3>
+      <p><code>kubectl rollout undo deployment/&lt;name&gt;</code>. Check history: <code>kubectl rollout history</code>.</p>
+      <h3>Scaling</h3>
+      <p><code>kubectl scale deployment/&lt;name&gt; --replicas=N</code>. Or edit <code>spec.replicas</code> and apply.</p>
 
-      <h3>ConfigMaps</h3>
+      <h3>Application Configuration</h3>
+      <h4>ConfigMaps</h4>
+      <div class="cka-definition">
+        <div class="cka-def-term">ConfigMap</div>
+        <div class="cka-def-body">Stores non-sensitive config as key-value pairs. Inject via <code>env</code>, <code>envFrom</code>, or volume mount. CKA: <code>kubectl create configmap x --from-literal=K=V</code>, <code>--from-file</code>, <code>configMapKeyRef</code>/<code>configMapRef</code> in pod spec.</div>
+      </div>
       <p>Create: imperative
         <code>kubectl create configmap app-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod</code> or
         from file <code>--from-file=app_config.properties</code>.
@@ -1494,6 +1615,10 @@ spec:
         name: app-config</code></pre>
 
       <h3>Secrets</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Secret</div>
+        <div class="cka-def-body">Stores sensitive data (base64-encoded in YAML). Types: generic, tls, docker-registry. Inject via <code>secretKeyRef</code>/<code>secretRef</code>. CKA: <code>kubectl create secret generic x --from-literal=K=V</code>, <code>secret tls</code> for Ingress. Enable encryption at rest for prod.</div>
+      </div>
       <p>Store sensitive data (base64 in YAML). Create:
         <code>kubectl create secret generic app-secret --from-literal=DB_Host=mysql --from-literal=DB_User=root --from-literal=DB_Password=paswrd</code>.
         Encode for YAML: <code>echo -n "paswrd" | base64</code>.
@@ -1513,8 +1638,11 @@ kubectl get secret app-secret -o yaml</code></pre>
       <p>Decode: <code>echo -n "bX1zcWw=" | base64 --decode</code>. Inject into pod with
         <code>envFrom: - secretRef: name: app-secret</code> (same structure as configMapRef).
       </p>
+      <h4>Encrypting Secrets at Rest</h4>
+      <p>Enable encryption in <code>kube-apiserver</code> via <code>--encryption-provider-config</code>. Define which resources (e.g. secrets) are encrypted. CKA: know the concept; config is in a YAML file.</p>
 
-      <h3>Commands and arguments</h3>
+      <h4>Commands & Arguments (Docker)</h4>
+      <p>Docker: <code>ENTRYPOINT</code> + <code>CMD</code>. Kubernetes <code>command</code> overrides ENTRYPOINT, <code>args</code> overrides CMD.</p>
       <p>Override image <strong>CMD</strong> with <code>command</code> (args to entrypoint) and
         <strong>ENTRYPOINT</strong> with <code>args</code> in the container spec. In Kubernetes, <code>command</code>
         corresponds to Docker ENTRYPOINT and <code>args</code> to CMD. Example: <code>command: ["sleep"]</code>,
@@ -1535,7 +1663,7 @@ spec:
     image: ubuntu
     command: ["sleep"]    # overrides ENTRYPOINT
     args: ["5000"]        # overrides CMD</code></pre>
-      <h3>Environment variables</h3>
+      <h3>Environment Variables</h3>
       <p>Set env vars directly, from ConfigMaps, or from Secrets. Three injection methods:</p>
       <pre><code>containers:
 - name: app
@@ -1557,7 +1685,9 @@ spec:
         name: app-secret
         key: DB_Password</code></pre>
 
-      <h3>Multi-container pod design patterns</h3>
+      <h3>Pod Design</h3>
+      <h3>Multi-Container Pods</h3>
+      <h4>Multi-Container Design Patterns</h4>
       <p>CKA tests multi-container pods. Three main patterns:</p>
       <figure class="diagram">
         <img src="assets/k8s-multi-container-patterns.png" alt="Multi-container patterns: Sidecar, Ambassador, Adapter" width="540" height="140" style="max-width:100%;height:auto;display:block;">
@@ -1596,6 +1726,10 @@ spec:
   - name: log-volume
     emptyDir: {}</code></pre>
       <h3>Init containers</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Init Container</div>
+        <div class="cka-def-body">Runs to completion before main containers start. Runs sequentially; if one fails, pod restarts. Use for setup (clone repo, wait for DB). CKA: <code>initContainers</code> in pod spec, ordered execution, shared volumes with main containers.</div>
+      </div>
       <p>Run to completion before main containers start. Use for one-time setup or waiting for dependencies. If an
         init
         container fails, the pod is restarted (all init containers re-run). Order: initContainers run sequentially;
@@ -1624,7 +1758,9 @@ spec:
     image: busybox:1.28
     command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']</code></pre>
 
-      <h3>Liveness and readiness probes</h3>
+      <h3>Self-Healing</h3>
+      <p>Liveness and readiness probes make deployments self-healing. Liveness restarts unhealthy containers; readiness removes from Service endpoints until ready.</p>
+      <h4>Liveness and readiness probes</h4>
       <p>Probes make deployments <strong>self-healing</strong>. <strong>livenessProbe</strong>: if it fails, the
         container is restarted. <strong>readinessProbe</strong>: if it fails, the pod is removed from Service
         endpoints
@@ -1652,7 +1788,20 @@ spec:
     initialDelaySeconds: 5
     periodSeconds: 10</code></pre>
 
+      <h3>Autoscaling (2025)</h3>
+      <h4>Introduction to Autoscaling</h4>
+      <p>HPA scales replicas by CPU/custom metrics. VPA adjusts resource requests. Manual scaling via <code>kubectl scale</code>.</p>
+      <h4>Manual Scaling</h4>
+      <p><code>kubectl scale deployment/&lt;name&gt; --replicas=N</code>.</p>
+      <h4>In-Place Resize</h4>
+      <p>Kubernetes 1.27+: resize CPU/memory without restart. Update <code>resources</code> in pod spec; kubelet applies if supported.</p>
+      <h4>Vertical Pod Autoscaler (VPA)</h4>
+      <p>Recommends or auto-updates resource requests/limits based on usage. Install VPA controller; create VPA resource targeting deployment.</p>
       <h3>HorizontalPodAutoscaler (HPA)</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">HPA (Horizontal Pod Autoscaler)</div>
+        <div class="cka-def-body">Scales Deployment/ReplicaSet based on CPU or custom metrics. Requires Metrics Server. Set <code>resources.requests</code> on deployment. CKA: <code>kubectl autoscale deploy x --min=2 --max=10 --cpu-percent=80</code>, <code>kubectl get hpa</code>. VPA (Vertical Pod Autoscaler) adjusts CPU/memory requests.</div>
+      </div>
       <p><strong>Workload autoscaling</strong>: HPA scales a Deployment/ReplicaSet based on CPU (or custom metrics).
         Requires <strong>Metrics Server</strong> in the cluster for <code>kubectl top</code> and CPU-based scaling.
         Set
@@ -1683,6 +1832,19 @@ kubectl describe hpa myapp-hpa</code></pre>
 
       <!-- 06 Cluster Maintenance -->
       <h2 id="section-06">06 — Cluster Maintenance</h2>
+      <h3>OS Upgrades</h3>
+      <p>Drain node before upgrade: <code>kubectl drain &lt;node&gt; --ignore-daemonsets --delete-emptydir-data</code>. Perform OS updates. Uncordon: <code>kubectl uncordon &lt;node&gt;</code>.</p>
+      <h3>Kubernetes Releases</h3>
+      <p>Upgrade one minor version at a time. Control plane first, then workers. Use <code>kubeadm upgrade</code>.</p>
+      <h3>Cluster Upgrade Process</h3>
+      <p>1. Upgrade kubeadm. 2. <code>kubeadm upgrade plan</code> and <code>kubeadm upgrade apply</code>. 3. Upgrade kubelet and kubectl. 4. Restart kubelet.</p>
+      <h3>Backup & Restore Methods</h3>
+      <p>Backup etcd before upgrades. Use <code>etcdctl snapshot save</code> or <code>etcdutl snapshot save</code>. Restore with <code>etcdutl snapshot restore</code>. See ETCDCTL & ETCDUTL below.</p>
+      <h3>ETCDCTL & ETCDUTL</h3>
+      <pre><code>ETCDCTL_API=3 etcdctl snapshot save snapshot.db --endpoints=...
+etcdutl snapshot restore snapshot.db --data-dir=/var/lib/etcd-restore</code></pre>
+      <h3>Certification Tips</h3>
+      <p>Set aliases at exam start. Use imperative + dry-run for YAML. Verify answers. Don't get stuck — flag and move on.</p>
       <h3>OS upgrades and node maintenance</h3>
       <p><strong>Important:</strong> If a node is down for <strong>more than 5 minutes</strong>, the control plane may
         terminate pods that were on that node (they will be recreated elsewhere if managed by a controller).</p>
@@ -1766,14 +1928,20 @@ kubectl describe pdb myapp-pdb</code></pre>
 
       <!-- 07 Security -->
       <h2 id="section-07">07 — Security</h2>
+      <div class="cka-definition">
+        <div class="cka-def-term">RBAC</div>
+        <div class="cka-def-body">Role-Based Access Control. Defines who can do what via Roles/ClusterRoles (permissions) and RoleBindings/ClusterRoleBindings (who gets them). CKA: create Role (namespace-scoped), ClusterRole (cluster-wide), bind to User/Group/ServiceAccount. <code>kubectl auth can-i --as=user get pods</code>.</div>
+      </div>
 
-      <h3>Kubernetes security primitives</h3>
+      <h3>Security Fundamentals</h3>
+      <h3>Kubernetes Security Primitives</h3>
       <p>Security starts with the <strong>API server</strong> — it is the gatekeeper. Two key questions: <strong>who
           can
           access?</strong> (authentication) and <strong>what can they do?</strong> (authorization). All access goes
         through the API server, making it the single chokepoint for security.</p>
 
       <h3>Authentication</h3>
+      <h3>Authorization</h3>
       <p>Kubernetes does <strong>not</strong> manage user accounts natively (no User object). It relies on external
         mechanisms. Two types of accounts:</p>
       <ul>
@@ -1810,7 +1978,10 @@ spec:
         <code>kubernetes.io/service-account.name</code>.
       </p>
 
-      <h3>TLS in Kubernetes</h3>
+      <h3>TLS & Certificates</h3>
+      <h4>TLS Basics</h4>
+      <p>TLS provides encryption and authentication. Certificates bind identity to public key. Kubernetes uses TLS for API server, etcd, and kubelet.</p>
+      <h4>TLS in Kubernetes</h4>
       <p>Cluster components use <strong>TLS</strong>: servers use <strong>server certificates</strong>, clients use
         <strong>client certificates</strong> for authentication. API server, etcd, kubelet, and other control-plane
         components each have certs (typically under <code>/etc/kubernetes/pki/</code> on kubeadm). Certificate API can
@@ -1826,13 +1997,15 @@ spec:
         <li><code>front-proxy-ca.crt</code> — Aggregation layer</li>
       </ul>
 
-      <h3>Viewing certificates</h3>
+      <h4>Certificate Creation</h4>
+      <p>Use OpenSSL or Certificates API. For user certs: generate key + CSR, create Kubernetes CSR object, approve, extract cert.</p>
+      <h4>Certificate Inspection</h4>
       <pre><code>openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout</code></pre>
       <p>Check subject, issuer, validity (not after), SANs (Subject Alternative Names). Same for other certs in
         <code>/etc/kubernetes/pki/</code> (ca.crt, apiserver-kubelet-client.crt, etc.).
       </p>
 
-      <h3>Certificate API — CSR workflow</h3>
+      <h4>Certificates API</h4>
       <p>Kubernetes has a built-in <strong>Certificate Signing Request (CSR)</strong> API for issuing client
         certificates. The controller manager signs the certificates using the cluster CA.</p>
       <div class="snippet-label">Create and approve a user certificate</div>
@@ -1873,7 +2046,13 @@ kubectl get pods --kubeconfig config</code></pre>
       <p>To set default namespace for current context:
         <code>kubectl config set-context $(kubectl config current-context) --namespace=dev</code>.
       </p>
-      <h3>RBAC — Role and RoleBinding</h3>
+      <h3>API Groups</h3>
+      <p>Kubernetes API is organized into groups: <code>core</code> (v1), <code>apps</code>, <code>networking.k8s.io</code>, etc. Resources like Pods are in core; Deployments in apps/v1.</p>
+      <h3>KubeConfig</h3>
+      <p>Stores clusters, users, contexts. File: <code>~/.kube/config</code>. <code>kubectl config use-context</code> switches context. Each exam question may use a different context.</p>
+      <h3>Access Control</h3>
+      <h3>Role-Based Access Control (RBAC)</h3>
+      <h4>Roles</h4>
       <p>Role: apiGroups, resources, verbs. RoleBinding: links subject (user/group/serviceaccount) to Role. Both are
         namespace-scoped.</p>
       <pre><code>apiVersion: rbac.authorization.k8s.io/v1
@@ -1907,7 +2086,9 @@ kubectl describe role developer
 kubectl describe rolebinding devuser-developer-binding
 kubectl auth can-i create pods --as=dev-user -n default</code></pre>
 
-      <h3>ClusterRole and ClusterRoleBinding</h3>
+      <h4>RoleBindings</h4>
+      <p>RoleBinding links a Role to a subject (user, group, ServiceAccount). Scope: same namespace as RoleBinding.</p>
+      <h4>ClusterRoles</h4>
       <p>ClusterRole can define access to cluster-scoped resources (e.g. nodes) or to namespaced resources across all
         namespaces.</p>
       <pre><code>apiVersion: rbac.authorization.k8s.io/v1
@@ -1935,7 +2116,12 @@ kubectl create -f cluster-admin-role-binding.yaml
 kubectl api-resources --namespaced=true
 kubectl api-resources --namespaced=false</code></pre>
 
-      <h3>Network policy</h3>
+      <h3>Network Security</h3>
+      <h4>Network Policies</h4>
+      <div class="cka-definition">
+        <div class="cka-def-term">NetworkPolicy</div>
+        <div class="cka-def-body">Controls ingress/egress to pods by selector. Requires CNI with policy support (Calico, Cilium). Default: allow all. Once a policy selects a pod, traffic not explicitly allowed is denied. CKA: <code>podSelector</code>, <code>policyTypes</code> (Ingress, Egress), <code>from</code>/<code>to</code> (podSelector, namespaceSelector, ipBlock).</div>
+      </div>
       <p>Controls ingress/egress to pods by selector. Default: no restrictions. Once a NetworkPolicy selects a pod,
         that
         pod denies traffic not allowed by any policy.</p>
@@ -1958,7 +2144,9 @@ spec:
     - protocol: TCP
       port: 3306</code></pre>
       <pre><code>kubectl create -f policy-definition.yaml</code></pre>
-      <h3>Image security</h3>
+      <h4>Developing Network Policies</h4>
+      <p>Start with deny-all, then add allow rules. Test with <code>kubectl run</code> debug pods. Use <code>podSelector</code>, <code>namespaceSelector</code>, <code>ipBlock</code> for <code>from</code>/<code>to</code>.</p>
+      <h3>Image Security</h3>
       <p>Default image registry is <strong>docker.io</strong>. Image <code>nginx</code> is really
         <code>docker.io/library/nginx</code>. For private registries, create a <code>docker-registry</code> secret and
         reference it in the pod spec.
@@ -1982,7 +2170,7 @@ spec:
   imagePullSecrets:
   - name: regcred</code></pre>
 
-      <h3>Security context</h3>
+      <h3>Security Contexts</h3>
       <p>Restrict pod/container behavior: run as non-root user, read-only root filesystem, drop capabilities. Set at
         <code>spec.securityContext</code> (pod) or <code>spec.containers[].securityContext</code> (container).
         Container-level settings override pod-level. Capabilities can only be set at <strong>container</strong> level.
@@ -2010,9 +2198,25 @@ kubectl exec my-pod -- id</code></pre>
         <figcaption>RBAC: Role defines permissions; RoleBinding binds Role to User/Group/ServiceAccount.</figcaption>
       </figure>
 
+      <h3>Advanced (2025)</h3>
+      <p>Custom Resource Definitions (CRD), Custom Controllers, Operator Framework. See section 15 (Advanced Kubectl) for CRDs.</p>
+
       <!-- 08 Storage -->
       <h2 id="section-08">08 — Storage</h2>
-      <h3>Persistent Volume (PV) and Persistent Volume Claim (PVC)</h3>
+      <h3>Docker Storage</h3>
+      <p>Docker uses layers (copy-on-write). Volumes persist data outside container lifecycle. <code>docker volume</code> for volume management.</p>
+      <h4>Volume Drivers</h4>
+      <p>Docker volume drivers (local, nfs, etc.) provide storage backends. Kubernetes uses its own volume system.</p>
+      <div class="cka-definition">
+        <div class="cka-def-term">PV & PVC</div>
+        <div class="cka-def-body"><strong>PersistentVolume (PV):</strong> Cluster-wide storage resource. <strong>PersistentVolumeClaim (PVC):</strong> User request for storage. Binding matches PVC (size, accessMode, storageClass) to PV. CKA: static provisioning (create PV + PVC) or dynamic (StorageClass). Know <code>accessModes</code> (RWO, ROX, RWX) and <code>reclaimPolicy</code>.</div>
+      </div>
+      <h3>Kubernetes Storage</h3>
+      <h4>Container Storage Interface (CSI)</h4>
+      <p>Standard for storage drivers. CSI drivers provision volumes for PVs. Dynamic provisioning via StorageClass uses a CSI provisioner.</p>
+      <h4>Volumes</h4>
+      <p>Pod-level storage: <code>emptyDir</code>, <code>hostPath</code>, <code>persistentVolumeClaim</code>, <code>configMap</code>, <code>secret</code>. Mount via <code>volumeMounts</code>.</p>
+      <h3>Persistent Volumes (PV) and Persistent Volume Claims (PVC)</h3>
       <p>PV is <strong>cluster-scoped</strong> storage (admin provisions); PVC is <strong>namespace-scoped</strong>
         (user requests storage). They bind when capacity and <code>accessModes</code> match. If no PV matches, PVC
         stays
@@ -2051,7 +2255,7 @@ kubectl get pvc
 kubectl delete pvc myclaim
 kubectl delete pv pv-vol1</code></pre>
 
-      <h3>Using PVC in a pod</h3>
+      <h4>Using PVC in Pods</h4>
       <pre><code>apiVersion: v1
 kind: Pod
 metadata:
@@ -2070,7 +2274,7 @@ spec:
       <pre><code>kubectl create -f pod-definition.yaml
 kubectl get pod,pvc,pv</code></pre>
 
-      <h3>StorageClass (dynamic provisioning)</h3>
+      <h3>Storage Classes</h3>
       <p>With a StorageClass, PVC can trigger automatic PV creation (no manual PV).</p>
       <pre><code>apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -2082,11 +2286,23 @@ kubectl get sc</code></pre>
       <p>In PVC add <code>storageClassName: google-storage</code>. Then create PVC and use <code>claimName</code> in
         pod
         volume as above.</p>
+      <h4>Application Configuration Topics</h4>
+      <p>ConfigMaps and Secrets can be mounted as volumes. Use <code>configMapRef</code>/<code>secretRef</code> for env, or <code>volumes</code> + <code>volumeMounts</code> for file injection.</p>
 
       <!-- 09 Networking -->
       <h2 id="section-09">09 — Networking</h2>
-
-      <h3>Networking prerequisites — Linux basics</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">CNI (Container Network Interface)</div>
+        <div class="cka-def-body">Standard for pod networking. Plugins (Calico, Flannel, Weave) assign pod IPs and configure routing. kubelet calls CNI when pod is created/destroyed. CKA: verify CNI pods in kube-system, check DNS (CoreDNS), service endpoints.</div>
+      </div>
+      <h3>Networking Fundamentals</h3>
+      <h4>Switching</h4>
+      <p>Layer 2; switches forward by MAC. <code>ip link</code>, <code>ip addr</code> for interfaces.</p>
+      <h4>Routing</h4>
+      <p>Layer 3; routers forward by IP. <code>ip route</code>, <code>route -n</code> for routing table.</p>
+      <h4>Gateways</h4>
+      <p>Default gateway: <code>ip route add default via &lt;gateway-ip&gt;</code>. Nodes need IP forwarding: <code>net.ipv4.ip_forward=1</code>.</p>
+      <h3>Linux networking for CKA</h3>
       <p>Understanding Linux networking is essential for the CKA. Key commands:</p>
       <div class="snippet-label">Switching, routing, gateways</div>
       <pre><code># List network interfaces
@@ -2111,7 +2327,11 @@ cat /proc/sys/net/ipv4/ip_forward   # 0=disabled, 1=enabled
 echo 1 > /proc/sys/net/ipv4/ip_forward
 # Permanent: set net.ipv4.ip_forward=1 in /etc/sysctl.conf
 sysctl --system</code></pre>
-      <div class="snippet-label">Network namespaces (how containers get isolated networking)</div>
+      <h4>DNS Basics</h4>
+      <p>FQDN resolution. Kubernetes uses CoreDNS for cluster-internal DNS (<code>.svc.cluster.local</code>).</p>
+      <h4>CoreDNS</h4>
+      <p>Cluster DNS. Config in ConfigMap <code>coredns</code> (Corefile). Plugins: kubernetes, forward, etc.</p>
+      <h4>Network Namespaces</h4>
       <pre><code># Create network namespace
 ip netns add red
 ip netns add blue
@@ -2132,13 +2352,15 @@ ip -n blue addr add 192.168.15.2/24 dev veth-blue
 ip -n red link set veth-red up
 ip -n blue link set veth-blue up</code></pre>
 
-      <h3>Pod Networking &amp; CNI</h3>
+      <h3>Cluster Networking</h3>
+      <h4>Pod Networking</h4>
       <p>Kubernetes uses the <strong>Container Network Interface (CNI)</strong> standard to manage networking.
         <br><em>Core Responsibilities of CNI Plugin:</em>
         <br>1. <strong>Connectivity:</strong> Insert a network interface into the container's namespace.
         <br>2. <strong>IPAM (IP Address Management):</strong> Assign an IP address to the pod from the Pod CIDR.
       </p>
 
+      <h4>CNI Fundamentals / CNI in Kubernetes</h4>
       <p><em>Golden Rules:</em>
         <br>- Every Pod gets a unique IP.
         <br>- Pods on the same node talk via <code>localhost</code>/bridge.
@@ -2155,7 +2377,7 @@ ls /opt/cni/bin/
 # Identify Pod CIDR (allocated to node)
 kubectl get node -o jsonpath='{.spec.podCIDR}'</code></pre>
 
-      <h3>Service Networking (The "Magic" VIP)</h3>
+      <h3>Service Networking</h3>
       <p>A Service provides a stable <strong>ClusterIP</strong> (Virtual IP) that load balances traffic to dynamic Pod
         IPs.
         <br><strong>Service:</strong> The abstraction (stable VIP).
@@ -2177,7 +2399,7 @@ iptables-save | grep &lt;service-name&gt;
 # Check kube-proxy mode
 kubectl logs -n kube-system -l k8s-app=kube-proxy</code></pre>
 
-      <h3>DNS (CoreDNS)</h3>
+      <h3>DNS in Kubernetes / CoreDNS in Kubernetes</h3>
       <p><strong>CoreDNS</strong> is the cluster's internal DNS server. It watches the API server for new Services and
         Pods and creates DNS records.
         <br><em>Config:</em> The <strong>Corefile</strong> (inside a ConfigMap) defines behavior (plugins like
@@ -2194,12 +2416,24 @@ kubectl run -it --rm debug --image=busybox:1.28 -- nslookup kubernetes
 kubectl get configmap coredns -n kube-system -o yaml</code></pre>
 
       <h3>Ingress</h3>
+      <div class="cka-definition">
+        <div class="cka-def-term">Ingress</div>
+        <div class="cka-def-body">API object that manages external HTTP/HTTPS access to Services. Requires an Ingress controller (e.g., nginx-ingress). Rules map host/path to backend services. CKA: know <code>rules</code>, <code>pathType</code> (Prefix, Exact), TLS with <code>secretName</code>, and <code>rewrite-target</code> annotation.</div>
+      </div>
+      <div class="cka-definition">
+        <div class="cka-def-term">Gateway API (2025)</div>
+        <div class="cka-def-body">Successor to Ingress. Uses <code>Gateway</code> (infra) + <code>HTTPRoute</code> (routing rules). Role-oriented (GatewayClass, Gateway, Routes). More expressive than Ingress. CKA 2025: know it exists; Ingress still primary for exam.</div>
+      </div>
       <p>Need an Ingress controller (e.g. nginx-ingress) and Ingress resources (rules). Ingress exposes HTTP/HTTPS
         routes to services.</p>
       <figure class="diagram">
         <img src="assets/k8s-ingress-flow.png" alt="Ingress flow: External → Ingress Controller → Service → Pods" width="560" height="140" style="max-width:100%;height:auto;display:block;">
         <figcaption><strong>Ingress flow:</strong> External traffic &rarr; Ingress Controller &rarr; Ingress rules (host/path) &rarr; Service &rarr; Pods.</figcaption>
       </figure>
+      <h4>Ingress Annotations</h4>
+      <p>Controller-specific: e.g. <code>nginx.ingress.kubernetes.io/rewrite-target</code>, <code>cert-manager.io/cluster-issuer</code>.</p>
+      <h4>Rewrite Target</h4>
+      <p>nginx-ingress: <code>nginx.ingress.kubernetes.io/rewrite-target: /</code> rewrites path before forwarding to backend.</p>
       <div class="snippet-label">Ingress with paths</div>
       <pre><code>apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -2262,8 +2496,23 @@ kubectl describe ingress ingress-wear-watch</code></pre>
         evolution of Ingress.
       </p>
 
+      <h4>Introduction to Gateway API</h4>
+      <p>Gateway API is the evolution of Ingress. Resources: GatewayClass, Gateway, HTTPRoute, etc.</p>
+      <h4>Practical Guide to Gateway API</h4>
+      <p>Create Gateway + HTTPRoute. Install a Gateway controller (e.g. istio, envoy). Route traffic to Services.</p>
+
       <!-- 10 Design & Install -->
-      <h2 id="section-10">10 — Design and Install Kubernetes Cluster</h2>
+      <h2 id="section-10">10 — Cluster Design & Installation</h2>
+      <h3>Design Kubernetes Cluster</h3>
+      <p>Plan control-plane HA, node count, networking (Pod CIDR, Service CIDR), storage, and add-ons.</p>
+      <h3>Choosing Infrastructure</h3>
+      <p>VMs, bare metal, or managed (EKS, GKE, AKS). Consider networking, storage, and scaling needs.</p>
+      <h3>Configure High Availability</h3>
+      <p>Multiple API servers behind LB; etcd cluster (3 or 5 nodes); stacked or external etcd.</p>
+      <h4>ETCD in HA</h4>
+      <p>etcd uses RAFT. Odd number of members (3, 5). Stacked: etcd on same nodes as control plane. External: separate etcd cluster.</p>
+      <h3>Kubernetes the Hard Way</h3>
+      <p>Manual install from scratch (no kubeadm): set up VMs, install binaries, configure certs, etcd, API server, scheduler, controller-manager, kubelet, kube-proxy. Excellent for deep understanding.</p>
       <p><strong>Design:</strong> Plan control-plane count (HA = multiple masters), etcd (stacked with API server or
         external cluster), load balancer in front of API servers. Choose node sizing and networking (pod CIDR, service
         CIDR).</p>
@@ -2271,7 +2520,8 @@ kubectl describe ingress ingress-wear-watch</code></pre>
         number, 3 or 5); scheduler and controller manager can run as active/standby (only one active).</p>
 
       <!-- 11 kubeadm -->
-      <h2 id="section-11">11 — Install Kubernetes the kubeadm Way</h2>
+      <h2 id="section-11">11 — kubeadm Installation</h2>
+      <h3>Deployment with kubeadm</h3>
       <p><strong>kubeadm</strong> bootstraps the control plane and generates certs, manifests, and kubeconfig. You
         then
         join worker nodes with <code>kubeadm join</code>. The exam rarely asks for a full install; <strong>upgrading
@@ -2281,6 +2531,11 @@ kubectl describe ingress ingress-wear-watch</code></pre>
         <img src="assets/k8s-kubeadm-flow.png" alt="kubeadm init and join flow" width="560" height="180" style="max-width:100%;height:auto;display:block;">
         <figcaption><strong>kubeadm flow:</strong> Control plane: <code>kubeadm init</code>; workers: <code>kubeadm join</code> with token and CA hash.</figcaption>
       </figure>
+      <h3>Provision VMs</h3>
+      <p>Create VMs (or use cloud instances). Install container runtime, disable swap, configure networking. See Prerequisites below.</p>
+      <h3>Deploy Control Plane</h3>
+      <h3>Join Worker Nodes</h3>
+      <p>Use <code>kubeadm join</code> with token and CA hash from <code>kubeadm init</code> output. Or: <code>kubeadm token create --print-join-command</code>.</p>
       <h4>kubeadm init steps (reference)</h4>
       <div class="snippet-label">Prerequisites on all nodes</div>
       <pre><code># Disable swap (required)
@@ -2326,9 +2581,116 @@ sudo kubeadm join &lt;master-ip&gt;:6443 --token &lt;token&gt; --discovery-token
 # If token expired, create a new one on master:
 kubeadm token create --print-join-command</code></pre>
 
-      <!-- 12 Troubleshooting -->
-      <h2 id="section-12">12 — Troubleshooting</h2>
-      <h3>Application failure — step-by-step</h3>
+      <!-- 12 Helm -->
+      <h2 id="section-12">12 — Helm</h2>
+      <h3>Helm Installation</h3>
+      <p><code>curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash</code> or use package manager.</p>
+      <div class="cka-definition">
+        <div class="cka-def-term">Helm</div>
+        <div class="cka-def-body">The package manager for Kubernetes. Packages charts (pre-configured K8s resources). Helm 3 removed Tiller; uses direct API calls. CKA: know <code>helm install</code>, <code>helm list</code>, <code>helm upgrade</code>, <code>helm uninstall</code>, and <code>values.yaml</code> for customization.</div>
+      </div>
+      <h3>Helm Introduction</h3>
+      <p>Helm manages Kubernetes applications as <strong>charts</strong> — packages of YAML templates plus default values. Helm 3 is cluster-scoped and stores release state in Secrets.</p>
+      <h3>Helm Charts</h3>
+      <p>Charts are packages of templated K8s manifests. Structure: Chart.yaml, values.yaml, templates/.</p>
+      <h3>Helm Components</h3>
+      <ul>
+        <li><strong>Chart:</strong> Package of templated K8s manifests</li>
+        <li><strong>Release:</strong> Instance of a chart deployed to a cluster</li>
+        <li><strong>Values:</strong> Configuration overrides (YAML)</li>
+      </ul>
+      <h3>Working with Helm</h3>
+      <div class="snippet-label">Essential Helm commands (CKA)</div>
+      <pre><code># Add a repo
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+# Install a chart
+helm install my-nginx bitnami/nginx
+helm install my-nginx bitnami/nginx -f values.yaml
+helm install my-nginx bitnami/nginx --set service.port=8080
+
+# List releases
+helm list
+helm list -A
+
+# Upgrade
+helm upgrade my-nginx bitnami/nginx --set replicaCount=3
+
+# Uninstall
+helm uninstall my-nginx
+
+# Template (render YAML without installing)
+helm template my-nginx bitnami/nginx -f values.yaml
+
+# Customizing values
+helm show values bitnami/nginx
+helm install my-nginx bitnami/nginx --set image.tag=1.25</code></pre>
+      <h3>Helm Lifecycle Management</h3>
+      <p><code>helm install</code> (create) → <code>helm upgrade</code> (update) → <code>helm rollback</code> (revert) → <code>helm uninstall</code> (delete).</p>
+      <h3>Helm2 vs Helm3</h3>
+      <p>Helm 3 removed Tiller (no server-side component). Release data stored in Kubernetes Secrets in the release namespace. RBAC applies to Helm as a regular kubectl user.</p>
+
+      <!-- 13 Kustomize -->
+      <h2 id="section-13">13 — Kustomize</h2>
+      <h3>Installation</h3>
+      <p>Built into kubectl: <code>kubectl kustomize</code>. Standalone: <code>curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash</code>.</p>
+      <div class="cka-definition">
+        <div class="cka-def-term">Kustomize</div>
+        <div class="cka-def-body">Declarative customization of Kubernetes manifests without templating. Uses <code>kustomization.yaml</code> to patch, overlay, and compose resources. Built into kubectl: <code>kubectl apply -k .</code>. CKA: know overlays, patches, image transformers, and <code>kubectl kustomize</code>.</div>
+      </div>
+      <h3>Kustomize Ideology</h3>
+      <p>Kustomize keeps base manifests unchanged and applies <strong>overlays</strong> (dev, staging, prod) for environment-specific config. No templating — pure YAML patches.</p>
+      <h3>Kustomize vs Helm</h3>
+      <p>Kustomize: native kubectl, no extra binary, patch-based. Helm: templating, chart ecosystem, versioned releases. Both are in the CKA 2025 curriculum.</p>
+      <div class="snippet-label">kustomization.yaml and overlays</div>
+      <pre><code># Base: kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - service.yaml
+
+# Overlay: overlays/prod/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+patches:
+  - target:
+      kind: Deployment
+      name: myapp
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 5
+images:
+  - name: myapp
+    newTag: v2.0
+
+# Apply
+kubectl apply -k overlays/prod
+kubectl kustomize overlays/prod   # preview</code></pre>
+      <h4>Image Transformers</h4>
+      <p>In kustomization.yaml: <code>images: - name: myapp; newTag: v2</code>. Replace image by name.</p>
+      <h4>Components</h4>
+      <p>Reusable kustomize fragments. Reference with <code>resources: - ../components/my-component</code>.</p>
+      <h3>Transformers & Patches</h3>
+      <ul>
+        <li><strong>namePrefix/nameSuffix:</strong> Add prefix/suffix to resource names</li>
+        <li><strong>images:</strong> Replace container images by name</li>
+        <li><strong>patches:</strong> JSON Patch or strategic merge</li>
+        <li><strong>configMapGenerator/secretGenerator:</strong> Generate ConfigMaps/Secrets from files</li>
+      </ul>
+
+      <!-- 14 Troubleshooting -->
+      <h2 id="section-14">14 — Troubleshooting</h2>
+      <div class="cka-definition">
+        <div class="cka-def-term">Troubleshooting (30% of CKA)</div>
+        <div class="cka-def-body">Highest-weight domain. Application: check pod status, describe, logs (<code>--previous</code>), endpoints, selector mismatch. Control plane: kube-apiserver, etcd, scheduler. Worker: kubelet, container runtime. Network: CNI, CoreDNS, kube-proxy, firewall. Use <code>kubectl describe</code>, <code>journalctl -u kubelet</code>, <code>crictl</code>.</div>
+      </div>
+      <h3>Application Failure</h3>
+      <h4>Debug Pod Failures</h4>
       <ul class="step-list">
         <li><strong>Is the service reachable?</strong> <code>curl http://&lt;node-ip&gt;:&lt;nodePort&gt;</code> or
           from
@@ -2349,7 +2711,11 @@ kubeadm token create --print-join-command</code></pre>
 kubectl describe pod &lt;pod-name&gt;
 kubectl logs &lt;pod-name&gt; -f --previous</code></pre>
 
-      <h3>Control plane failure</h3>
+      <h3>Control Plane Failure</h3>
+      <h4>Debug API Server</h4>
+      <p>Check pod status, logs: <code>kubectl logs kube-apiserver-&lt;node&gt; -n kube-system</code>. Verify certs, endpoints.</p>
+      <h4>Debug ETCD</h4>
+      <p>Check etcd pod. Use <code>etcdctl endpoint health</code>. Verify data-dir, certs.</p>
       <p>Verify nodes are Ready, then check control-plane components. With kubeadm they are pods in
         <code>kube-system</code>; with manual install they are often systemd services.
       </p>
@@ -2362,7 +2728,11 @@ service kubelet status
 kubectl logs kube-apiserver-master -n kube-system
 sudo journalctl -u kube-apiserver</code></pre>
 
-      <h3>Worker node failure</h3>
+      <h3>Worker Node Failure</h3>
+      <h4>Debug kubelet</h4>
+      <p><code>systemctl status kubelet</code>, <code>journalctl -u kubelet</code>. Check config, certs.</p>
+      <h4>Node NotReady</h4>
+      <p>kubelet not reporting. Check kubelet, container runtime, network. <code>kubectl describe node</code> for conditions.</p>
       <p>If a node is <strong>NotReady</strong>, check <code>kubectl describe node &lt;node&gt;</code> (conditions,
         LastHeartbeatTime). On the node: kubelet status, logs, and cert validity (kubelet may have expired cert).</p>
       <pre><code>kubectl get nodes
@@ -2384,7 +2754,12 @@ openssl x509 -in /var/lib/kubelet/worker-1.crt -text</code></pre>
         <li>Container runtime down → <code>systemctl status containerd</code></li>
       </ul>
 
-      <h3>Network troubleshooting</h3>
+      <h3>Network Troubleshooting</h3>
+      <h4>Debug Service Issues</h4>
+      <p>Check <code>kubectl get endpoints</code>. If empty, selector mismatch. Verify pod labels, service selector.</p>
+      <h4>Debug DNS</h4>
+      <p>CoreDNS pods running? <code>kubectl run test --rm -it --image=busybox:1.28 -- nslookup kubernetes</code>.</p>
+      <h4>Debug CNI</h4>
       <p>When pods cannot communicate across nodes or DNS fails:</p>
       <ul class="step-list">
         <li><strong>Check CNI plugin:</strong> <code>kubectl get pods -n kube-system</code> — are Calico/Flannel/Weave
@@ -2409,8 +2784,12 @@ kubectl run netshoot --image=nicolaka/netshoot -it --rm --restart=Never -- bash
 kubectl run test --image=busybox:1.28 --rm -it --restart=Never -- wget -qO- http://&lt;svc&gt;.&lt;ns&gt;.svc.cluster.local:&lt;port&gt;</code></pre>
 
       <!-- 13 Other Topics -->
-      <h2 id="section-13">13 — Other Topics</h2>
-      <h3>JSON path and custom columns</h3>
+      <h2 id="section-15">15 — Advanced Kubectl & JSON Path</h2>
+      <div class="cka-definition">
+        <div class="cka-def-term">JSONPath</div>
+        <div class="cka-def-body">Query language for extracting data from JSON. Used with <code>kubectl get -o jsonpath='{...}'</code>. CKA: know <code>{.items[*].metadata.name}</code>, <code>{range .items[*]}...{end}</code>, <code>{.status.addresses[?(@.type=="InternalIP")].address}</code>, and <code>custom-columns</code>.</div>
+      </div>
+      <h3>JSON Path in Kubernetes</h3>
       <pre><code>kubectl get nodes -o json
 kubectl get pods -o json
 kubectl get pods -o=jsonpath='{.items[0].spec.containers[0].image}'
@@ -2419,19 +2798,9 @@ kubectl get nodes -o=custom-columns=NODE:.metadata.name,CPU:.status.capacity.cpu
 kubectl get nodes --sort-by=.metadata.name
 kubectl get nodes --sort-by=.status.capacity.cpu</code></pre>
 
-      <h3>2025 curriculum: Helm and Kustomize</h3>
-      <p><strong>Helm</strong> packages Kubernetes manifests into <strong>charts</strong>. Use for cluster components
-        and repeatable installs. Common commands: <code>helm install &lt;release&gt; &lt;chart&gt;</code>,
-        <code>helm upgrade</code>, <code>helm list</code>, <code>helm uninstall</code>. Add repos:
-        <code>helm repo add &lt;name&gt; &lt;url&gt;</code>, <code>helm repo update</code>.
-      </p>
-      <p><strong>Kustomize</strong> customizes base YAML (overlays, patches, common labels). Built into kubectl:
-        <code>kubectl apply -k &lt;dir&gt;</code> or <code>kustomize build &lt;dir&gt; | kubectl apply -f -</code>.
-        Typical layout: <code>base/</code> (resources) + <code>kustomization.yaml</code>; overlays (e.g.
-        <code>dev/</code>, <code>prod/</code>) reference the base and add patches.
-      </p>
-
-      <h3>CRDs and operators</h3>
+      <h3>Advanced Kubectl Commands</h3>
+      <p><code>kubectl get</code> with <code>-o wide</code>, <code>--sort-by</code>, <code>--selector</code>. <code>kubectl describe</code>, <code>kubectl logs -f</code>, <code>kubectl exec -it</code>.</p>
+      <h3>CRDs and operators (2025)</h3>
       <p><strong>Custom Resource Definitions (CRDs)</strong> extend the API with custom resources. After defining a
         CRD,
         you get new resource types (e.g. <code>kubectl get myresource</code>). <strong>Operators</strong> are
@@ -2446,8 +2815,10 @@ kubectl get nodes --sort-by=.status.capacity.cpu</code></pre>
         (Container Runtime Interface): container runtimes (containerd, CRI-O); kubelet talks to the runtime via CRI.
         Configure/validate these when installing or troubleshooting the cluster.</p>
 
-      <!-- 14 Playground & Labs -->
-      <h2 id="section-14">14 — Playground &amp; Lightning Labs</h2>
+      <!-- 16 Practice & Exam Preparation -->
+      <h2 id="section-16">16 — Practice &amp; Exam Preparation</h2>
+      <h3>Lightning Labs</h3>
+      <h4>Playground &amp; Lightning Labs</h4>
       <p>Use the links below to practice in a real cluster, then try the scenarios on your own before revealing the
         solution.</p>
 
@@ -2532,7 +2903,7 @@ kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data</code></pre>
       </div>
 
       <!-- 15 Mock Exams -->
-      <h2 id="section-15">15 — Mock Exams</h2>
+      <h3>Mock Exam 1, 2, 3</h3>
       <p>Time yourself (e.g. 10–15 minutes per question). Complete the task in your cluster or playground, then check
         the solution.</p>
 
@@ -2830,7 +3201,7 @@ kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.a
         </div>
       </div>
 
-      <h2 id="section-16">16 — Ultimate Mocks</h2>
+      <h3>Ultimate Mocks</h3>
       <p>Extended scenario-based mocks: multi-step troubleshooting, storage (PV/PVC), networking (NetworkPolicy,
         Ingress), and cluster upgrades. Use the same format: try the scenario in a playground, then compare with the
         solutions in the course docs or your notes.</p>
@@ -2839,7 +3210,9 @@ kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.a
         Killer.sh
         (free retake included with CKA exam purchase).</p>
 
-      <h2 id="section-17">17 — Tips and Tricks</h2>
+      <h3>Certification Tips</h3>
+      <p>Set aliases, use imperative + dry-run, verify answers. Prioritize high-weight questions. Bookmark kubernetes.io/docs.</p>
+      <h3>Tips and Tricks</h3>
       <h3>Exam environment setup (do this first!)</h3>
       <p>The CKA exam uses a browser-based terminal. Set up shortcuts immediately:</p>
       <div class="snippet-label">Shell aliases and settings (~/.bashrc)</div>
@@ -2938,6 +3311,8 @@ kubectl get secret &lt;name&gt; -o jsonpath='{.data.password}' | base64 --decode
 ps aux | grep kubelet | grep config
 grep staticPodPath /var/lib/kubelet/config.yaml</code></pre>
 
+      <h3>What's Next</h3>
+      <p>After CKA: CKAD (application development), CKS (security). Practice on Killer.sh, KillerCoda, or your own cluster.</p>
       <h3>Common exam mistakes to avoid</h3>
       <ul>
         <li>❌ Forgetting to switch context (<code>kubectl config use-context &lt;context&gt;</code>) — each question
@@ -2953,7 +3328,7 @@ grep staticPodPath /var/lib/kubelet/config.yaml</code></pre>
       </ul>
 
       <!--18 Cheat Sheet -->
-      <h2 id="section-18">18 — CKA Exam Cheat Sheet</h2>
+      <h2 id="section-17">17 — CKA Exam Cheat Sheet</h2>
       <p>Quick-reference cards for every exam domain. Print this section or keep it open during practice sessions.
         Each
         card contains the most commonly tested commands and YAML patterns from exam dumps.</p>

@@ -466,6 +466,34 @@
       letter-spacing: 0.04em;
     }
 
+    /* CKA Definition boxes — exam-focused term definitions */
+    .cka-definition {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      background: linear-gradient(135deg, rgba(26, 127, 55, 0.06) 0%, rgba(9, 105, 218, 0.04) 100%);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .cka-definition .cka-def-term {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.4rem;
+    }
+    .cka-definition .cka-def-body {
+      color: var(--text);
+    }
+    .cka-definition .cka-def-body strong { color: var(--text); }
+    body.dark-mode .cka-definition {
+      background: linear-gradient(135deg, rgba(26, 127, 55, 0.12) 0%, rgba(9, 105, 218, 0.08) 100%);
+      border-left-color: #2ea043;
+    }
+    body.dark-mode .cka-definition .cka-def-term { color: #56d364; }
+
     .diagram {
       margin: 1.5rem 0;
       padding: 1.5rem;
