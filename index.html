@@ -2588,6 +2588,11 @@ kubectl describe ingress ingress-wear-watch</code></pre>
       <p><strong>High availability:</strong> Multiple API server replicas behind a load balancer; etcd cluster (odd
         number, 3 or 5); scheduler and controller manager can run as active/standby (only one active).</p>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 10 Cluster Design</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 10 Cluster Design" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 11 kubeadm -->
       <h2 id="section-11">11 — kubeadm Installation</h2>
       <h3>Deployment with kubeadm</h3>
@@ -2871,6 +2876,11 @@ kubectl run netshoot --image=nicolaka/netshoot -it --rm --restart=Never -- bash
 # Test service from inside cluster
 kubectl run test --image=busybox:1.28 --rm -it --restart=Never -- wget -qO- http://&lt;svc&gt;.&lt;ns&gt;.svc.cluster.local:&lt;port&gt;</code></pre>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 14 Troubleshooting</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 14 Troubleshooting" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 13 Other Topics -->
       <h2 id="section-15">15 — Advanced Kubectl & JSON Path</h2>
       <div class="cka-definition">
@@ -2902,6 +2912,11 @@ kubectl get nodes --sort-by=.status.capacity.cpu</code></pre>
         storage drivers for PVs; dynamic provisioning via StorageClass uses a CSI driver. <strong>CRI</strong>
         (Container Runtime Interface): container runtimes (containerd, CRI-O); kubelet talks to the runtime via CRI.
         Configure/validate these when installing or troubleshooting the cluster.</p>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 15 Advanced Kubectl</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 15 Advanced Kubectl" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 16 Practice & Exam Preparation -->
       <h2 id="section-16">16 — Practice &amp; Exam Preparation</h2>
@@ -3414,6 +3429,11 @@ grep staticPodPath /var/lib/kubelet/config.yaml</code></pre>
         <li>❌ Spending too long on one question — flag it and move on</li>
         <li>❌ Forgetting <code>--dry-run=client -o yaml</code> — the fastest way to generate templates</li>
       </ul>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 16 Practice &amp; Exam Preparation</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 16 Practice & Exam" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!--18 Cheat Sheet -->
       <h2 id="section-17">17 — CKA Exam Cheat Sheet</h2>
@@ -3976,12 +3996,12 @@ k config use-context user-ctx</code></pre>
 
         </div><!-- end cheat-grid -->
 
-    <!-- Comments -->
+    <!-- Comments — 17 Cheat Sheet -->
     <section class="comments-section" id="comments" aria-label="Comments">
-      <h2 class="comments-title">Comments</h2>
+      <h3 class="comments-title">Comments — 17 Cheat Sheet</h3>
       <script src="https://utteranc.es/client.js"
               repo="SKCloudOps/k8s"
-              issue-term="pathname"
+              issue-term="CKA Guide - 17 Cheat Sheet"
               theme="github-light"
               crossorigin="anonymous"
               async>
