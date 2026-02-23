@@ -2625,3 +2625,17 @@
       width: auto;
       padding: 0 0.75rem;
     }
+
+    /* Comments section (Utterances) */
+    .comments-section {
+      max-width: var(--content-max);
+      margin: 3rem auto 0;
+      padding: 2rem 1.25rem 3rem;
+      border-top: 1px solid var(--border);
+    }
+    .comments-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 1rem;
+    }
