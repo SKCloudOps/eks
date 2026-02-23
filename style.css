@@ -563,11 +563,9 @@
         overflow: visible;
       }
 
-      /* In horizontal/landscape mobile: hide challenge toggle to prevent overlap with menu */
-      @media (max-width: 768px) and (max-height: 500px) {
-        .challenge-toggle-wrapper {
-          display: none;
-        }
+      /* Mobile: hide some header icons to save space */
+      .header-hide-mobile {
+        display: none !important;
       }
 
       .nav-close {
@@ -623,18 +621,6 @@
         padding: 1.25rem 1rem 3rem;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-      }
-
-      /* Mobile: hide Playground & Labs */
-      nav a.nav-hide-mobile {
-        display: none;
-      }
-
-      /* Horizontal/landscape view: hide some nav items to save space */
-      @media (orientation: landscape) and (max-height: 500px) {
-        nav a.nav-hide-landscape {
-          display: none;
-        }
       }
 
       /* Horizontal/landscape view: ensure content scroll works */
