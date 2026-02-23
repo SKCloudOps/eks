@@ -336,6 +336,11 @@
         <li><strong>What's next after CKA?</strong> CKAD (Application Developer) or CKS (Security Specialist).</li>
       </ul>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 01 Introduction &amp; Foundations</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 01 Introduction & Foundations" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 02 Core Concepts -->
       <h2 id="section-02">02 — Core Concepts</h2>
 
@@ -662,6 +667,11 @@ curl http://&lt;node-ip&gt;:30008   # for NodePort</code></pre>
         <figcaption>Service types: NodePort (expose on node port), ClusterIP (internal VIP), LoadBalancer (cloud LB).
         </figcaption>
       </figure>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 02 Core Concepts</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 02 Core Concepts" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 03 Scheduling -->
       <h2 id="section-03">03 &mdash; Scheduling</h2>
@@ -1538,7 +1548,12 @@ spec:
         <div class="cka-def-term">Admission Controller</div>
         <div class="cka-def-body">Intercepts requests to the API server after authentication/authorization, before persistence. <strong>Validating:</strong> accept or reject (e.g., PodSecurity, ResourceQuota). <strong>Mutating:</strong> modify objects (e.g., DefaultStorageClass, ServiceAccount). CKA: know they run in-order; use <code>kube-apiserver --enable-admission-plugins</code>.</div>
       </div>
-      <p>Admission controllers enforce cluster policies. <strong>Validating</strong> controllers only validate (e.g., <code>PodSecurity</code>, <code>LimitRanger</code>). <strong>Mutating</strong> controllers can modify objects (e.g., <code>DefaultStorageClass</code>, inject default values). Configure via <code>--enable-admission-plugins</code> and <code>--disable-admission-plugins</code> on kube-apiserver.</p>
+      <p>Admission controllers enforce cluster policies. <strong>Validating</strong> controllers only validate (e.g., <code>PodSecurity</code>, <code>LimitRanger</code>). <strong>Mutating</strong> controllers can modify objects (e.g., <code>DefaultStorageClass</code>, inject default values). Configure via <code>--enable-admission-plugins</code> and <code>--disable-admission-plugins</code> on kube-apiserver.      </p>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 03 Scheduling</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 03 Scheduling" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 04 Logging & Monitoring -->
       <h2 id="section-04">04 — Logging and Monitoring</h2>
@@ -1563,6 +1578,11 @@ kubectl logs &lt;pod-name&gt; -f --previous</code></pre>
         <code>kubectl top pods</code>. It is not for long-term storage; use a monitoring stack (Prometheus, etc.) for
         that. Legacy Heapster is deprecated.
       </p>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 04 Logging &amp; Monitoring</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 04 Logging and Monitoring" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 05 Application Lifecycle -->
       <h2 id="section-05">05 — Application Lifecycle Management</h2>
@@ -1842,6 +1862,11 @@ spec:
 kubectl get hpa
 kubectl describe hpa myapp-hpa</code></pre>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 05 Application Lifecycle</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 05 Application Lifecycle" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 06 Cluster Maintenance -->
       <h2 id="section-06">06 — Cluster Maintenance</h2>
       <h3>OS Upgrades</h3>
@@ -1937,6 +1962,11 @@ spec:
       app: myapp</code></pre>
       <pre><code>kubectl get pdb
 kubectl describe pdb myapp-pdb</code></pre>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 06 Cluster Maintenance</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 06 Cluster Maintenance" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 07 Security -->
       <h2 id="section-07">07 — Security</h2>
@@ -2217,6 +2247,11 @@ kubectl exec my-pod -- id</code></pre>
       <h3>Advanced (2025)</h3>
       <p>Custom Resource Definitions (CRD), Custom Controllers, Operator Framework. See section 15 (Advanced Kubectl) for CRDs.</p>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 07 Security</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 07 Security" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 08 Storage -->
       <h2 id="section-08">08 — Storage</h2>
       <h3>Docker Storage</h3>
@@ -2304,6 +2339,11 @@ kubectl get sc</code></pre>
         volume as above.</p>
       <h4>Application Configuration Topics</h4>
       <p>ConfigMaps and Secrets can be mounted as volumes. Use <code>configMapRef</code>/<code>secretRef</code> for env, or <code>volumes</code> + <code>volumeMounts</code> for file injection.</p>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 08 Storage</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 08 Storage" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 09 Networking -->
       <h2 id="section-09">09 — Networking</h2>
@@ -2525,6 +2565,11 @@ kubectl describe ingress ingress-wear-watch</code></pre>
       <h4>Practical Guide to Gateway API</h4>
       <p>Create Gateway + HTTPRoute. Install a Gateway controller (e.g. istio, envoy). Route traffic to Services.</p>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 09 Networking</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 09 Networking" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 10 Design & Install -->
       <h2 id="section-10">10 — Cluster Design & Installation</h2>
       <h3>Design Kubernetes Cluster</h3>
@@ -2605,6 +2650,11 @@ sudo kubeadm join &lt;master-ip&gt;:6443 --token &lt;token&gt; --discovery-token
 # If token expired, create a new one on master:
 kubeadm token create --print-join-command</code></pre>
 
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 11 kubeadm</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 11 kubeadm" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
+
       <!-- 12 Helm -->
       <h2 id="section-12">12 — Helm</h2>
       <h3>Helm Installation</h3>
@@ -2654,6 +2704,11 @@ helm install my-nginx bitnami/nginx --set image.tag=1.25</code></pre>
       <p><code>helm install</code> (create) → <code>helm upgrade</code> (update) → <code>helm rollback</code> (revert) → <code>helm uninstall</code> (delete).</p>
       <h3>Helm2 vs Helm3</h3>
       <p>Helm 3 removed Tiller (no server-side component). Release data stored in Kubernetes Secrets in the release namespace. RBAC applies to Helm as a regular kubectl user.</p>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 12 Helm</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 12 Helm" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 13 Kustomize -->
       <h2 id="section-13">13 — Kustomize</h2>
@@ -2706,6 +2761,11 @@ kubectl kustomize overlays/prod   # preview</code></pre>
         <li><strong>patches:</strong> JSON Patch or strategic merge</li>
         <li><strong>configMapGenerator/secretGenerator:</strong> Generate ConfigMaps/Secrets from files</li>
       </ul>
+
+      <section class="comments-section" aria-label="Comments">
+        <h3 class="comments-title">Comments — 13 Kustomize</h3>
+        <script src="https://utteranc.es/client.js" repo="SKCloudOps/k8s" issue-term="CKA Guide - 13 Kustomize" theme="github-light" crossorigin="anonymous" async></script>
+      </section>
 
       <!-- 14 Troubleshooting -->
       <h2 id="section-14">14 — Troubleshooting</h2>
