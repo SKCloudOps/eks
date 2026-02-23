@@ -2639,3 +2639,77 @@
       color: var(--text);
       margin: 0 0 1rem;
     }
+
+    /* K8s Workflow (intro) */
+    .k8s-workflow {
+      margin: 2rem 0 0;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 640px;
+    }
+    .workflow-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 0.25rem;
+    }
+    .workflow-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0 0 1.25rem;
+      line-height: 1.5;
+    }
+    .workflow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .wf-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 0.9rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.25rem;
+    }
+    .wf-step.wf-final {
+      border-color: var(--accent);
+      background: rgba(26, 127, 55, 0.06);
+    }
+    .wf-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 50%;
+    }
+    .wf-body {
+      font-size: 0.85rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .wf-body strong { color: var(--text); }
+    .wf-arrow {
+      text-align: center;
+      color: var(--accent);
+      font-size: 0.9rem;
+      padding: 0.2rem 0;
+    }
+    .workflow-summary {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
