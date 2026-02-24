@@ -10,10 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .lab-page { --nav-width: 280px; }
+    body.lab-page { overflow: auto !important; }
+    .lab-page { --nav-width: 280px; min-height: 100vh; }
     .lab-layout { display: flex; gap: 0; min-height: calc(100vh - 48px); }
-    .lab-sidebar { width: var(--nav-width); min-width: var(--nav-width); background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; }
-    .lab-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .lab-sidebar { width: var(--nav-width); min-width: var(--nav-width); height: calc(100vh - 48px); background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; flex-shrink: 0; }
+    .lab-main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: calc(100vh - 48px); overflow: hidden; }
     .lab-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .lab-header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
     .cmd-cat { border-bottom: 1px solid var(--border); }
@@ -31,18 +32,19 @@
     .lab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
     .lab-btn:hover { filter: brightness(1.08); }
     .lab-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .lab-scenarios { padding: 1.5rem; border-top: 1px solid var(--border); background: var(--bg); }
-    .lab-scenarios h2 { font-size: 1rem; margin: 0 0 1rem; }
-    .scenario-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
-    .scenario-card h4 { margin: 0 0 0.5rem; font-size: 0.95rem; }
-    .scenario-card p { margin: 0.25rem 0; font-size: 0.85rem; color: var(--text-muted); }
-    .scenario-card pre { margin: 0.5rem 0 0; padding: 0.75rem; background: var(--bg); border-radius: 6px; font-size: 0.8rem; overflow-x: auto; }
-    .scenario-card .copy-cmd { margin-top: 0.5rem; font-size: 0.8rem; }
+    .lab-scenarios { padding: 1.5rem 2rem 2rem; border-top: 1px solid var(--border); background: var(--surface); flex: 1; overflow-y: auto; }
+    .lab-scenarios h2 { font-size: 1.05rem; margin: 0 0 1.25rem; color: var(--text); font-weight: 600; }
+    .scenario-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+    .scenario-card h4 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--text); font-weight: 600; }
+    .scenario-card p { margin: 0.35rem 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+    .scenario-card pre { margin: 0.75rem 0 0; padding: 1rem 1.25rem; background: #1e293b; border-radius: 8px; font-size: 0.9rem; line-height: 1.6; overflow-x: auto; border: 1px solid #334155; }
+    .scenario-card pre code { color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; white-space: pre; }
+    .scenario-card .copy-cmd { margin-top: 0.75rem; padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 500; }
     @media (max-width: 900px) { .lab-layout { flex-direction: column; } .lab-sidebar { width: 100%; min-width: 100%; max-height: 40vh; } }
   </style>
 </head>
 <body class="lab-page">
-  <header class="site-header" style="height: 48px; padding: 0 1rem;">
+  <header class="site-header" style="height: 48px; padding: 0 1rem; justify-content: space-between;">
     <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
       <span style="font-weight: 700;">CKA Study Guide</span>
       <span class="badge">CKA</span>
