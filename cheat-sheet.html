@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKA Exam Cheat Sheet | Print Reference for Certified Kubernetes Administrator</title>
+  <meta name="description" content="Printable CKA cheat sheet: kubectl, Pod/Deploy/RBAC YAML, etcd backup, cluster upgrade, troubleshooting. One page reference for the exam.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.cheat-page { margin: 0; font-family: 'Outfit', sans-serif; background: var(--surface); color: var(--text); }
+    .cheat-header { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.75rem; }
+    .cheat-header a { text-decoration: none; color: inherit; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+    .cheat-actions { display: flex; align-items: center; gap: 0.5rem; }
+    .cheat-btn { padding: 0.5rem 1rem; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; font-family: inherit; }
+    .cheat-btn.primary { background: var(--accent); color: white; }
+    .cheat-btn.primary:hover { filter: brightness(1.08); }
+    .cheat-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .cheat-btn.secondary:hover { background: var(--border); }
+    .cheat-intro { padding: 1rem 1.5rem 0.5rem; font-size: 0.95rem; color: var(--text-muted); max-width: 900px; }
+    .cheat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem; padding: 1rem 1.5rem 2rem; }
+    .cheat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; break-inside: avoid; }
+    .cheat-card-header { padding: 0.6rem 1rem; background: var(--surface2); border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.95rem; }
+    .cheat-card-body { padding: 0; }
+    .cheat-card-body pre { margin: 0; padding: 1rem; background: #0d1117; color: #e6edf3; font-size: 0.8rem; line-height: 1.45; overflow-x: auto; font-family: 'JetBrains Mono', monospace; }
+    .cheat-card-body code { font-family: 'JetBrains Mono', monospace; }
+    @media print {
+      body.cheat-page { background: #fff; }
+      .no-print { display: none !important; }
+      .cheat-intro { color: #333; padding: 0.5rem 0; }
+      .cheat-grid { padding: 0; gap: 0.75rem; grid-template-columns: 1fr; }
+      .cheat-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+      .cheat-card-header { background: #f0f0f0; color: #111; }
+      .cheat-card-body pre { background: #f8f8f8; color: #222; font-size: 0.7rem; padding: 0.6rem; border: 1px solid #eee; }
+      @page { margin: 1cm; }
+      .print-only { display: block !important; font-weight: 700; font-size: 0.95rem; }
+      .cheat-page-title { font-size: 1.2rem; margin: 0 0 0.5rem; }
+    }
+    .cheat-page-title { font-size: 1.35rem; font-weight: 700; margin: 0; padding: 0 1.5rem; }
+  </style>
+</head>
+<body class="cheat-page">
+  <header class="cheat-header no-print">
+    <a href="index.html"><span>CKA Study Guide</span><span class="badge">CKA</span></a>
+    <div class="cheat-actions">
+      <a href="index.html#section-17" class="cheat-btn secondary">← Back to Guide</a>
+      <button type="button" class="cheat-btn primary" id="print-btn" title="Print this cheat sheet">🖨️ Print Cheat Sheet</button>
+    </div>
+  </header>
+
+  <h1 class="cheat-page-title no-print">CKA Exam Cheat Sheet</h1>
+  <p class="cheat-intro no-print">Quick reference for the Certified Kubernetes Administrator exam. Use <strong>Print Cheat Sheet</strong> to print; the printed copy is designed to be a complete exam-day reference.</p>
+  <p class="cheat-intro print-only" style="display: none;">CKA Exam Cheat Sheet — Certified Kubernetes Administrator. 2h exam, 66% pass. Allowed: kubernetes.io/docs. alias k=kubectl</p>
+  <p class="cheat-intro" style="padding: 0 1.5rem 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+    <strong>Exam:</strong> 2 hours, 66% to pass. Allowed: one browser tab to <a href="https://kubernetes.io/docs/" target="_blank" rel="noopener">kubernetes.io/docs</a>. Set <code>alias k=kubectl</code> at start.
+  </p>
+
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <div class="cheat-card-header">kubectl Quick Reference</div>
+      <div class="cheat-card-body">
+        <pre><code># Create resources fast
+k run pod1 --image=nginx
+k create deploy d1 --image=nginx --replicas=3
+k expose deploy d1 --port=80 --name=d1-svc
+k create ns dev
+k create sa my-sa
+k create cm cfg --from-literal=k=v
+k create secret generic s1 --from-literal=p=s
+k create job j1 --image=busybox -- echo hi
+k create cronjob cj --image=b --schedule="* * * * *" -- sh
+
+# Generate YAML
+k run x --image=nginx --dry-run=client -o yaml > x.yaml
+k create deploy x --image=nginx --dry-run=client -o yaml
+
+# Inspect
+k get pods -A -o wide
+k describe pod &lt;name&gt;
+k logs &lt;pod&gt; -c &lt;container&gt; --previous
+k exec -it &lt;pod&gt; -- sh
+k get events --sort-by='.lastTimestamp'
+
+# Edit / Patch / Replace
+k edit deploy &lt;name&gt;
+k patch svc s1 -p '{"spec":{"type":"NodePort"}}'
+k replace --force -f pod.yaml
+k delete pod x --force --grace-period=0
+
+# Context & Namespace
+k config use-context &lt;ctx&gt;
+k config set-context --current --namespace=dev
+
+# Node maintenance
+k cordon &lt;node&gt;
+k drain &lt;node&gt; --ignore-daemonsets --delete-emptydir-data
+k uncordon &lt;node&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">Pod Skeleton</div>
+      <div class="cheat-card-body">
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  namespace: default
+  labels:
+    app: myapp
+spec:
+  serviceAccountName: my-sa
+  nodeSelector:
+    disk: ssd
+  tolerations:
+  - key: "node-role"
+    operator: "Exists"
+    effect: "NoSchedule"
+  initContainers:
+  - name: init
+    image: busybox
+    command: ['sh','-c','sleep 5']
+  containers:
+  - name: app
+    image: nginx:1.21
+    ports:
+    - containerPort: 80
+    env:
+    - name: KEY
+      value: val
+    envFrom:
+    - configMapRef:
+        name: my-cm
+    - secretRef:
+        name: my-secret
+    resources:
+      requests: { cpu: 100m, memory: 128Mi }
+      limits:   { cpu: 500m, memory: 256Mi }
+    livenessProbe:
+      httpGet: { path: /healthz, port: 80 }
+      initialDelaySeconds: 10
+    readinessProbe:
+      httpGet: { path: /ready, port: 80 }
+    volumeMounts:
+    - name: data
+      mountPath: /data
+    securityContext:
+      runAsUser: 1000
+      runAsNonRoot: true
+      capabilities:
+        drop: ["ALL"]
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: my-pvc</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">Deployment + Service</div>
+      <div class="cheat-card-body">
+        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  selector:
+    matchLabels: { app: webapp }
+  template:
+    metadata:
+      labels: { app: webapp }
+    spec:
+      containers:
+      - name: webapp
+        image: nginx:1.21
+        ports: [{ containerPort: 80 }]
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-svc
+spec:
+  type: NodePort
+  selector: { app: webapp }
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">RBAC Pattern</div>
+      <div class="cheat-card-body">
+        <pre><code># Imperative (fastest in exam)
+k create role dev-role \
+  --verb=get,list,create,delete \
+  --resource=pods -n dev
+k create rolebinding dev-bind \
+  --role=dev-role --user=jane -n dev
+
+k create clusterrole node-viewer \
+  --verb=get,list --resource=nodes
+k create clusterrolebinding node-bind \
+  --clusterrole=node-viewer --user=jane
+
+# Check permissions
+k auth can-i create pods --as=jane -n dev
+k auth can-i '*' '*' --as=system:serviceaccount:default:my-sa
+
+# Pod: spec.serviceAccountName: my-sa</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">ETCD Backup & Restore</div>
+      <div class="cheat-card-body">
+        <pre><code># BACKUP
+ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+# Verify
+ETCDCTL_API=3 etcdctl snapshot status /tmp/etcd.db
+
+# RESTORE (etcdutl for restore)
+etcdutl snapshot restore /tmp/etcd.db --data-dir=/var/lib/etcd-restored
+
+# Update etcd manifest: hostPath.path → /var/lib/etcd-restored
+# Restart kubelet</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">Cluster Upgrade Sequence</div>
+      <div class="cheat-card-body">
+        <pre><code># CONTROL PLANE
+apt-mark unhold kubeadm
+apt-get update && apt-get install -y kubeadm=1.XX.0-*
+apt-mark hold kubeadm
+kubeadm upgrade plan
+kubeadm upgrade apply v1.XX.0
+kubectl drain &lt;cp-node&gt; --ignore-daemonsets --delete-emptydir-data
+apt-mark unhold kubelet kubectl
+apt-get install -y kubelet=1.XX.0-* kubectl=1.XX.0-*
+apt-mark hold kubelet kubectl
+systemctl daemon-reload && systemctl restart kubelet
+kubectl uncordon &lt;cp-node&gt;
+
+# WORKER NODES
+kubectl drain &lt;worker&gt; --ignore-daemonsets --delete-emptydir-data
+# On worker:
+apt-mark unhold kubeadm kubelet
+apt-get install -y kubeadm=1.XX.0-* kubelet=1.XX.0-*
+kubeadm upgrade node
+systemctl daemon-reload && systemctl restart kubelet
+apt-mark hold kubeadm kubelet
+kubectl uncordon &lt;worker&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">Node Maintenance & PDB</div>
+      <div class="cheat-card-body">
+        <pre><code># Cordon = no new pods
+kubectl cordon &lt;node&gt;
+
+# Drain = cordon + evict
+kubectl drain &lt;node&gt; --ignore-daemonsets --delete-emptydir-data
+kubectl drain &lt;node&gt; --ignore-daemonsets --delete-emptydir-data --force
+
+# Uncordon
+kubectl uncordon &lt;node&gt;
+
+# PodDisruptionBudget
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: myapp-pdb
+spec:
+  minAvailable: 2   # OR maxUnavailable: 1
+  selector:
+    matchLabels: { app: myapp }
+k get pdb
+k describe pdb myapp-pdb</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">Storage: PV + PVC + SC</div>
+      <div class="cheat-card-body">
+        <pre><code># PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  capacity: { storage: 1Gi }
+  accessModes: [ReadWriteOnce]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath: { path: /mnt/data }
+---
+# PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc1
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests: { storage: 500Mi }
+  storageClassName: ""
+---
+# StorageClass (dynamic)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata: { name: fast }
+provisioner: kubernetes.io/gce-pd
+parameters: { type: pd-ssd }
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+
+# Pod: volumes: [{ name: data, persistentVolumeClaim: { claimName: pvc1 } }]
+#      volumeMounts: [{ name: data, mountPath: /data }]</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">NetworkPolicy & Ingress</div>
+      <div class="cheat-card-body">
+        <pre><code># NetworkPolicy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api
+  namespace: prod
+spec:
+  podSelector: { matchLabels: { app: db } }
+  policyTypes: [Ingress, Egress]
+  ingress:
+  - from:
+    - podSelector: { matchLabels: { app: api } }
+    - namespaceSelector: { matchLabels: { env: prod } }
+    ports: [{ port: 3306 }]
+  egress:
+  - to:
+    - podSelector: { matchLabels: { app: cache } }
+    ports: [{ port: 6379 }]
+
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: app.example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service: { name: api-svc, port: { number: 80 } }</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">Troubleshooting Checklist</div>
+      <div class="cheat-card-body">
+        <pre><code># 1. Nodes
+k get nodes
+k describe node &lt;node&gt;
+
+# 2. Control plane
+k get pods -n kube-system
+k logs kube-apiserver-master -n kube-system
+k logs kube-scheduler-master -n kube-system
+
+# 3. Kubelet (on node)
+systemctl status kubelet
+journalctl -u kubelet -f
+
+# 4. Service & endpoints
+k get svc,endpoints &lt;svc-name&gt;
+# Empty endpoints → wrong selector
+
+# 5. Pod
+k get pods -o wide
+k describe pod &lt;name&gt;
+k logs &lt;pod&gt; --previous
+k exec -it &lt;pod&gt; -- sh
+
+# 6. DNS
+k run dns-test --image=busybox:1.28 --rm -it --restart=Never -- nslookup kubernetes
+
+# 7. Certs
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout | grep -A2 Validity</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">DaemonSet / Job / CronJob</div>
+      <div class="cheat-card-body">
+        <pre><code># DaemonSet
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: { name: log-agent }
+spec:
+  selector: { matchLabels: { app: log-agent } }
+  template:
+    metadata: { labels: { app: log-agent } }
+    spec:
+      containers:
+      - name: agent
+        image: fluentd
+---
+# Job
+apiVersion: batch/v1
+kind: Job
+metadata: { name: pi-job }
+spec:
+  completions: 3
+  parallelism: 2
+  backoffLimit: 4
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl","-Mbignum=bpi","-wle","print bpi(2000)"]
+      restartPolicy: Never
+---
+# CronJob
+apiVersion: batch/v1
+kind: CronJob
+metadata: { name: backup }
+spec:
+  schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: busybox
+            command: ["/bin/sh","-c","date"]
+          restartPolicy: OnFailure</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">JSONPath & Output</div>
+      <div class="cheat-card-body">
+        <pre><code># Single value
+k get pod x -o jsonpath='{.spec.nodeName}'
+
+# All names
+k get pods -o jsonpath='{.items[*].metadata.name}'
+
+# Range
+k get nodes -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.capacity.cpu}{"\n"}{end}'
+
+# Filter
+k get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
+
+# Custom columns
+k get pods -A -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName,IMAGE:.spec.containers[0].image
+
+# Sort
+k get pods --sort-by=.metadata.creationTimestamp
+
+# To file (exam)
+k get nodes -o json > /opt/output.json
+k get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/os.txt
+
+# Count
+k get pods -A --no-headers | wc -l</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-card-header">CSR / Certificates</div>
+      <div class="cheat-card-body">
+        <pre><code># Key + CSR
+openssl genrsa -out user.key 2048
+openssl req -new -key user.key -subj "/CN=user/O=group" -out user.csr
+
+# CSR object (base64 request)
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata: { name: user }
+spec:
+  request: &lt;base64-csr&gt;
+  signerName: kubernetes.io/kube-apiserver-client
+  usages: [client auth]
+
+# Approve & extract
+k certificate approve user
+k get csr user -o jsonpath='{.status.certificate}' | base64 -d > user.crt
+
+# Kubeconfig
+k config set-credentials user --client-certificate=user.crt --client-key=user.key
+k config set-context user-ctx --cluster=kubernetes --user=user
+k config use-context user-ctx</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('print-btn').addEventListener('click', function () {
+      window.print();
+    });
+  </script>
+</body>
+</html>
