@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <style>
     body.lab-page { overflow: auto !important; }
-    .lab-page { --nav-width: 280px; min-height: 100vh; }
+    .lab-page { --nav-width: 400px; min-height: 100vh; }
     .lab-layout { display: flex; gap: 0; min-height: calc(100vh - 48px); }
     .lab-sidebar { width: var(--nav-width); min-width: var(--nav-width); height: calc(100vh - 48px); background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; flex-shrink: 0; }
     .lab-main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: calc(100vh - 48px); overflow: hidden; }
@@ -24,10 +24,10 @@
     .cmd-cat.collapsed .arrow { transform: rotate(-90deg); }
     .cmd-cat.collapsed .cmd-list { display: none; }
     .cmd-list { padding: 0.25rem 0; }
-    .cmd-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: background 0.15s; }
+    .cmd-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: background 0.15s; }
     .cmd-item:hover { background: var(--surface2); }
-    .cmd-item code { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.78rem; }
-    .cmd-item .copy-btn { flex-shrink: 0; padding: 0.2rem 0.4rem; font-size: 0.7rem; opacity: 0.7; }
+    .cmd-item code { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: break-word; font-size: 0.82rem; line-height: 1.4; }
+    .cmd-item .copy-btn { flex-shrink: 0; padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 1px; opacity: 0.7; }
     .cmd-item:hover .copy-btn { opacity: 1; }
     .lab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
     .lab-btn:hover { filter: brightness(1.08); }
