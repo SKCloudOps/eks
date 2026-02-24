@@ -59,6 +59,57 @@
 
   <div class="cheat-grid">
     <div class="cheat-card">
+      <div class="cheat-card-header">Imperative commands (exam speed)</div>
+      <div class="cheat-card-body">
+        <pre><code># Pod
+k run &lt;name&gt; --image=&lt;img&gt;
+k run &lt;name&gt; --image=&lt;img&gt; --restart=Never
+k run &lt;name&gt; --image=&lt;img&gt; --dry-run=client -o yaml > pod.yaml
+
+# Deployment
+k create deployment &lt;name&gt; --image=&lt;img&gt; [--replicas=N]
+k scale deployment &lt;name&gt; --replicas=N
+k set image deployment/&lt;name&gt; &lt;container&gt;=&lt;img&gt;
+k rollout status deployment/&lt;name&gt;
+k rollout history deployment/&lt;name&gt;
+k rollout undo deployment/&lt;name&gt;
+k rollout undo deployment/&lt;name&gt; --to-revision=2
+k create deployment &lt;name&gt; --image=&lt;img&gt; --dry-run=client -o yaml
+
+# Service
+k expose deployment &lt;name&gt; --port=&lt;port&gt; [--name=&lt;svc-name&gt;]
+k expose deployment &lt;name&gt; --port=80 --type=NodePort [--node-port=30080]
+k expose pod &lt;name&gt; --port=80
+
+# Namespace
+k create namespace &lt;name&gt;
+k create ns &lt;name&gt;
+
+# ConfigMap / Secret
+k create configmap &lt;name&gt; --from-literal=KEY=val [KEY2=val2]
+k create configmap &lt;name&gt; --from-file=path/to/file
+k create secret generic &lt;name&gt; --from-literal=KEY=val
+k create secret generic &lt;name&gt; --from-file=key=path
+
+# ServiceAccount
+k create serviceaccount &lt;name&gt;
+k create sa &lt;name&gt;
+
+# Job / CronJob
+k create job &lt;name&gt; --image=busybox -- echo hello
+k create cronjob &lt;name&gt; --image=busybox --schedule="0 * * * *" -- echo hi
+
+# RBAC (see RBAC card for full list)
+k create role &lt;name&gt; --verb=get,list --resource=pods -n &lt;ns&gt;
+k create rolebinding &lt;name&gt; --role=&lt;role&gt; --user=&lt;user&gt; -n &lt;ns&gt;
+k create clusterrole &lt;name&gt; --verb=get,list --resource=nodes
+k create clusterrolebinding &lt;name&gt; --clusterrole=&lt;name&gt; --user=&lt;user&gt;
+
+# All: add -n &lt;namespace&gt; or --namespace=&lt;ns&gt; for ns</code></pre>
+      </div>
+    </div>
+
+    <div class="cheat-card">
       <div class="cheat-card-header">kubectl Quick Reference</div>
       <div class="cheat-card-body">
         <pre><code># Create resources fast
@@ -83,11 +134,21 @@ k logs &lt;pod&gt; -c &lt;container&gt; --previous
 k exec -it &lt;pod&gt; -- sh
 k get events --sort-by='.lastTimestamp'
 
+# Docs in terminal (exam allowed)
+k explain pod
+k explain pod.spec.containers
+k explain deployment.spec --recursive
+
 # Edit / Patch / Replace
 k edit deploy &lt;name&gt;
 k patch svc s1 -p '{"spec":{"type":"NodePort"}}'
 k replace --force -f pod.yaml
 k delete pod x --force --grace-period=0
+
+# Label / Annotate
+k label pod &lt;name&gt; env=prod
+k label node &lt;name&gt; disk=ssd
+k annotate pod &lt;name&gt; key=value
 
 # Context & Namespace
 k config use-context &lt;ctx&gt;
