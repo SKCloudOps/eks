@@ -277,7 +277,7 @@
         <p class="subtitle">Complete reference guide for the CKA exam. Use the navigation to jump between topics.</p>
 
         <figure class="diagram">
-          <img src="assets/k8s-request-flow.png" alt="Kubernetes request flow: kubectl apply → API Server → etcd → Controller → Scheduler → kubelet → CNI → Pod Running" width="720" height="480" style="max-width:100%;height:auto;display:block;">
+          <img src="assets/c__Users_REV0310_AppData_Roaming_Cursor_User_workspaceStorage_b7e0a0de266f7440c082d74b87a9cfe3_images_image-0407fa99-6f1b-4655-ae0b-db90af4c3914.png" alt="Kubernetes request workflow diagram showing kubectl apply to pod running flow" width="1024" height="576" style="max-width:100%;height:auto;display:block;">
           <figcaption><strong>Kubernetes Request Flow</strong> — What happens when you run <code>kubectl apply -f deployment.yaml</code>. 1) kubectl → API Server (auth, RBAC, admission). 2) API Server → etcd (persist desired state). 3) Controller creates Pod. 4) Scheduler assigns node. 5) kubelet pulls image & runs container via CRI. 6) CNI assigns pod IP; kube-proxy programs Service routing. 7) Pod Running. Every CKA candidate must understand this flow.</figcaption>
         </figure>
       </header>
