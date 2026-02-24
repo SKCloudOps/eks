@@ -11,23 +11,23 @@
   <link rel="stylesheet" href="style.css">
   <style>
     body.lab-page { overflow: hidden; }
-    .lab-page { --nav-width: 400px; height: 100vh; display: flex; flex-direction: column; }
+    .lab-page { --nav-width: 440px; height: 100vh; display: flex; flex-direction: column; }
     .lab-layout { display: flex; gap: 0; flex: 1; min-height: 0; }
     .lab-sidebar { width: var(--nav-width); min-width: var(--nav-width); height: calc(100vh - 48px); background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; flex-shrink: 0; }
     .lab-main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
     .lab-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .lab-header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
     .cmd-cat { border-bottom: 1px solid var(--border); }
-    .cmd-cat-header { padding: 0.6rem 1rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+    .cmd-cat-header { padding: 0.7rem 1rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; background: var(--surface2); }
     .cmd-cat-header:hover { background: var(--surface2); color: var(--text); }
     .cmd-cat-header .arrow { font-size: 0.7rem; transition: transform 0.2s; }
     .cmd-cat.collapsed .arrow { transform: rotate(-90deg); }
     .cmd-cat.collapsed .cmd-list { display: none; }
-    .cmd-list { padding: 0.25rem 0; }
-    .cmd-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 1rem; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: background 0.15s; }
-    .cmd-item:hover { background: var(--surface2); }
-    .cmd-item code { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: break-word; font-size: 0.82rem; line-height: 1.4; }
-    .cmd-item .copy-btn { flex-shrink: 0; padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 1px; opacity: 0.7; }
+    .cmd-list { padding: 0.35rem 0; }
+    .cmd-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 1rem; font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: background 0.15s; border-left: 2px solid transparent; }
+    .cmd-item:hover { background: var(--surface2); border-left-color: var(--accent); }
+    .cmd-item code { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: break-word; font-size: 0.9rem; line-height: 1.5; color: var(--text); font-weight: 500; }
+    .cmd-item .copy-btn { flex-shrink: 0; padding: 0.3rem 0.6rem; font-size: 0.8rem; margin-top: 2px; opacity: 0.8; }
     .cmd-item:hover .copy-btn { opacity: 1; }
     .lab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
     .lab-btn:hover { filter: brightness(1.08); }
@@ -36,7 +36,8 @@
     .lab-scenarios h2 { font-size: 1.05rem; margin: 0 0 1.25rem; color: var(--text); font-weight: 600; }
     .scenario-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
     .scenario-card h4 { margin: 0 0 0.5rem; font-size: 1rem; color: var(--text); font-weight: 600; }
-    .scenario-card p { margin: 0.35rem 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+    .scenario-card p { margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+.scenario-card p code { font-size: 0.85rem; background: var(--code-bg); padding: 0.1rem 0.35rem; border-radius: 3px; }
     .scenario-card pre { margin: 0.75rem 0 0; padding: 1rem 1.25rem; background: #1e293b; border-radius: 8px; font-size: 0.9rem; line-height: 1.6; overflow-x: auto; border: 1px solid #334155; }
     .scenario-card pre code { color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; white-space: pre; }
     .scenario-card .copy-cmd { margin-top: 0.75rem; padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 500; }
@@ -72,40 +73,44 @@
         <h2>Quick scenarios — Copy & run in Killercoda or your cluster</h2>
         <div class="scenario-card">
           <h4>1. Pod + Deployment + Service</h4>
-          <p>Create nginx deployment with 3 replicas, expose as Service.</p>
+          <p><strong>Goal:</strong> Deploy a web app, scale it, and expose it via a ClusterIP Service.</p>
+          <p><strong>Steps:</strong> (1) Create a Deployment with 3 replicas of nginx. (2) Expose it on port 80. (3) Verify pods, deployment, and service.</p>
+          <p><strong>Verify:</strong> <code>kubectl get pods</code> — all should be Running. <code>kubectl get endpoints nginx-svc</code> — shows pod IPs.</p>
           <pre><code>kubectl create deployment nginx-deploy --image=nginx:1.21 --replicas=3
 kubectl expose deployment nginx-deploy --port=80 --name=nginx-svc
 kubectl get deploy,svc,pods</code></pre>
-          <button class="copy-cmd copy-btn" data-cmd="kubectl create deployment nginx-deploy --image=nginx:1.21 --replicas=3
-kubectl expose deployment nginx-deploy --port=80 --name=nginx-svc
-kubectl get deploy,svc,pods">Copy all</button>
+          <button class="copy-cmd copy-btn">Copy all</button>
         </div>
         <div class="scenario-card">
           <h4>2. ConfigMap + Pod env</h4>
-          <p>ConfigMap with APP_ENV=prod, pod using it as env var.</p>
+          <p><strong>Goal:</strong> Store config as ConfigMap and inject it into a Pod as an environment variable.</p>
+          <p><strong>Steps:</strong> (1) Create ConfigMap with <code>APP_ENV=production</code>. (2) Create a Pod that references the ConfigMap via <code>envFrom</code> or <code>valueFrom.configMapKeyRef</code>.</p>
+          <p><strong>Verify:</strong> <code>kubectl exec busybox-cm -- env | grep APP_ENV</code> — should show <code>APP_ENV=production</code>.</p>
+          <p><strong>Tip:</strong> In exam, you may need to create the pod from YAML. Use <code>kubectl run ... --dry-run=client -o yaml</code> then add the env block.</p>
           <pre><code>kubectl create configmap app-cm --from-literal=APP_ENV=production
 kubectl run busybox-cm --image=busybox:1.28 --restart=Never -- sleep 3600 --overrides='{"spec":{"containers":[{"name":"b","image":"busybox:1.28","command":["sleep","3600"],"env":[{"name":"APP_ENV","valueFrom":{"configMapKeyRef":{"name":"app-cm","key":"APP_ENV"}}}]}]}}'</code></pre>
-          <button class="copy-cmd copy-btn" data-cmd="kubectl create configmap app-cm --from-literal=APP_ENV=production
-kubectl run busybox-cm --image=busybox:1.28 --restart=Never -- sleep 3600">Copy all</button>
+          <button class="copy-cmd copy-btn">Copy all</button>
         </div>
         <div class="scenario-card">
           <h4>3. RBAC — Role + RoleBinding</h4>
-          <p>Role: get,list on pods in dev. Bind to user jane.</p>
+          <p><strong>Goal:</strong> Give user <code>jane</code> permission to get and list pods in namespace <code>dev</code> only.</p>
+          <p><strong>Steps:</strong> (1) Create namespace <code>dev</code> if needed: <code>kubectl create ns dev</code>. (2) Create Role with verbs <code>get,list</code> and resource <code>pods</code>. (3) Create RoleBinding to bind the Role to user <code>jane</code>.</p>
+          <p><strong>Verify:</strong> <code>kubectl auth can-i get pods --as=jane -n dev</code> — should return <code>yes</code>. Check other ns: <code>--as=jane -n kube-system</code> — typically <code>no</code>.</p>
           <pre><code>kubectl create role pod-reader --verb=get,list --resource=pods -n dev
 kubectl create rolebinding jane-pod-reader --role=pod-reader --user=jane -n dev
 kubectl auth can-i get pods --as=jane -n dev</code></pre>
-          <button class="copy-cmd copy-btn" data-cmd="kubectl create role pod-reader --verb=get,list --resource=pods -n dev
-kubectl create rolebinding jane-pod-reader --role=pod-reader --user=jane -n dev">Copy all</button>
+          <button class="copy-cmd copy-btn">Copy all</button>
         </div>
         <div class="scenario-card">
           <h4>4. Node drain (maintenance)</h4>
-          <p>Cordon, drain, uncordon a node.</p>
+          <p><strong>Goal:</strong> Safely evacuate a node for maintenance without losing workloads.</p>
+          <p><strong>Steps:</strong> (1) <code>cordon</code> — mark node unschedulable. (2) <code>drain</code> — evict all pods (use <code>--ignore-daemonsets</code> for DaemonSet pods, <code>--delete-emptydir-data</code> for emptyDir). (3) After maintenance, <code>uncordon</code> to allow scheduling again.</p>
+          <p><strong>Verify:</strong> During drain, pods should reschedule to other nodes. <code>kubectl get nodes</code> — drained node shows <code>SchedulingDisabled</code>.</p>
           <pre><code>kubectl cordon worker-1
 kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data
 # After maintenance:
 kubectl uncordon worker-1</code></pre>
-          <button class="copy-cmd copy-btn" data-cmd="kubectl cordon worker-1
-kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data">Copy</button>
+          <button class="copy-cmd copy-btn">Copy all</button>
         </div>
       </div>
     </div>
