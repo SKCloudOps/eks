@@ -1,138 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWS Cloud Interview Guide - Complete Study Resource</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
-        rel="stylesheet">
+    <title>AWS Cloud Interview Guide — Study Resource</title>
+    <meta name="description" content="AWS study guide: Compute, Networking, Storage, Database, Serverless, Security, DevOps, and Cost.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <header class="site-header">
-        <h1>AWS Study Guide <span class="badge">AWS Certified</span></h1>
-        <div class="header-controls">
-            <button id="dark-mode-btn" class="icon-btn" title="Toggle Dark Mode">🌓</button>
-            <button id="zen-btn" class="icon-btn" title="Toggle Zen Mode">🧘</button>
-            <div class="challenge-mode">
-                <span class="mode-label">Challenge Mode</span>
-                <label class="switch">
-                    <input type="checkbox" id="challenge-toggle">
-                    <span class="slider round"></span>
-                </label>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header class="header" role="banner">
+        <div class="header-inner">
+            <h1 class="header-title">
+                AWS Study Guide
+                <span class="header-badge" aria-label="AWS Certified">Certified</span>
+            </h1>
+            <div class="header-actions">
+                <button type="button" id="theme-btn" class="btn btn-icon" title="Toggle dark mode" aria-label="Toggle dark mode">🌓</button>
+                <button type="button" id="zen-btn" class="btn btn-icon" title="Zen mode (hide nav)" aria-label="Zen mode">🧘</button>
+                <div class="challenge-wrap">
+                    <span class="challenge-label">Challenge</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="challenge-toggle" aria-describedby="challenge-desc">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <span id="challenge-desc" class="sr-only">Blur card images until hover</span>
             </div>
         </div>
     </header>
 
-    <div class="layout">
-        <nav id="nav">
-            <div class="nav-group-label">Architecture Core</div>
-            <a href="#compute" class="active">Compute Services</a>
-            <a href="#networking">Networking & Content Delivery</a>
-            <a href="#storage">Storage Services</a>
-            <a href="#database">Database Services</a>
-
-            <div class="nav-group-label">Advanced Topics</div>
-            <a href="#serverless">Serverless Architecture</a>
-            <a href="#analytics">Analytics & Big Data</a>
-            <a href="#security">Security & Identity</a>
-            <a href="#devops">DevOps & Tooling</a>
-            <a href="#cost">Cost Optimization</a>
+    <div class="app">
+        <nav class="sidebar" id="nav" aria-label="Guide sections">
+            <ul class="nav-list">
+                <li class="nav-group">
+                    <span class="nav-group-title">Architecture Core</span>
+                    <ul class="nav-sublist">
+                        <li><a href="#compute" class="nav-link active" data-section="compute">Compute</a></li>
+                        <li><a href="#networking" class="nav-link" data-section="networking">Networking</a></li>
+                        <li><a href="#storage" class="nav-link" data-section="storage">Storage</a></li>
+                        <li><a href="#database" class="nav-link" data-section="database">Database</a></li>
+                    </ul>
+                </li>
+                <li class="nav-group">
+                    <span class="nav-group-title">Advanced</span>
+                    <ul class="nav-sublist">
+                        <li><a href="#serverless" class="nav-link" data-section="serverless">Serverless</a></li>
+                        <li><a href="#analytics" class="nav-link" data-section="analytics">Analytics</a></li>
+                        <li><a href="#security" class="nav-link" data-section="security">Security & Identity</a></li>
+                        <li><a href="#devops" class="nav-link" data-section="devops">DevOps</a></li>
+                        <li><a href="#cost" class="nav-link" data-section="cost">Cost</a></li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
 
-        <main>
-            <!-- Sections will be populated by JS -->
-            <div id="block-compute" class="content-block is-open">
-                <h1 class="page-title">Compute Services</h1>
-                <p class="subtitle">Deep dive into EC2, Lambda, and EKS architectures.</p>
-                <div class="aws-diagram-hero">
-                    <img src="assets/aws-overview.svg" alt="AWS service categories overview" class="aws-diagram-img" width="900" height="340" loading="eager">
+        <main id="main" class="main" role="main">
+            <article id="block-compute" class="section is-visible" aria-labelledby="title-compute">
+                <header class="section-header">
+                    <h2 id="title-compute" class="section-title">Compute Services</h2>
+                    <p class="section-desc">EC2, Lambda, EKS, and ECS.</p>
+                </header>
+                <div class="section-diagram">
+                    <img src="assets/aws-overview.svg" alt="AWS service categories" width="900" height="340" loading="eager">
                 </div>
-                <figure class="aws-section-diagram">
+                <figure class="section-diagram">
                     <img src="assets/aws-compute-options.svg" alt="EC2 vs Lambda vs Containers" width="860" height="260" loading="lazy">
                 </figure>
-                <div class="resource-grid"></div>
-            </div>
+                <div class="card-grid resource-grid" data-section="compute"></div>
+            </article>
 
-            <div id="block-networking" class="content-block">
-                <h1 class="page-title">Networking</h1>
-                <p class="subtitle">VPC, Route 53, ALB, and more.</p>
-                <figure class="aws-section-diagram">
-                    <img src="assets/aws-vpc-basics.svg" alt="VPC and networking basics" width="820" height="320" loading="lazy">
+            <article id="block-networking" class="section" aria-labelledby="title-networking" hidden>
+                <header class="section-header">
+                    <h2 id="title-networking" class="section-title">Networking</h2>
+                    <p class="section-desc">VPC, Route 53, ALB, CloudFront.</p>
+                </header>
+                <figure class="section-diagram">
+                    <img src="assets/aws-vpc-basics.svg" alt="VPC basics" width="820" height="320" loading="lazy">
                 </figure>
-                <div class="resource-grid"></div>
-            </div>
+                <div class="card-grid resource-grid" data-section="networking"></div>
+            </article>
 
-            <div id="block-storage" class="content-block">
-                <h1 class="page-title">Storage Services</h1>
-                <p class="subtitle">S3, EBS, EFS, and Storage Gateway.</p>
-                <div class="resource-grid"></div>
-            </div>
+            <article id="block-storage" class="section" aria-labelledby="title-storage" hidden>
+                <header class="section-header">
+                    <h2 id="title-storage" class="section-title">Storage</h2>
+                    <p class="section-desc">S3, EBS, EFS, Glacier.</p>
+                </header>
+                <div class="card-grid resource-grid" data-section="storage"></div>
+            </article>
 
-            <div id="block-database" class="content-block">
-                <h1 class="page-title">Database Services</h1>
-                <p class="subtitle">RDS, Aurora, DynamoDB, and ElastiCache.</p>
-                <div class="resource-grid"></div>
-            </div>
+            <article id="block-database" class="section" aria-labelledby="title-database" hidden>
+                <header class="section-header">
+                    <h2 id="title-database" class="section-title">Database</h2>
+                    <p class="section-desc">RDS, Aurora, DynamoDB, ElastiCache.</p>
+                </header>
+                <div class="card-grid resource-grid" data-section="database"></div>
+            </article>
 
-            <div id="block-serverless" class="content-block">
-                <h1 class="page-title">Serverless Architecture</h1>
-                <p class="subtitle">Lambda, API Gateway, SQS, and SNS.</p>
-                <div class="resource-grid"></div>
-            </div>
+            <article id="block-serverless" class="section" aria-labelledby="title-serverless" hidden>
+                <header class="section-header">
+                    <h2 id="title-serverless" class="section-title">Serverless</h2>
+                    <p class="section-desc">Lambda, API Gateway, SQS, SNS.</p>
+                </header>
+                <div class="card-grid resource-grid" data-section="serverless"></div>
+            </article>
 
-            <div id="block-analytics" class="content-block">
-                <h1 class="page-title">Analytics</h1>
-                <p class="subtitle">Kinesis, EMR, Athena, and Redshift.</p>
-                <div class="resource-grid"></div>
-            </div>
+            <article id="block-analytics" class="section" aria-labelledby="title-analytics" hidden>
+                <header class="section-header">
+                    <h2 id="title-analytics" class="section-title">Analytics</h2>
+                    <p class="section-desc">Kinesis, EMR, Athena, Redshift.</p>
+                </header>
+                <div class="card-grid resource-grid" data-section="analytics"></div>
+            </article>
 
-            <div id="block-security" class="content-block">
-                <h1 class="page-title">Security & Identity</h1>
-                <p class="subtitle">IAM, KMS, WAF, and Shield.</p>
-                <figure class="aws-section-diagram">
-                    <img src="assets/aws-shared-responsibility.svg" alt="AWS Shared Responsibility Model" width="820" height="320" loading="lazy">
+            <article id="block-security" class="section" aria-labelledby="title-security" hidden>
+                <header class="section-header">
+                    <h2 id="title-security" class="section-title">Security & Identity</h2>
+                    <p class="section-desc">IAM, KMS, WAF, Shield, Cognito.</p>
+                </header>
+                <figure class="section-diagram">
+                    <img src="assets/aws-shared-responsibility.svg" alt="Shared Responsibility Model" width="820" height="320" loading="lazy">
                 </figure>
-                <div class="resource-grid"></div>
-            </div>
+                <div class="card-grid resource-grid" data-section="security"></div>
+            </article>
 
-            <div id="block-devops" class="content-block">
-                <h1 class="page-title">DevOps & Tooling</h1>
-                <p class="subtitle">CodePipeline, CloudFormation, and CLI.</p>
-                <div class="resource-grid"></div>
-            </div>
+            <article id="block-devops" class="section" aria-labelledby="title-devops" hidden>
+                <header class="section-header">
+                    <h2 id="title-devops" class="section-title">DevOps & Tooling</h2>
+                    <p class="section-desc">CodePipeline, CloudFormation, CLI.</p>
+                </header>
+                <div class="card-grid resource-grid" data-section="devops"></div>
+            </article>
 
-            <div id="block-cost" class="content-block">
-                <h1 class="page-title">Cost Optimization</h1>
-                <p class="subtitle">Savings Plans, Spot Instances, and Cost Explorer.</p>
-                <div class="resource-grid"></div>
-            </div>
+            <article id="block-cost" class="section" aria-labelledby="title-cost" hidden>
+                <header class="section-header">
+                    <h2 id="title-cost" class="section-title">Cost Optimization</h2>
+                    <p class="section-desc">Savings Plans, Spot, Cost Explorer.</p>
+                </header>
+                <div class="card-grid resource-grid" data-section="cost"></div>
+            </article>
 
-            <!-- Comments -->
-            <section class="comments-section" id="comments" aria-label="Comments" style="margin-top:2rem;padding:2rem 0;border-top:1px solid var(--border);">
-                <h2 class="comments-title" style="font-size:1.1rem;margin:0 0 1rem;">Comments</h2>
-                <script src="https://utteranc.es/client.js"
-                        repo="SKCloudOps/k8s"
-                        issue-term="pathname"
-                        theme="github-light"
-                        crossorigin="anonymous"
-                        async>
-                </script>
-            </section>
+            <footer class="main-footer">
+                <section class="comments" aria-label="Comments">
+                    <h2 class="comments-title">Comments</h2>
+                    <script src="https://utteranc.es/client.js"
+                            repo="SKCloudOps/k8s"
+                            issue-term="pathname"
+                            theme="github-light"
+                            crossorigin="anonymous"
+                            async></script>
+                </section>
+            </footer>
         </main>
     </div>
 
-    <!-- Image Modal -->
-    <div id="image-modal" class="modal">
-        <span class="close-modal">&times;</span>
-        <img class="modal-content" id="modal-img">
-        <div id="modal-caption"></div>
+    <div id="image-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-caption" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-body">
+            <button type="button" class="modal-close" aria-label="Close">×</button>
+            <img class="modal-img" id="modal-img" alt="">
+            <p id="modal-caption" class="modal-caption"></p>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>
