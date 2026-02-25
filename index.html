@@ -2259,7 +2259,61 @@ spec:
       port: 3306</code></pre>
       <pre><code>kubectl create -f policy-definition.yaml</code></pre>
       <h4>Developing Network Policies</h4>
-      <p>Start with deny-all, then add allow rules. Test with <code>kubectl run</code> debug pods. Use <code>podSelector</code>, <code>namespaceSelector</code>, <code>ipBlock</code> for <code>from</code>/<code>to</code>.</p>
+      <p>Use an iterative approach: start with a deny-all baseline, then add the minimum allow rules your app needs.</p>
+      <figure class="diagram">
+        <img src="assets/k8s-pod-networking-cni.png" alt="Network policy development: start deny-all and progressively allow required pod-to-pod paths" width="560" height="180" style="max-width:100%;height:auto;display:block;">
+        <figcaption>Build policies incrementally: deny by default, then allow only required pod and namespace traffic.</figcaption>
+      </figure>
+      <pre><code># 1) Default deny in namespace (both directions)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress</code></pre>
+      <pre><code># 2) Allow only API pods to reach DB pods on 3306
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-to-db
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: api
+    ports:
+    - protocol: TCP
+      port: 3306</code></pre>
+      <pre><code># 3) Cross-namespace access with namespaceSelector
+ingress:
+- from:
+  - namespaceSelector:
+      matchLabels:
+        name: monitoring</code></pre>
+      <pre><code># 4) External CIDR access with ipBlock
+ingress:
+- from:
+  - ipBlock:
+      cidr: 203.0.113.0/24
+      except:
+      - 203.0.113.128/25</code></pre>
+      <pre><code># 5) Validate with temporary debug pods
+kubectl run test-a -n default --rm -it --image=busybox:1.36 -- sh
+kubectl run test-b -n monitoring --rm -it --image=busybox:1.36 -- sh
+
+# From inside pod
+nc -zv db 3306
+wget -qO- http://web.default.svc.cluster.local:80</code></pre>
+      <p><strong>Selector usage:</strong> <code>podSelector</code> selects pods, <code>namespaceSelector</code> selects namespaces, and <code>ipBlock</code> matches IP CIDRs. In ingress rules use <code>from</code>; in egress rules use <code>to</code>.</p>
       <h3>Image Security</h3>
       <p>Default image registry is <strong>docker.io</strong>. Image <code>nginx</code> is really
         <code>docker.io/library/nginx</code>. For private registries, create a <code>docker-registry</code> secret and
