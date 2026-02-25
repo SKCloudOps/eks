@@ -114,16 +114,19 @@
 
         // Resource toggle
         window.toggleResource = function (btn) {
+            const card = btn.closest('.resource-card');
             const fullText = btn.nextElementSibling;
             const shortText = btn.previousElementSibling;
-            if (fullText.style.display === "none") {
+            if (fullText.style.display === "none" || fullText.style.display === "") {
                 fullText.style.display = "block";
                 btn.innerText = "Read Less";
-                shortText.style.display = "none";
+                if (shortText) shortText.style.display = "none";
+                if (card) card.classList.add('is-expanded');
             } else {
                 fullText.style.display = "none";
                 btn.innerText = "Read More";
-                shortText.style.display = "block";
+                if (shortText) shortText.style.display = "block";
+                if (card) card.classList.remove('is-expanded');
             }
         };
     }

@@ -1,45 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 260" width="560" height="260">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 520" width="1120" height="520" role="img" aria-label="Kubernetes TLS certificate chain">
   <defs>
-    <linearGradient id="caGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#059669;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.05"/>
+    <linearGradient id="caBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#047857"/>
+      <stop offset="100%" style="stop-color:#059669"/>
     </linearGradient>
-    <linearGradient id="apiGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0.05"/>
+    <linearGradient id="apiBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
     </linearGradient>
-    <linearGradient id="clientGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#d97706;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.05"/>
+    <linearGradient id="clientBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#b45309"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
     </linearGradient>
-    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
-      <path d="M0 0 L10 4 L0 8 Z" fill="#475569"/>
+    <marker id="arr" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto">
+      <path d="M0 0 L14 5 L0 10 Z" fill="#334155"/>
     </marker>
-    <filter id="softShadow" x="-6%" y="-6%" width="112%" height="112%">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.1"/>
+    <filter id="cardShadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
     </filter>
   </defs>
-  <g filter="url(#softShadow)">
-    <rect x="180" y="16" width="200" height="72" rx="10" fill="url(#caGrad)" stroke="#059669" stroke-width="2"/>
-    <text x="280" y="44" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#047857">Certificate Authority (CA)</text>
-    <text x="280" y="64" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#065f46">Root of trust - signs all cluster certs</text>
+  <!-- CA -->
+  <g filter="url(#cardShadow)">
+    <rect x="260" y="32" width="600" height="120" rx="16" fill="#ecfdf5" stroke="#047857" stroke-width="3"/>
+    <rect x="260" y="32" width="600" height="56" rx="16" fill="url(#caBg)"/>
+    <text x="560" y="72" text-anchor="middle" font-family="system-ui, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Certificate Authority (CA)</text>
+    <text x="560" y="118" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" fill="#065f46">Root of trust — signs all cluster certificates</text>
   </g>
-  <path d="M280 88 L280 118" stroke="#059669" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <text x="280" y="108" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#047857">signs</text>
-  <g filter="url(#softShadow)">
-    <rect x="80" y="128" width="180" height="64" rx="10" fill="url(#apiGrad)" stroke="#2563eb" stroke-width="2"/>
-    <text x="170" y="156" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#1e40af">API Server</text>
-    <text x="170" y="176" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#1e3a8a">server certificate</text>
-    <text x="170" y="188" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">proves identity to clients</text>
+  <!-- Arrow down -->
+  <line x1="560" y1="152" x2="560" y2="218" stroke="#047857" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="560" y="192" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#047857">signs</text>
+  <!-- API Server -->
+  <g filter="url(#cardShadow)">
+    <rect x="80" y="238" width="380" height="140" rx="16" fill="#eff6ff" stroke="#1e40af" stroke-width="3"/>
+    <rect x="80" y="238" width="380" height="52" rx="16" fill="url(#apiBg)"/>
+    <text x="270" y="276" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">API Server</text>
+    <text x="270" y="318" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" fill="#1e40af">Server certificate</text>
+    <text x="270" y="348" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#475569">Proves identity to clients</text>
   </g>
-  <g filter="url(#softShadow)">
-    <rect x="300" y="128" width="180" height="64" rx="10" fill="url(#clientGrad)" stroke="#d97706" stroke-width="2"/>
-    <text x="390" y="156" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#b45309">Kubelet / Scheduler</text>
-    <text x="390" y="176" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#92400e">client certificate</text>
-    <text x="390" y="188" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">proves identity to API server</text>
+  <!-- Kubelet / Scheduler -->
+  <g filter="url(#cardShadow)">
+    <rect x="660" y="238" width="380" height="140" rx="16" fill="#fffbeb" stroke="#b45309" stroke-width="3"/>
+    <rect x="660" y="238" width="380" height="52" rx="16" fill="url(#clientBg)"/>
+    <text x="850" y="276" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Kubelet / Scheduler</text>
+    <text x="850" y="318" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" fill="#92400e">Client certificate</text>
+    <text x="850" y="348" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#475569">Proves identity to API server</text>
   </g>
-  <path d="M260 160 L300 160" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowhead)"/>
-  <text x="280" y="152" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#1e40af">TLS</text>
-  <rect x="30" y="212" width="500" height="42" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-  <text x="280" y="232" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#475569">Flow: CA signs all certs. API server presents server cert; kubelet/scheduler present client cert. Both sides trust the same CA.</text>
+  <!-- TLS between -->
+  <line x1="460" y1="308" x2="660" y2="308" stroke="#2563eb" stroke-width="3" stroke-dasharray="10 6" marker-end="url(#arr)"/>
+  <text x="560" y="294" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#1e40af">TLS</text>
+  <!-- Summary -->
+  <rect x="40" y="418" width="1040" height="82" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="560" y="455" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" fill="#334155">Flow: CA signs all certs. API server presents server cert; kubelet/scheduler present client cert. Both sides trust the same CA.</text>
 </svg>
