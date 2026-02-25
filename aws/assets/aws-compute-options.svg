@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 260" width="860" height="260" role="img" aria-label="AWS Compute options">
+  <defs>
+    <linearGradient id="ec2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#232F3E"/><stop offset="100%" style="stop-color:#37475A"/></linearGradient>
+    <linearGradient id="lam" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#C8511B"/><stop offset="100%" style="stop-color:#e07842"/></linearGradient>
+    <linearGradient id="con" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#326CE5"/><stop offset="100%" style="stop-color:#5B8DEF"/></linearGradient>
+    <filter id="sf" x="-6%" y="-6%" width="112%" height="112%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.08"/></filter>
+  </defs>
+  <text x="430" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#232F3E">Compute Options at a Glance</text>
+  <!-- EC2 -->
+  <g filter="url(#sf)">
+    <rect x="40" y="60" width="260" height="180" rx="14" fill="#f1f5f9" stroke="#232F3E" stroke-width="2"/>
+    <rect x="40" y="60" width="260" height="50" rx="14" fill="url(#ec2)"/>
+    <text x="170" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">EC2</text>
+    <text x="170" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#334155">Virtual servers</text>
+    <text x="170" y="158" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">You manage OS, scale,</text>
+    <text x="170" y="178" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">capacity. Full control.</text>
+    <text x="170" y="208" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">Use when: predictable load,</text>
+    <text x="170" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">custom software, long-running</text>
+  </g>
+  <!-- Lambda -->
+  <g filter="url(#sf)">
+    <rect x="300" y="60" width="260" height="180" rx="14" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+    <rect x="300" y="60" width="260" height="50" rx="14" fill="url(#lam)"/>
+    <text x="430" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">Lambda</text>
+    <text x="430" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#334155">Serverless functions</text>
+    <text x="430" y="158" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">No servers. Run code on</text>
+    <text x="430" y="178" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">events. Auto scale, pay per use.</text>
+    <text x="430" y="208" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">Use when: event-driven,</text>
+    <text x="430" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">spiky traffic, short runs</text>
+  </g>
+  <!-- Containers (EKS/ECS) -->
+  <g filter="url(#sf)">
+    <rect x="560" y="60" width="280" height="180" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+    <rect x="560" y="60" width="280" height="50" rx="14" fill="url(#con)"/>
+    <text x="700" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">EKS / ECS</text>
+    <text x="700" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#334155">Containers</text>
+    <text x="700" y="158" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Kubernetes (EKS) or AWS</text>
+    <text x="700" y="178" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">orchestration (ECS). Portable.</text>
+    <text x="700" y="208" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">Use when: microservices,</text>
+    <text x="700" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">CI/CD, multi-cloud apps</text>
+  </g>
+</svg>

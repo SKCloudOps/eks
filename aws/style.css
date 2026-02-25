@@ -245,7 +245,34 @@ main .content-block {
     line-height: 1.6;
 }
 
-/* Resource Grid/Cards */
+/* AWS overview and section diagrams (readable, high-contrast) */
+.aws-diagram-hero {
+    max-width: var(--content-max);
+    margin-bottom: 3rem;
+}
+
+.aws-diagram-hero .aws-diagram-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+}
+
+.aws-section-diagram {
+    margin: 0 0 2.5rem;
+    max-width: var(--content-max);
+}
+
+.aws-section-diagram img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+}
 .resource-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

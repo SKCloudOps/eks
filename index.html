@@ -2012,7 +2012,7 @@ spec:
       <p>Every connection to the Kubernetes API server (and between control-plane components) is protected by <strong>TLS</strong>. This section explains what TLS and certificates are, why Kubernetes uses them, and how to work with them for the CKA exam — even if you have never used them before.</p>
 
       <figure class="diagram">
-        <img src="assets/tls-encryption-authentication.png" alt="TLS: Encryption and Authentication" width="480" height="140" style="max-width:100%;height:auto;display:block;">
+        <img src="assets/tls-encryption-authentication.svg" alt="TLS: Encryption and Authentication" width="960" height="280" style="max-width:100%;height:auto;display:block;" loading="lazy">
         <figcaption><strong>TLS in one picture:</strong> Encryption protects data; authentication ensures you are talking to the right server and that the client is who it claims to be. Certificates are used for both.</figcaption>
       </figure>
 
@@ -2033,7 +2033,7 @@ spec:
       <p>Each certificate has a <strong>private key</strong> (kept secret) and a <strong>public key</strong> (in the certificate). Only the holder of the private key can prove they own that certificate.</p>
 
       <figure class="diagram">
-        <img src="assets/tls-k8s-cert-chain.png" alt="Kubernetes TLS certificate chain: CA, API server, and clients" width="560" height="260" style="max-width:100%;height:auto;display:block;">
+        <img src="assets/tls-k8s-cert-chain.svg" alt="Kubernetes TLS certificate chain: CA, API server, and clients" width="1120" height="520" style="max-width:100%;height:auto;display:block;" loading="lazy">
         <figcaption><strong>Certificate chain in Kubernetes:</strong> The cluster CA is the root of trust. The API server has a <em>server</em> certificate (so clients know they are talking to the real API server). Components like the kubelet and scheduler have <em>client</em> certificates (so the API server knows they are legitimate). All certificates are signed by the same CA.</figcaption>
       </figure>
 

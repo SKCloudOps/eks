@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" width="820" height="320" role="img" aria-label="AWS Shared Responsibility Model">
+  <defs>
+    <linearGradient id="aw" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#232F3E"/><stop offset="100%" style="stop-color:#37475A"/></linearGradient>
+    <linearGradient id="cu" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#FF9900"/><stop offset="100%" style="stop-color:#F2A33C"/></linearGradient>
+    <filter id="sh" x="-6%" y="-6%" width="112%" height="112%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.08"/></filter>
+  </defs>
+  <text x="410" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#232F3E">Shared Responsibility Model</text>
+  <!-- AWS responsibility -->
+  <g filter="url(#sh)">
+    <rect x="40" y="60" width="340" height="240" rx="14" fill="#f1f5f9" stroke="#232F3E" stroke-width="2"/>
+    <rect x="40" y="60" width="340" height="52" rx="14" fill="url(#aw)"/>
+    <text x="210" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">AWS Responsibility</text>
+    <text x="210" y="138" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#334155">Security OF the cloud</text>
+    <text x="210" y="168" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Hardware, network, hypervisor</text>
+    <text x="210" y="198" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Physical data centers</text>
+    <text x="210" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Managed services (RDS, S3, etc.)</text>
+    <text x="210" y="258" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Patching managed OS/services</text>
+  </g>
+  <!-- Customer responsibility -->
+  <g filter="url(#sh)">
+    <rect x="440" y="60" width="360" height="240" rx="14" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+    <rect x="440" y="60" width="360" height="52" rx="14" fill="url(#cu)"/>
+    <text x="620" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">Customer Responsibility</text>
+    <text x="620" y="138" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#334155">Security IN the cloud</text>
+    <text x="620" y="168" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Data, IAM users, policies</text>
+    <text x="620" y="198" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">OS patching (EC2), network config (VPC)</text>
+    <text x="620" y="228" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Application security, encryption keys</text>
+    <text x="620" y="258" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#475569">Compliance of your workloads</text>
+  </g>
+</svg>

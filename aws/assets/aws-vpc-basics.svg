@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 300" width="880" height="300" role="img" aria-label="AWS VPC and networking basics">
+  <defs>
+    <linearGradient id="vpc" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#3B48CC"/><stop offset="100%" style="stop-color:#5B68DA"/></linearGradient>
+    <marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#475569"/></marker>
+    <filter id="f" x="-6%" y="-6%" width="112%" height="112%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.08"/></filter>
+  </defs>
+  <text x="440" y="34" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#232F3E">VPC and Networking Basics</text>
+  <!-- Internet -->
+  <rect x="340" y="52" width="200" height="44" rx="10" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <text x="440" y="82" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#334155">Internet</text>
+  <!-- IGW -->
+  <g filter="url(#f)">
+    <rect x="380" y="108" width="120" height="56" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="440" y="138" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#1e40af">Internet</text>
+    <text x="440" y="156" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#1e40af">Gateway</text>
+  </g>
+  <line x1="440" y1="96" x2="440" y2="108" stroke="#64748b" stroke-width="2" marker-end="url(#ar)"/>
+  <!-- VPC -->
+  <g filter="url(#f)">
+    <rect x="80" y="188" width="720" height="96" rx="14" fill="#eef2ff" stroke="#3730a3" stroke-width="2"/>
+    <rect x="80" y="188" width="720" height="40" rx="14" fill="url(#vpc)"/>
+    <text x="440" y="218" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#fff">VPC (your private network)</text>
+    <text x="240" y="252" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#4338ca">Public Subnet</text>
+    <text x="440" y="252" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#4338ca">Private Subnet</text>
+    <text x="640" y="252" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#4338ca">Private Subnet</text>
+  </g>
+  <line x1="440" y1="164" x2="440" y2="188" stroke="#3730a3" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="460" y="182" text-anchor="start" font-family="system-ui,sans-serif" font-size="12" fill="#475569">Route tables, NACLs, Security Groups</text>
+</svg>
