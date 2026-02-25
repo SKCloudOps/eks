@@ -2007,40 +2007,103 @@ spec:
         <code>kubernetes.io/service-account.name</code>.
       </p>
 
-      <h3>TLS & Certificates</h3>
-      <h4>TLS Basics</h4>
-      <p>TLS provides encryption and authentication. Certificates bind identity to public key. Kubernetes uses TLS for API server, etcd, and kubelet.</p>
+      <h3>TLS &amp; Certificates</h3>
+
+      <p>Every connection to the Kubernetes API server (and between control-plane components) is protected by <strong>TLS</strong>. This section explains what TLS and certificates are, why Kubernetes uses them, and how to work with them for the CKA exam — even if you have never used them before.</p>
+
       <figure class="diagram">
-        <img src="assets/k8s-tls-cert-chain.png" alt="Kubernetes TLS certificate chain: CA signs component certs" width="400" height="200" style="max-width:100%;height:auto;display:block;">
-        <figcaption><strong>TLS certificate chain:</strong> CA is root of trust. API server, etcd, kubelet certs are signed by cluster CA.</figcaption>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="100%" max-width="400" style="display:block; margin:0 auto;">
+          <rect x="20" y="20" width="160" height="60" rx="8" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+          <text x="100" y="48" text-anchor="middle" font-weight="700" font-size="14" fill="#1e3a8a">Encryption</text>
+          <text x="100" y="68" text-anchor="middle" font-size="11" fill="#334155">Data in transit is</text>
+          <text x="100" y="82" text-anchor="middle" font-size="11" fill="#334155">unreadable to others</text>
+          <rect x="220" y="20" width="160" height="60" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+          <text x="300" y="48" text-anchor="middle" font-weight="700" font-size="14" fill="#065f46">Authentication</text>
+          <text x="300" y="68" text-anchor="middle" font-size="11" fill="#334155">Each side proves</text>
+          <text x="300" y="82" text-anchor="middle" font-size="11" fill="#334155">who it is (via certs)</text>
+          <text x="200" y="58" text-anchor="middle" font-size="18" font-weight="700" fill="#64748b">+</text>
+        </svg>
+        <figcaption><strong>TLS in one picture:</strong> Encryption protects data; authentication ensures you are talking to the right server and that the client is who it claims to be. Certificates are used for both.</figcaption>
       </figure>
+
+      <h4>What is TLS?</h4>
+      <p><strong>TLS (Transport Layer Security)</strong> does two things over the network:</p>
+      <ul>
+        <li><strong>Encryption:</strong> Data between the client and server is encrypted so anyone intercepting traffic cannot read it.</li>
+        <li><strong>Authentication:</strong> Each side can prove who it is. The server proves it really is the API server; the client (e.g. kubelet) proves it is a legitimate component — not an imposter.</li>
+      </ul>
+      <p>Without TLS, someone on the network could read or alter cluster traffic and pretend to be the API server or a node.</p>
+
+      <h4>What is a certificate?</h4>
+      <p>A <strong>certificate</strong> is a digital document that says: <em>“This public key belongs to this identity (e.g. api-server or kubelet).”</em> It is signed by a <strong>Certificate Authority (CA)</strong>. If you trust the CA, you can trust any certificate it has signed.</p>
+      <ul>
+        <li><strong>Server certificate:</strong> Presented by the server (e.g. API server) when a client connects. The client checks that the cert is signed by a CA it trusts and that the name in the cert matches the server it contacted.</li>
+        <li><strong>Client certificate:</strong> Presented by the client (e.g. kubelet, scheduler) to prove its identity to the server. The server checks that the cert is signed by the cluster CA.</li>
+      </ul>
+      <p>Each certificate has a <strong>private key</strong> (kept secret) and a <strong>public key</strong> (in the certificate). Only the holder of the private key can prove they own that certificate.</p>
+
+      <figure class="diagram">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 220" width="100%" max-width="520" style="display:block; margin:0 auto;">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#555"/></marker>
+            <filter id="shadow"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.2"/></filter>
+          </defs>
+          <rect x="10" y="10" width="150" height="70" rx="8" fill="#e8f4ea" stroke="#1a7f37" stroke-width="1.5"/>
+          <text x="85" y="38" text-anchor="middle" font-weight="700" font-size="13" fill="#0d3d1a">Certificate</text>
+          <text x="85" y="55" text-anchor="middle" font-size="11" fill="#333">Authority (CA)</text>
+          <text x="85" y="72" text-anchor="middle" font-size="10" fill="#666">Root of trust</text>
+          <line x1="85" y1="80" x2="85" y2="105" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="85" y="98" text-anchor="middle" font-size="9" fill="#555">signs</text>
+          <rect x="200" y="110" width="120" height="55" rx="6" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+          <text x="260" y="135" text-anchor="middle" font-weight="700" font-size="12" fill="#1e3a8a">API Server</text>
+          <text x="260" y="152" text-anchor="middle" font-size="10" fill="#333">server cert</text>
+          <text x="260" y="165" text-anchor="middle" font-size="9" fill="#666">(proves identity)</text>
+          <rect x="360" y="110" width="150" height="55" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <text x="435" y="128" text-anchor="middle" font-weight="700" font-size="11" fill="#92400e">Kubelet / Scheduler</text>
+          <text x="435" y="145" text-anchor="middle" font-size="10" fill="#333">client cert</text>
+          <text x="435" y="160" text-anchor="middle" font-size="9" fill="#666">(proves who I am)</text>
+          <path d="M 320 137 L 358 137" stroke="#1e40af" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="339" y="130" text-anchor="middle" font-size="9" fill="#555">TLS</text>
+          <rect x="10" y="175" width="500" height="38" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+          <text x="260" y="193" text-anchor="middle" font-size="11" fill="#334155">Flow: CA signs all certs. API server presents server cert; kubelet/scheduler present client cert. Both sides trust the same CA.</text>
+        </svg>
+        <figcaption><strong>Certificate chain in Kubernetes:</strong> The cluster CA is the root of trust. The API server has a <em>server</em> certificate (so clients know they are talking to the real API server). Components like the kubelet and scheduler have <em>client</em> certificates (so the API server knows they are legitimate). All certificates are signed by the same CA.</figcaption>
+      </figure>
+
+      <h4>Why does Kubernetes use TLS?</h4>
+      <p>The API server is the gateway to the cluster. If someone could impersonate it or read traffic, they could control or steal data. TLS ensures that:</p>
+      <ul>
+        <li>Only clients with a valid <strong>client certificate</strong> (or other allowed auth) can call the API server.</li>
+        <li>Clients can verify they are talking to the real API server using its <strong>server certificate</strong>.</li>
+        <li>Traffic between the API server and etcd, and between the API server and kubelets, is encrypted.</li>
+      </ul>
+      <p>With <strong>kubeadm</strong>, all certificates are created automatically and stored under <code>/etc/kubernetes/pki/</code>. You need to know how to <em>inspect</em> them (for troubleshooting) and how to <em>create</em> new ones for users (via the Certificates API).</p>
+
       <h4>TLS in Kubernetes</h4>
-      <p>Cluster components use <strong>TLS</strong>: servers use <strong>server certificates</strong>, clients use
-        <strong>client certificates</strong> for authentication. API server, etcd, kubelet, and other control-plane
-        components each have certs (typically under <code>/etc/kubernetes/pki/</code> on kubeadm). Certificate API can
-        issue signed certs for users; the controller manager handles signing.
-      </p>
+      <p>Cluster components use <strong>TLS</strong>: servers use <strong>server certificates</strong>, and clients use <strong>client certificates</strong> for authentication. The API server, etcd, kubelet, and other control-plane components each have their own certs (with kubeadm, under <code>/etc/kubernetes/pki/</code>). The Kubernetes <strong>Certificates API</strong> can issue new client certificates for users; the controller manager signs them using the cluster CA.</p>
       <h4>Key certificate files (kubeadm)</h4>
       <ul>
-        <li><code>ca.crt / ca.key</code> — Cluster CA (root of trust)</li>
-        <li><code>apiserver.crt / apiserver.key</code> — API server TLS</li>
-        <li><code>apiserver-kubelet-client.crt</code> — API → kubelet client cert</li>
-        <li><code>apiserver-etcd-client.crt</code> — API → etcd client cert</li>
-        <li><code>etcd/ca.crt, etcd/server.crt</code> — etcd TLS</li>
-        <li><code>front-proxy-ca.crt</code> — Aggregation layer</li>
+        <li><code>ca.crt / ca.key</code> — Cluster CA (root of trust). Used to sign all other certs.</li>
+        <li><code>apiserver.crt / apiserver.key</code> — API server TLS (server cert). Presented to clients when they connect.</li>
+        <li><code>apiserver-kubelet-client.crt</code> — Client cert used by the API server when it talks to the kubelet.</li>
+        <li><code>apiserver-etcd-client.crt</code> — Client cert used by the API server when it talks to etcd.</li>
+        <li><code>etcd/ca.crt</code>, <code>etcd/server.crt</code> — etcd’s own CA and server cert (etcd can use a separate CA).</li>
+        <li><code>front-proxy-ca.crt</code> — Used for the aggregation layer (extension API servers).</li>
       </ul>
 
-      <h4>Certificate Creation</h4>
-      <p>Use OpenSSL or Certificates API. For user certs: generate key + CSR, create Kubernetes CSR object, approve, extract cert.</p>
-      <h4>Certificate Inspection</h4>
+      <h4>Certificate inspection (troubleshooting)</h4>
+      <p>To check a certificate’s subject, issuer, and <strong>validity dates</strong> (expiry is a common cause of failures):</p>
       <pre><code>openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout</code></pre>
-      <p>Check subject, issuer, validity (not after), SANs (Subject Alternative Names). Same for other certs in
-        <code>/etc/kubernetes/pki/</code> (ca.crt, apiserver-kubelet-client.crt, etc.).
-      </p>
+      <p>Look for <strong>Not Before</strong> / <strong>Not After</strong>, <strong>Subject</strong>, <strong>Issuer</strong>, and <strong>Subject Alternative Name (SAN)</strong>. Use the same command for other certs (e.g. <code>apiserver-kubelet-client.crt</code>, <code>ca.crt</code>). If <strong>Not After</strong> has passed, the cert has expired and must be renewed (kubeadm can do this).</p>
 
-      <h4>Certificates API</h4>
-      <p>Kubernetes has a built-in <strong>Certificate Signing Request (CSR)</strong> API for issuing client
-        certificates. The controller manager signs the certificates using the cluster CA.</p>
+      <h4>Certificate creation for users (Certificates API)</h4>
+      <p>To give a new user (or service) access to the cluster, you can issue a <strong>client certificate</strong> signed by the cluster CA. Steps:</p>
+      <ol>
+        <li>User generates a private key and a <strong>Certificate Signing Request (CSR)</strong> with OpenSSL.</li>
+        <li>Admin creates a Kubernetes <strong>CertificateSigningRequest</strong> object with the CSR (base64-encoded).</li>
+        <li>Admin approves the CSR. The controller manager signs it and puts the signed certificate in the CSR object’s status.</li>
+        <li>User extracts the certificate and uses it (with the private key) in kubeconfig.</li>
+      </ol>
       <div class="snippet-label">Create and approve a user certificate</div>
       <pre><code># 1. User generates key and CSR
 openssl genrsa -out jane.key 2048
