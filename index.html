@@ -2012,7 +2012,7 @@ spec:
       <p>Every connection to the Kubernetes API server (and between control-plane components) is protected by <strong>TLS</strong>. This section explains what TLS and certificates are, why Kubernetes uses them, and how to work with them for the CKA exam — even if you have never used them before.</p>
 
       <figure class="diagram">
-        <img src="assets/tls-encryption-authentication.svg" alt="TLS: Encryption and Authentication" width="960" height="280" style="max-width:100%;height:auto;display:block;" loading="lazy">
+        <img src="assets/tls-encryption-authentication.png" alt="TLS: Encryption and Authentication" width="960" height="280" style="max-width:100%;height:auto;display:block;" loading="lazy">
         <figcaption><strong>TLS in one picture:</strong> Encryption protects data; authentication ensures you are talking to the right server and that the client is who it claims to be. Certificates are used for both.</figcaption>
       </figure>
 
@@ -2033,7 +2033,7 @@ spec:
       <p>Each certificate has a <strong>private key</strong> (kept secret) and a <strong>public key</strong> (in the certificate). Only the holder of the private key can prove they own that certificate.</p>
 
       <figure class="diagram">
-        <img src="assets/tls-k8s-cert-chain.svg" alt="Kubernetes TLS certificate chain: CA, API server, and clients" width="1120" height="520" style="max-width:100%;height:auto;display:block;" loading="lazy">
+        <img src="assets/tls-k8s-cert-chain.png" alt="Kubernetes TLS certificate chain: CA, API server, and clients" width="1120" height="520" style="max-width:100%;height:auto;display:block;" loading="lazy">
         <figcaption><strong>Certificate chain in Kubernetes:</strong> The cluster CA is the root of trust. The API server has a <em>server</em> certificate (so clients know they are talking to the real API server). Components like the kubelet and scheduler have <em>client</em> certificates (so the API server knows they are legitimate). All certificates are signed by the same CA.</figcaption>
       </figure>
 
@@ -2110,11 +2110,58 @@ kubectl get pods --kubeconfig config</code></pre>
         <code>kubectl config set-context $(kubectl config current-context) --namespace=dev</code>.
       </p>
       <h3>API Groups</h3>
-      <p>Kubernetes API is organized into groups: <code>core</code> (v1), <code>apps</code>, <code>networking.k8s.io</code>, etc. Resources like Pods are in core; Deployments in apps/v1.</p>
+      <p>Kubernetes API is organized into groups so related resources are versioned and managed together. The
+        <strong>core group</strong> is special and uses just <code>v1</code> (for example:
+        <code>Pod</code>, <code>Service</code>, <code>ConfigMap</code>), while named groups use
+        <code>&lt;group&gt;/&lt;version&gt;</code> (for example: <code>apps/v1</code>,
+        <code>networking.k8s.io/v1</code>).</p>
+      <pre><code># Core group (no group prefix)
+apiVersion: v1
+kind: Pod
+
+# apps group
+apiVersion: apps/v1
+kind: Deployment
+
+# networking group
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy</code></pre>
+      <pre><code># Discover groups and resources
+kubectl api-versions
+kubectl api-resources</code></pre>
       <h3>KubeConfig</h3>
-      <p>Stores clusters, users, contexts. File: <code>~/.kube/config</code>. <code>kubectl config use-context</code> switches context. Each exam question may use a different context.</p>
+      <p><code>kubeconfig</code> stores <strong>clusters</strong> (API server endpoints),
+        <strong>users</strong> (credentials), and <strong>contexts</strong> (cluster + user + namespace mapping).
+        Default file is <code>~/.kube/config</code>. In CKA, switch context at the start of each question to avoid
+        working in the wrong cluster.</p>
+      <figure class="diagram">
+        <img src="assets/k8s-request-workflow.png" alt="kubectl request workflow using kubeconfig context and credentials" width="1024" height="576" style="max-width:100%;height:auto;display:block;">
+        <figcaption>KubeConfig picks cluster/user/context so <code>kubectl</code> can authenticate to the correct API server.</figcaption>
+      </figure>
+      <pre><code># List and verify contexts
+kubectl config get-contexts
+kubectl config current-context
+
+# Switch context for a question
+kubectl config use-context ckad-cluster-1
+
+# Optional: set namespace for current context
+kubectl config set-context --current --namespace=dev</code></pre>
       <h3>Access Control</h3>
+      <p>Access control is mainly: <strong>Authentication</strong> (who you are) and
+        <strong>Authorization</strong> (what you are allowed to do). Kubernetes commonly uses
+        <strong>RBAC</strong> for authorization.</p>
       <h3>Role-Based Access Control (RBAC)</h3>
+      <p>RBAC objects: <code>Role</code>/<code>ClusterRole</code> define permissions;
+        <code>RoleBinding</code>/<code>ClusterRoleBinding</code> attach those permissions to a
+        <code>User</code>, <code>Group</code>, or <code>ServiceAccount</code>.</p>
+      <figure class="diagram">
+        <img src="assets/k8s-rbac-flow.png" alt="RBAC flow from Role to RoleBinding to user, group, or service account" width="400" height="110" style="max-width:100%;height:auto;display:block;">
+        <figcaption>RBAC flow: define permissions in Role/ClusterRole, then grant via Binding.</figcaption>
+      </figure>
+      <pre><code># Quick permission checks
+kubectl auth can-i list pods -n dev --as system:serviceaccount:dev:app-sa
+kubectl auth can-i get nodes --as jane</code></pre>
       <h4>Roles</h4>
       <p>Role: apiGroups, resources, verbs. RoleBinding: links subject (user/group/serviceaccount) to Role. Both are
         namespace-scoped.</p>
@@ -2188,6 +2235,10 @@ kubectl api-resources --namespaced=false</code></pre>
       <p>Controls ingress/egress to pods by selector. Default: no restrictions. Once a NetworkPolicy selects a pod,
         that
         pod denies traffic not allowed by any policy.</p>
+      <figure class="diagram">
+        <img src="assets/k8s-pod-networking-cni.png" alt="Pod networking and policy enforcement with CNI across nodes" width="560" height="180" style="max-width:100%;height:auto;display:block;">
+        <figcaption>NetworkPolicy enforcement depends on a CNI plugin that supports policy (for example, Calico or Cilium).</figcaption>
+      </figure>
       <pre><code>apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -2256,11 +2307,6 @@ spec:
       <pre><code># Check who's running inside the container
 kubectl exec my-pod -- whoami
 kubectl exec my-pod -- id</code></pre>
-      <figure class="diagram">
-        <img src="assets/k8s-rbac-flow.png" alt="RBAC: Role → RoleBinding → User/Group/ServiceAccount" width="400" height="110" style="max-width:100%;height:auto;display:block;">
-        <figcaption>RBAC: Role defines permissions; RoleBinding binds Role to User/Group/ServiceAccount.</figcaption>
-      </figure>
-
       <h3>Advanced (2025)</h3>
       <p>Custom Resource Definitions (CRD), Custom Controllers, Operator Framework. See section 15 (Advanced Kubectl) for CRDs.</p>
 
