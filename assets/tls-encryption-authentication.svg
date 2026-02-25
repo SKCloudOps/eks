@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 140" width="480" height="140">
+  <defs>
+    <linearGradient id="encGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0.04"/>
+    </linearGradient>
+    <linearGradient id="authGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.04"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <!-- Encryption card -->
+  <g filter="url(#cardShadow)">
+    <rect x="24" y="24" width="200" height="92" rx="12" fill="url(#encGrad)" stroke="#2563eb" stroke-width="2"/>
+    <rect x="24" y="24" width="200" height="36" rx="12" fill="#2563eb"/>
+    <rect x="24" y="52" width="200" height="8" fill="#2563eb"/>
+    <text x="124" y="48" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="16" font-weight="700" fill="#fff">Encryption</text>
+    <text x="124" y="78" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#1e3a8a">Data in transit is</text>
+    <text x="124" y="96" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#1e3a8a">unreadable to others</text>
+    <path d="M104 60 L104 52 L144 52 L144 60" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="124" cy="68" r="4" fill="#2563eb"/>
+  </g>
+  <!-- Plus -->
+  <text x="240" y="78" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#64748b">+</text>
+  <!-- Authentication card -->
+  <g filter="url(#cardShadow)">
+    <rect x="256" y="24" width="200" height="92" rx="12" fill="url(#authGrad)" stroke="#059669" stroke-width="2"/>
+    <rect x="256" y="24" width="200" height="36" rx="12" fill="#059669"/>
+    <rect x="256" y="52" width="200" height="8" fill="#059669"/>
+    <text x="356" y="48" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#fff">Authentication</text>
+    <text x="356" y="78" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#065f46">Each side proves identity</text>
+    <text x="356" y="96" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#065f46">via certificates</text>
+    <path d="M336 60 L336 52 L376 52 L376 60" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="356" cy="68" r="4" fill="#059669"/>
+  </g>
+</svg>
