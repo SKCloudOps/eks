@@ -1968,7 +1968,10 @@ kubectl describe pdb myapp-pdb</code></pre>
           can
           access?</strong> (authentication) and <strong>what can they do?</strong> (authorization). All access goes
         through the API server, making it the single chokepoint for security.</p>
-
+      <figure class="diagram">
+        <img src="assets/k8s-security-api-gatekeeper.png" alt="Kubernetes security: API server as gatekeeper, authentication then authorization" width="960" height="400" style="max-width:100%;height:auto;display:block;">
+        <figcaption>API server enforces authentication (who) then authorization (what); requests are allowed or denied.</figcaption>
+      </figure>
       <h3>Authentication</h3>
       <h3>Authorization</h3>
       <p>Kubernetes does <strong>not</strong> manage user accounts natively (no User object). It relies on external
@@ -2033,8 +2036,8 @@ spec:
       <p>Each certificate has a <strong>private key</strong> (kept secret) and a <strong>public key</strong> (in the certificate). Only the holder of the private key can prove they own that certificate.</p>
 
       <figure class="diagram">
-        <img src="assets/tls-k8s-cert-chain.png" alt="Kubernetes TLS certificate chain: CA, API server, and clients" width="1120" height="520" style="max-width:100%;height:auto;display:block;" loading="lazy">
-        <figcaption><strong>Certificate chain in Kubernetes:</strong> The cluster CA is the root of trust. The API server has a <em>server</em> certificate (so clients know they are talking to the real API server). Components like the kubelet and scheduler have <em>client</em> certificates (so the API server knows they are legitimate). All certificates are signed by the same CA.</figcaption>
+        <img src="assets/k8s-security-tls-chain.png" alt="Kubernetes TLS certificate chain: CA, API server, and client components" width="960" height="400" style="max-width:100%;height:auto;display:block;" loading="lazy">
+        <figcaption><strong>Certificate chain in Kubernetes:</strong> The cluster CA is the root of trust. The API server has a <em>server</em> certificate; components like the kubelet and scheduler have <em>client</em> certificates. All signed by the same CA.</figcaption>
       </figure>
 
       <h4>Why does Kubernetes use TLS?</h4>
@@ -2135,7 +2138,7 @@ kubectl api-resources</code></pre>
         Default file is <code>~/.kube/config</code>. In CKA, switch context at the start of each question to avoid
         working in the wrong cluster.</p>
       <figure class="diagram">
-        <img src="assets/k8s-request-workflow.png" alt="kubectl request workflow using kubeconfig context and credentials" width="1024" height="576" style="max-width:100%;height:auto;display:block;">
+        <img src="assets/k8s-security-kubeconfig.png" alt="KubeConfig: clusters, users, and contexts" width="960" height="400" style="max-width:100%;height:auto;display:block;">
         <figcaption>KubeConfig picks cluster/user/context so <code>kubectl</code> can authenticate to the correct API server.</figcaption>
       </figure>
       <pre><code># List and verify contexts
@@ -2156,8 +2159,8 @@ kubectl config set-context --current --namespace=dev</code></pre>
         <code>RoleBinding</code>/<code>ClusterRoleBinding</code> attach those permissions to a
         <code>User</code>, <code>Group</code>, or <code>ServiceAccount</code>.</p>
       <figure class="diagram">
-        <img src="assets/k8s-rbac-flow.png" alt="RBAC flow from Role to RoleBinding to user, group, or service account" width="400" height="110" style="max-width:100%;height:auto;display:block;">
-        <figcaption>RBAC flow: define permissions in Role/ClusterRole, then grant via Binding.</figcaption>
+        <img src="assets/k8s-security-rbac.png" alt="RBAC: Role and ClusterRole to RoleBinding to User, Group, ServiceAccount" width="960" height="400" style="max-width:100%;height:auto;display:block;">
+        <figcaption>RBAC flow: define permissions in Role/ClusterRole, then grant via Binding to User, Group, or ServiceAccount.</figcaption>
       </figure>
       <pre><code># Quick permission checks
 kubectl auth can-i list pods -n dev --as system:serviceaccount:dev:app-sa
@@ -2236,8 +2239,8 @@ kubectl api-resources --namespaced=false</code></pre>
         that
         pod denies traffic not allowed by any policy.</p>
       <figure class="diagram">
-        <img src="assets/k8s-pod-networking-cni.png" alt="Pod networking and policy enforcement with CNI across nodes" width="560" height="180" style="max-width:100%;height:auto;display:block;">
-        <figcaption>NetworkPolicy enforcement depends on a CNI plugin that supports policy (for example, Calico or Cilium).</figcaption>
+        <img src="assets/k8s-security-network-policy.png" alt="NetworkPolicy: deny all then allow rules" width="960" height="400" style="max-width:100%;height:auto;display:block;">
+        <figcaption>NetworkPolicy enforcement: start with deny-all, then add allow rules (podSelector, namespaceSelector, ipBlock).</figcaption>
       </figure>
       <pre><code>apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -2261,7 +2264,7 @@ spec:
       <h4>Developing Network Policies</h4>
       <p>Use an iterative approach: start with a deny-all baseline, then add the minimum allow rules your app needs.</p>
       <figure class="diagram">
-        <img src="assets/k8s-pod-networking-cni.png" alt="Network policy development: start deny-all and progressively allow required pod-to-pod paths" width="560" height="180" style="max-width:100%;height:auto;display:block;">
+        <img src="assets/k8s-security-network-policy.png" alt="Network policy development: deny-all then allow required traffic" width="960" height="400" style="max-width:100%;height:auto;display:block;">
         <figcaption>Build policies incrementally: deny by default, then allow only required pod and namespace traffic.</figcaption>
       </figure>
       <pre><code># 1) Default deny in namespace (both directions)
