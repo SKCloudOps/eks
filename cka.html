@@ -292,8 +292,8 @@
     .cmd-table {
       border: 1px solid var(--border);
       border-radius: 8px;
-      overflow: hidden;
-      margin: 0.75rem 0 1.5rem;
+      overflow: visible;
+      margin: 0.75rem 0 2.5rem;
     }
     .cmd-row {
       display: flex;
@@ -305,7 +305,9 @@
       transition: background 0.15s;
       gap: 0.75rem;
     }
-    .cmd-row:last-child { border-bottom: none; }
+    .cmd-row:first-child { border-radius: 7px 7px 0 0; }
+    .cmd-row:last-child { border-bottom: none; border-radius: 0 0 7px 7px; }
+    .cmd-row:only-child { border-radius: 7px; }
     .cmd-row:hover { background: var(--surface2); }
     .cmd-row code {
       background: none;
