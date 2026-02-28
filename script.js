@@ -83,7 +83,18 @@
       if (navToggle) navToggle.setAttribute('aria-label', 'Open menu');
     }
 
-    if (navClose) navClose.addEventListener('click', closeMobileNav);
+    // Desktop nav close: nav-close button also hides sidebar on desktop
+    if (navClose) {
+      navClose.addEventListener('click', function () {
+        closeMobileNav(); // always handle mobile
+        const layout = document.querySelector('.layout');
+        const toggleLeftBtn = document.getElementById('toggle-left');
+        if (layout && window.innerWidth > 768) {
+          layout.classList.add('nav-hidden');
+          if (toggleLeftBtn) toggleLeftBtn.classList.add('active-toggle');
+        }
+      });
+    }
     if (navToggle && nav) {
       navToggle.addEventListener('click', function (e) {
         e.stopPropagation(); // Prevent immediate close
